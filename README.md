@@ -1,6 +1,13 @@
 # ProductBundler
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.11.
+## Description
+This application is intended to create bundles from combining different products. 
+the key feature to highlight is the improvement of sales and quotations with all the information stored in one place but 
+available for a lot of users in the store.
+
+## Technical Details
+
+Angular version 15.2.11.
 
 ## Development server
 
