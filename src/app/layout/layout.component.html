@@ -1,0 +1,13 @@
+<div class="layout-container">
+    <app-header />
+    <app-content />
+    <app-footer />
+    <div class="overlay" *ngIf="isLoading">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

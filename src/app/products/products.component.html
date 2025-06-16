@@ -1,0 +1,59 @@
+<h1>products</h1>
+
+<input type="text" class="mat-input" matInput placeholder="Filter products">
+
+<table mat-table [dataSource]="products" class="mat-elevation-z5 ">
+    <ng-container matColumnDef="productId">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let product"> {{product.productId}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> name </th>
+        <td mat-cell *matCellDef="let product"> {{product.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> description </th>
+        <td mat-cell *matCellDef="let product"> {{product.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price1">
+        <th mat-header-cell *matHeaderCellDef> Precio CF </th>
+        <td mat-cell *matCellDef="let product"> {{product.price1 | currency}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price2">
+        <th mat-header-cell *matHeaderCellDef> Precio PM </th>
+        <td mat-cell *matCellDef="let product"> {{product.price2 | currency}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let product">
+            <div class="option-buttons">
+                <button matMiniFab aria-label="Example icon button with a menu icon"
+                matTooltip="Visualizar detalles de {{product.name}}" mat-button>
+                    <mat-icon >visibility</mat-icon>
+                </button>
+                <button matMiniFab aria-label="Example icon button with a menu icon"
+                matTooltip="Modificar {{product.name}}" mat-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button matMiniFab aria-label="Example icon button with a menu icon"
+                matTooltip="Eliminar {{product.name}}" mat-button>
+                    <mat-icon>remove_shopping_cart</mat-icon>
+                </button>
+                <button matMiniFab aria-label="Example icon button with a menu icon"
+                matTooltip="Agregar al carrito {{product.name}}" mat-button (click)="addToCart(product)">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

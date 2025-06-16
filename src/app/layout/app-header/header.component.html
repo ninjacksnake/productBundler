@@ -1,0 +1,31 @@
+<header class="header">
+  <nav class="nav-menu">
+    <div class="nav-left">
+      <a routerLink="/" class="nav-link">Bundler</a>
+      <a routerLink="/products" class="nav-link">Products</a>
+      <a routerLink="/users" class="nav-link">Users</a>
+    </div>
+    <!-- Carrito -->
+    <div class="nav-right">
+      <a matMiniFab aria-label="Carrito de compras" [mat-menu-trigger-for]="cartMenu" class="nav-link">
+        <mat-icon matBadge="{{getTotalProducts()}}" matBadgePosition="before" matBadgeSize="small"
+          matBadgeHideZero="true">trolley</mat-icon>
+        <mat-menu #cartMenu="matMenu">
+          <button mat-menu-item (click)="openCart()">Ver</button>
+          <button mat-menu-item (click)="clearCart()">Limpiar</button>
+          <!-- <button mat-menu-item>Crear Combo</button> -->
+        </mat-menu>
+      </a>
+      <!-- Menu -->
+      <a [mat-menu-trigger-for]="profileMenu" class="nav-link">
+        <mat-icon>person</mat-icon>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item>Perfil</button>
+          <button mat-menu-item>Configuración</button>
+          <button mat-menu-item>Salir</button>
+        </mat-menu>
+      </a>
+    </div>
+
+  </nav>
+</header>

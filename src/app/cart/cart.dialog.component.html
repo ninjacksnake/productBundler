@@ -1,0 +1,45 @@
+<div class="cart-dialog">
+<div class="action-buttons">
+  <button  class="close-button" (click)="closeCart()" aria-label="Close cart"><mat-icon>close</mat-icon></button>
+</div>
+  <h2>Lista del Combo</h2>
+
+
+  <div class="row">
+    <div class="product-section ">
+      <table class="mat-elevation-z1">
+        <thead>
+            <tr>  
+            <th>Nombre</th>
+            <th>Precio CF</th>
+            <th>Precio PM</th>
+            <th>Cantidad</th>
+            <th>Subtotal CF</th>
+            <th>Subtotal PM</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of getCart()">
+            <td>{{product.name}}</td>
+            <td>{{product.price1 | currency : '$'}}</td>
+            <td>{{product.price2 | currency : '$'}}</td>
+            <td>{{product.quantity}}</td>
+            <td>{{product.subtotal | currency : '$'}}</td>
+            <td>{{product.subtotal2 | currency : '$'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="totals-section">
+ 
+    <p> <strong>Total CF:</strong> {{getTotalCF() | currency}}</p>
+      <p><strong>Total PM:</strong> {{getTotalPM() | currency}}</p>
+  </div>
+
+  <div class="row justify-content-end">
+    <button mat-flat-button color="warn" (click)="clearCart()">Limpiar</button>
+   
+    <button mat-flat-button color="primary" (click)="createBundle()">Crear Combo</button>
+  </div>
