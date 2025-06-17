@@ -11,10 +11,10 @@ export class BundlesComponent {
   bundles: AddBundleDto[] = [];
 
   constructor(private bundlesService: BundlesService) {
-    this.bundlesService.getAll()
+    this.bundles = this.bundlesService.getAll()
    
 
   }      
-  columns: string[] = ['name', 'description', 'price1', 'price2', 'createdDate', 'updatedDate'];
+  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'options' ];
 
 }

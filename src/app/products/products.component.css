@@ -1,9 +1,7 @@
-.option-buttons {
+.option-buttons-container {
     display: flex;
-   gap: 1rem;
-    flex-wrap: wrap;
+    gap: 10px;
 }
-
 
 .mat-input {
   width: 25%;

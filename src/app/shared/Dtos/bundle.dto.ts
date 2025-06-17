@@ -5,18 +5,18 @@ export class BundleDto {
   name: string;
   description: string;
   products: AddProductDto[];
-  PriceCF: number;
-  PricePM: number;
+  priceCF: number;
+  pricePM: number;
   createdDate: Date;
   updatedDate: Date;
 
-  constructor( name: string, description: string, products: AddProductDto[], PriceCF: number, PricePM: number, createdDate?: Date, updatedDate?: Date) {
+  constructor( name: string, description: string, products: AddProductDto[], priceCF: number, pricePM: number, createdDate?: Date, updatedDate?: Date) {
   
     this.name = name;
     this.description = description;
     this.products = products;
-    this.PriceCF = PriceCF;
-    this.PricePM = PricePM;
+    this.priceCF = priceCF;
+    this.pricePM = pricePM;
     this.createdDate = createdDate ? createdDate : new Date();
     this.updatedDate = updatedDate ? updatedDate : new Date();
  

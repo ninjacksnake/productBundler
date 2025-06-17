@@ -4,8 +4,8 @@ export class AddBundleDto {
     id?: number;
     name?: string;
     description?: string;
-    price1?: number;
-    price2?: number;
+    priceCF?: number;
+    pricePM?: number;
     products?: AddProductDto[];
     createdDate?: Date;
     updatedDate?: Date;

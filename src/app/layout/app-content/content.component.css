@@ -2,4 +2,8 @@
     flex: 1;
     padding: 2rem;
     background-color: #f8f9fa;
+    overflow: auto;
+    height: 100%;
+    width: 85%;
+    margin: auto;
   }

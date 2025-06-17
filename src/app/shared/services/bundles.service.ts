@@ -16,8 +16,8 @@ export class BundlesService {
         name: 'Bundle 1',
         description: 'Description 1',
         products: [],
-        PriceCF: 2000,
-        PricePM: 1500,
+        priceCF: 2000,
+        pricePM: 1500,
         createdDate: new Date(),
         updatedDate: new Date()
         },  
@@ -26,8 +26,8 @@ export class BundlesService {
         name: 'Bundle 2',
         description: 'Description 2',
         products: [],
-        PriceCF: 2500,
-        PricePM: 2000,
+        priceCF: 2500,
+        pricePM: 2000,
         createdDate: new Date(),
         updatedDate: new Date(),
         },
@@ -37,21 +37,33 @@ export class BundlesService {
 
   constructor() { }
 
+  /**
+   * Retrieves all bundles from the local data source.
+   * 
+   * @returns An array of all BundleDto objects.
+   */
   getAll(): BundleDto[]   {
    //return this.http.get<BundleDto[]>(this.apiUrl);
    return this.bundles;
   }
 
   getById(id: number): BundleDto {
-    return this.bundles.find(bundle => bundle.id === id);
+    const bundle = this.bundles.find(bundle => bundle.id === id);
+    if (!bundle) {
+      throw new Error('Bundle not found');
+    }
+    return bundle;
   }
 
   create(bundle: BundleDto):    BundleDto {
-    return this.bundles.push(bundle) ;
+    this.bundles.push(bundle) ;
+    return bundle;
   }
 
   update(id: number, bundle: BundleDto): BundleDto {
-    return this.bundles.find(bundle => bundle.id === id);
+    const index = this.bundles.findIndex(bundle => bundle.id === id);
+    this.bundles[index] = bundle;
+    return bundle;
   }
 
   delete(id: number): void {

@@ -3,8 +3,35 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.option-buttons{
-    margin: 0.1rem;
-    
-   
+
+
+.option-button {    
+    padding: 5px;
+    color: black ;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
 }
+
+.option-button:hover {
+    cursor: pointer;
+    background-color: rgb(202, 199, 199);
+}
+
+.option-green{
+       color: rgb(90, 128, 90);
+}
+
+.option-red{
+    color: rgb(218, 10, 10);
+}
+
+.option-blue{
+    color: rgb(10, 10, 218);
+}
+
+.option-gray   {
+    color: rgb(56, 54, 54);
+}
+    
+    
