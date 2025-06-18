@@ -1,13 +1,2 @@
-.option-buttons-container {
-    display: flex;
-    gap: 10px;
-}
 
-.mat-input {
-  width: 25%;
-  margin: 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-}
+

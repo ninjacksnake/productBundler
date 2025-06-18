@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ProductsComponent } from './products/products.component';
+import { ProductListComponent } from './products/product-list/product-list.component';
 import { UsersComponent } from './users/users.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,6 +25,18 @@ import { BundlesComponent } from './bundles/bundles.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 import { CartDialogComponent } from './cart/cart.dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AddUserComponent } from './users/add-user/add-user.component';
+import { AddBundleComponent } from './bundles/add-bundle/add.bundle.component';
+import { AddProductComponent } from './products/add-product/add-product.component';
+import { ViewProductComponent } from './products/view-product/view-product.component';
+import { ViewBundleComponent } from './bundles/view-bundle/view-bundle.component';
+import { ViewUserComponent } from './users/view-user/view-user.component';
+import { EditUserComponent } from './users/edit-user/edit-user.component';
+import { EditBundleComponent } from './bundles/edit-bundle/edit-bundle.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { BundleListComponent } from './bundles/bundle-list/bundle-list.component';
+import { UsersListComponent } from './users/users-list/users-list.component';
+
 
 /**
  * The root module of the application. 
@@ -42,6 +56,18 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     BundlesComponent,
     DialogComponent,
     CartDialogComponent,
+    AddUserComponent,
+    AddBundleComponent,
+    AddProductComponent,
+    ViewProductComponent,
+    ViewBundleComponent,
+    ViewUserComponent,
+    EditUserComponent,
+    EditBundleComponent,
+    EditProductComponent,
+    BundleListComponent,
+    ProductListComponent,
+    UsersListComponent,
   ],
   imports: [
     BrowserModule,

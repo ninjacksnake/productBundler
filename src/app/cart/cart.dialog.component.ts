@@ -14,11 +14,25 @@ interface CartDialogData {
   products: AddProductDto[];
 }
 
+
+  /**
+   * Store a copy of the cart in the web browser localstorage
+   */
+  const storeCartLocally = (data: CartDialogData): void => {
+    localStorage.setItem('cart', JSON.stringify(data.products));
+  }
+
+  const getCartLocally = (): AddProductDto[] => {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.dialog.component.html',
   styleUrls: ['./cart.dialog.component.css']
 })
+
+
 
 export class CartDialogComponent {
   constructor(private cartService: CartService,
@@ -27,7 +41,7 @@ export class CartDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: CartDialogData) { }
 
   getCart(): AddProductDto[] {
-    return this.data.products;
+    return getCartLocally();
   }
 
   getTotalCF(): number {
@@ -46,7 +60,8 @@ export class CartDialogComponent {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         title: 'Confirmar',
-        message: '¿Estas seguro de que deseas limpiar la lista?'
+        message: '¿Estas seguro de que deseas limpiar la lista?',
+        products: [] // Empty array since we're clearing the cart
       }
     });
     dialogRef.afterClosed().subscribe((result) => {
