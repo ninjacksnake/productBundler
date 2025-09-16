@@ -1,92 +1,128 @@
-import { Component } from '@angular/core';
-import { CartService } from '../shared/services/cart.service';
-import { AddProductDto } from '../Dtos/add.product.dto';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Inject } from '@angular/core';
-import { DialogComponent } from '../shared/dialog/dialog.component';
+import { Component, Inject, Input, OnInit } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { AddProductBundleDto } from "../Dtos/add.product.bundle.dto";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CartService } from "../shared/services/cart.service";
+import { ProductDto } from "../shared/Dtos/product.dto";
+import { BundlesService } from "../shared/services/bundles.service";
+import { finalize, map, shareReplay, take, tap } from "rxjs";
+import { HttpResponse, HttpStatusCode } from "@angular/common/http";
+import {
+    MatSnackBar,
+    MatSnackBarHorizontalPosition,
+    MatSnackBarVerticalPosition
+} from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 
 
 
 interface CartDialogData {
-  title: string;
-  message: string;
-  products: AddProductDto[];
+    title: string;
+    message: string;
+    products: AddProductBundleDto[];
+    closeDialog: () => void;
 }
 
 
-  /**
-   * Store a copy of the cart in the web browser localstorage
-   */
-  const storeCartLocally = (data: CartDialogData): void => {
-    localStorage.setItem('cart', JSON.stringify(data.products));
-  }
-
-  const getCartLocally = (): AddProductDto[] => {
-    return JSON.parse(localStorage.getItem('cart') || '[]');
-  }
+const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'quantity', 'options'];
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.dialog.component.html',
-  styleUrls: ['./cart.dialog.component.css']
+    selector: 'app-cart-dialog',
+    templateUrl: './cart.dialog.component.html',
+    styleUrls: ['./cart.dialog.component.css']
 })
 
+export class CartDialogComponent implements OnInit {
+    product: ProductDto[] = this.data.products;
+    tableColumns = tableColumns;
+    horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-
-export class CartDialogComponent {
-  constructor(private cartService: CartService,
-    private dialogRef: MatDialogRef<CartDialogComponent>,
-    private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: CartDialogData) { }
-
-  getCart(): AddProductDto[] {
-    return getCartLocally();
-  }
-
-  getTotalCF(): number {
-    return this.cartService.getTotalCF();
-  }
-
-  getTotalPM(): number {
-    return this.cartService.getTotalPM();
-  }
-
-  closeCart(): void {
-    this.dialogRef.close();
-  }
-
-  clearCart(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        title: 'Confirmar',
-        message: '¿Estas seguro de que deseas limpiar la lista?',
-        products: [] // Empty array since we're clearing the cart
-      }
+    bundleForm: FormGroup = this.fb.group({
+        name: ['', Validators.required],
+        description: ['', Validators.required],
+        priceCF: [0, Validators.required],
+        pricePM: [0, Validators.required],
+        products: [this.data.products]
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.cartService.clearCart();
-        this.dialogRef.close();
-      }
-    });
-  }
 
-  createBundle(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        title: 'Confirmar',
-        message: '¿Estas seguro de que deseas crear el combo?'
-      }
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.cartService.createBundle() ;
-        this.dialogRef.close();
-      }
-    });
-  }
+    @Input() closeDialog! :() => void;
 
+   
 
+    // Injecting data into the dialog component
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: CartDialogData,
+        private fb: FormBuilder,
+        private cartService: CartService,
+        private BundlesService: BundlesService,
+        private matSnackBar: MatSnackBar,
+        private router: Router,
+    ) {}
 
+    onClose(): void {
+        if (this.data.closeDialog) {
+            this.data.closeDialog();
+        }
+    }
+
+    ngOnInit(): void {
+        //  console.log(this.data.products);
+    }
+
+    onSubmit(): void {
+
+        this.bundleForm.value.bundleId = this.bundleForm.value.name;
+        this.bundleForm.value.priceCF = this.cartService.getTotalCF();
+        this.bundleForm.value.pricePM = this.cartService.getTotalPM();
+
+        if (this.bundleForm.valid) {
+            this.BundlesService.create(this.bundleForm.value).subscribe({
+                next: (response: HttpResponse<any>) => {
+                    this.matSnackBar.open("Combo creado exitosamente", "Cerrar", {
+                        verticalPosition: this.verticalPosition,
+                        horizontalPosition: this.horizontalPosition,
+                        duration: 3000,
+                        panelClass: ['mat-toolbar', 'mat-primary'],
+
+                    });
+
+                },
+                error: (error: any) => {
+                    console.error('Error al crear el combo:', error);
+                    this.matSnackBar.open("La creacion del combo fallo, intentelo nuevamente.", "Close", {
+                        verticalPosition: this.verticalPosition,
+                        horizontalPosition: this.horizontalPosition,
+                        duration: 3000,
+                        panelClass: ['mat-toolbar', 'mat-warn']
+                    });
+                },
+                complete: () => {
+                    //console.log('Bundle creation process completed.');
+                    this.cartService.clearCart();
+                    this.onClose();
+                    this.router.navigate(['/bundler/bundles']);
+                    
+                }
+            })
+
+        } else {
+            console.log("Hay campos vacios o no validos.");
+        }
+
+    }
+
+    getTotalCF(): number {
+        return this.cartService.getTotalCF();
+    }
+
+    getTotalPM(): number {
+        return this.cartService.getTotalPM();
+    }
+
+    removeProduct(theTroduct: ProductDto): void {
+        this.cartService.removeFromCart(theTroduct);
+    }
+
+   
 }

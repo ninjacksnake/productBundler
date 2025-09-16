@@ -1,33 +1,31 @@
 import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class AddProductDto {
-    @IsString()
-    @IsNotEmpty()
-    productId!: string;
+  @IsNumber()
+  @IsNotEmpty()
+  id?: number;
 
-    @IsString()
-    @IsNotEmpty()
-    name!: string;
-    
-    @IsString()
-    @IsOptional()
-    description?: string;
-   
-    @IsNumber() 
-    @IsNotEmpty()
-    price1!: number;
-   
-    @IsNumber() 
-    @IsOptional()
-    price2?: number;
+  @IsString()
+  @IsNotEmpty()
+  productId!: string;
 
-    @IsNumber()    
-    quantity?: number = 1;
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
 
-    @IsNumber()    
-    subtotal?: number = 0;  
+  @IsString()
+  @IsOptional()
+  description?: string;
 
-    @IsNumber()    
-    subtotal2?: number = 0;  
+  @IsNumber()
+  @IsNotEmpty()
+  pricePM!: number;
 
+  @IsNumber()
+  @IsOptional()
+  priceCF?: number;
+
+  @IsNumber()
+  @IsOptional()
+  stock?: number;
 }

@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}   
+
+.example-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.example-card mat-card-title {
+
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}   
+
+.example-card mat-form-field {
+    margin-bottom: 15px;
+}       
+
+.example-card mat-button {
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}   
+
+.button-container {
+    display: flex;
+    justify-content: end    ;
+    align-items: center;
+    
+}

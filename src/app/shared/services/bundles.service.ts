@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BundleDto } from '../Dtos/bundle.dto';
-                                                    
+import { HttpService } from '../../shared/http.service';
+import { catchError, map, Observable, shareReplay, take, tap, throwError } from 'rxjs';
+import { IBundle } from '../Dtos/bundle.dto';
+
 
 
 @Injectable({
@@ -10,64 +10,79 @@ import { BundleDto } from '../Dtos/bundle.dto';
 })
 export class BundlesService {
 
-    private bundles: BundleDto[] = [
-        {
-        id: 1,
-        name: 'Bundle 1',
-        description: 'Description 1',
-        products: [],
-        priceCF: 2000,
-        pricePM: 1500,
-        createdDate: new Date(),
-        updatedDate: new Date()
-        },  
-        {
-        id: 2,
-        name: 'Bundle 2',
-        description: 'Description 2',
-        products: [],
-        priceCF: 2500,
-        pricePM: 2000,
-        createdDate: new Date(),
-        updatedDate: new Date(),
-        },
-    ];
 
-  private apiUrl = 'https://localhost:5001/api/bundles';
+  public bundles: IBundle[] = [];
 
-  constructor() { }
+  private apiUrl = '/bundles';
+
+  constructor(private http: HttpService) {
+  }
 
   /**
    * Retrieves all bundles from the local data source.
    * 
    * @returns An array of all BundleDto objects.
    */
-  getAll(): BundleDto[]   {
-   //return this.http.get<BundleDto[]>(this.apiUrl);
-   return this.bundles;
+  getAll(): Observable<IBundle[]> {
+    return this.http.get(this.apiUrl).pipe(
+      map((response: any) => {
+        this.bundles = response;
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error fetching bundles:', error);
+        return throwError(() => error);
+      }),
+      shareReplay(1)
+    );
   }
 
-  getById(id: number): BundleDto {
-    const bundle = this.bundles.find(bundle => bundle.id === id);
-    if (!bundle) {
-      throw new Error('Bundle not found');
-    }
-    return bundle;
+  getById(id: number): Observable<IBundle> {
+    return this.http.get(`${this.apiUrl}/${id}`).pipe(
+      map((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error fetching bundle:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  create(bundle: BundleDto):    BundleDto {
-    this.bundles.push(bundle) ;
-    return bundle;
+  create(bundle: IBundle): Observable<any> {
+    return this.http.post(this.apiUrl, bundle).pipe(
+      map((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error creating bundle:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  update(id: number, bundle: BundleDto): BundleDto {
-    const index = this.bundles.findIndex(bundle => bundle.id === id);
-    this.bundles[index] = bundle;
-    return bundle;
+  update(id: number, bundle: IBundle): Observable<IBundle> {
+    return this.http.put(`${this.apiUrl}/${id}`, bundle).pipe(
+      map((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error updating bundle:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  delete(id: number): void {
-    this.bundles = this.bundles.filter(bundle => bundle.id !== id);
+  delete(id: number): Observable<void> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      map((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error deleting bundle:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
 }

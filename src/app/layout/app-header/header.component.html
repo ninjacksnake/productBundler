@@ -1,10 +1,6 @@
 <header class="header">
   <nav class="nav-menu">
-    <div class="nav-left">
-      <a routerLink="/bundles" class="nav-link">Combos</a>
-      <a routerLink="/products" class="nav-link">Productos</a>
-      <a routerLink="/users" class="nav-link">Usuarios</a>
-    </div>
+   <NavLeft [user]="user"></NavLeft>
     <!-- Carrito -->
     <div class="nav-right">
       <a matMiniFab aria-label="Carrito de compras" [mat-menu-trigger-for]="cartMenu" class="nav-link">
@@ -20,9 +16,13 @@
       <a [mat-menu-trigger-for]="profileMenu" class="nav-link">
         <mat-icon>person</mat-icon>
         <mat-menu #profileMenu="matMenu">
-          <button mat-menu-item>Perfil</button>
-          <button mat-menu-item>Configuración</button>
-          <button mat-menu-item>Salir</button>
+          <div *ngIf="user" class="profile-menu-name" center>
+            <p>{{user.name}}</p>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="users/profile">Perfil</button>
+          <!-- <button mat-menu-item routerLink="users/edit/{{user?.id}}">Configuración</button> -->
+          <button mat-menu-item (click)="logout()">Salir</button>
         </mat-menu>
       </a>
     </div>

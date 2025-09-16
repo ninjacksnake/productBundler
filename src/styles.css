@@ -1,7 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+
+
+.paleStone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px; /* Add padding to prevent footer overlap */
+}
 
 .ninja-input {
     width: 25%;
@@ -45,5 +61,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .option-gray   {
     color: rgb(56, 54, 54);
 }
-    
-    

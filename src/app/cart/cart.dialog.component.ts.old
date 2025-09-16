@@ -1,0 +1,306 @@
+import { Component, Inject, OnInit, ViewChild, HostListener } from '@angular/core';
+import { finalize, take } from 'rxjs';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { CartService } from '../shared/services/cart.service';
+import { AddProductBundleDto } from '../Dtos/add.product.bundle.dto';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogComponent } from '../shared/dialog/dialog.component';
+import { BundlesService } from '../shared/services/bundles.service';
+import { IBundle } from '../shared/Dtos/bundle.dto';
+
+
+interface CartDialogData {
+  title: string;
+  message: string;
+  products: AddProductBundleDto[];
+}
+
+  /**
+   * Store a copy of the cart in the web browser localstorage
+   */
+  const storeCartLocally = (data: CartDialogData): void => {
+    localStorage.setItem('cart', JSON.stringify(data.products));
+  }
+
+  const getCartLocally = (): AddProductBundleDto[] => {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+
+@Component({
+  selector: 'app-cart',
+  templateUrl: './cart.dialog.component.html',
+  styleUrls: ['./cart.dialog.component.css']
+})
+
+
+export class CartDialogComponent implements OnInit {
+  priceCF = 0;
+  pricePM = 0;
+  products: AddProductBundleDto[] = [];
+  bundles: IBundle[] = [];
+  isLoading = false;
+  isComponentActive = false;
+  private keyboardHandled = false;
+ // @ViewChild('bundleForm') bundleForm: any; // TODO: revisar si es necesario  
+  
+  // Form controls
+  bundleFormGroup: FormGroup;
+  name = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+  description = new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]);
+  priceCF = new FormControl(0, [Validators.required, Validators.min(0)]);
+  pricePM = new FormControl(0, [Validators.required, Validators.min(0)]);
+  
+  // Custom validator to ensure Por Mayor price is less than or equal to Venta price
+  priceValidator(group: FormGroup): ValidationErrors | null {
+    const priceCF = group.get('priceCF')?.value;
+    const pricePM = group.get('pricePM')?.value;
+    
+    // if (priceCF && pricePM && pricePM > priceCF) {
+    //   return { invalidPricing: true };
+    // }
+    
+    return null;
+  }
+
+  constructor(
+    private cartService: CartService,
+    private dialogRef: MatDialogRef<CartDialogComponent>,
+    private dialog: MatDialog,
+    private fb: FormBuilder,
+    private bundlesService: BundlesService,
+    @Inject(MAT_DIALOG_DATA) public data: CartDialogData
+  ) {
+    // Initialize products from the injected data
+    this.products = data.products || [];
+    
+    // Initialize form group with custom validator
+    this.bundleFormGroup = this.fb.group({
+      name: this.name,
+      description: this.description,
+      priceCF: this.priceCF,
+      pricePM: this.pricePM
+    }, { validators: this.priceValidator });
+  }
+  
+  ngOnInit() {
+    // Set component as active when initialized
+    this.isComponentActive = true;
+    
+    // Set initial values if needed
+    this.updatePricesFromCart();
+    
+    // Subscribe to form value changes for real-time validation
+    this.bundleFormGroup.valueChanges.subscribe(() => {
+      // You can add custom validation logic here if needed
+    });
+    
+    // Subscribe to form status changes
+    this.bundleFormGroup.statusChanges.subscribe(status => {
+      // You can update UI elements based on form status
+      console.log('Form status:', status); // 'VALID', 'INVALID', 'PENDING', 'DISABLED'
+    });
+  }
+  
+  // Helper method to update prices based on cart contents
+  updatePricesFromCart(): void {
+    if (this.products.length > 0) {
+      this.priceCF.setValue(this.getTotalCF());
+      this.pricePM.setValue(this.getTotalPM());
+    }
+  }
+  
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Only handle keyboard events if component is active
+    if (!this.isComponentActive) {
+      return;
+    }
+    
+    // Ctrl+Enter to submit form
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault(); // Prevent form submission
+      event.stopPropagation(); // Stop event bubbling
+      this.keyboardHandled = true;
+      
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        this.keyboardHandled = false;
+      }, 100);
+      
+      if (this.validateForm()) {
+        this.saveBundle();
+      }
+    }
+    
+    // Escape to reset form
+    if (event.key === 'Escape') {
+      event.preventDefault(); // Prevent any default behavior
+      event.stopPropagation(); // Stop event bubbling
+      this.resetForm();
+    }
+  }
+
+  getCart(): AddProductBundleDto[] {
+    return this.products;
+  }
+
+  getTotalCF(): number {
+    return this.cartService.getTotalCF();
+  }
+
+  getTotalPM(): number {
+    return this.cartService.getTotalPM();
+  }
+
+  closeCart(): void {
+    this.isComponentActive = false;
+    this.dialogRef.close();
+  }
+
+  clearCart(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        title: 'Confirmar',
+        message: '¿Estas seguro de que deseas limpiar la lista?',
+        products: [] // Empty array since we're clearing the cart
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.cartService.clearCart();
+        this.dialogRef.close();
+      }
+    });
+  }
+
+
+  saveBundle(): void {
+    // Prevent multiple simultaneous requests
+    if (this.isLoading) {
+      return;
+    }
+    
+    // Prevent duplicate calls from keyboard + form submit
+    if (this.keyboardHandled) {
+      return;
+    }
+    
+   // if (this.validateForm()) {
+      const formValue = this.bundleFormGroup.value;
+      const bundleData = {
+        bundleId: formValue.name,
+        name: formValue.name,
+        description: formValue.description,
+        priceCF: formValue.priceCF,
+        pricePM: formValue.pricePM,
+        products: this.products
+      };
+      
+       //   this.isLoading = true;
+         this.bundlesService
+          .create(bundleData as IBundle)
+          .pipe(take(1), finalize(() => (this.isLoading = false)))
+          .subscribe({
+          next: (bundle) => {
+            console.log('Bundle created:', bundle);
+          },
+          error: (error) => {
+            console.error('Error creating bundle:', error);
+          }
+         });
+        
+    //}
+  }
+  
+  // Helper method to mark all controls in a form group as touched
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      // If control is a nested form group, recursively mark its controls as touched
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+  
+  // Helper method to validate the entire form
+  validateForm(): boolean {
+    this.markFormGroupTouched(this.bundleFormGroup);
+    this.bundleFormGroup.updateValueAndValidity();
+    return this.bundleFormGroup.valid;
+  }
+  
+  resetForm(): void {
+    // Check if form is dirty before resetting
+    if (this.isFormDirty()) {
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {
+          title: 'Confirmar',
+          message: '¿Está seguro que desea limpiar el formulario? Se perderán los datos ingresados.',
+          showCancel: true
+        }
+      });
+      
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.performReset();
+        }
+      });
+    } else {
+      this.performReset();
+    }
+  }
+  
+  // Helper method to check if any form control is dirty
+  isFormDirty(): boolean {
+    return Object.keys(this.bundleFormGroup.controls).some(key => {
+      return this.bundleFormGroup.controls[key].dirty;
+    });
+  }
+  
+  // Helper method to perform the actual form reset
+  performReset(): void {
+    this.bundleFormGroup.reset();
+    
+    // Reset to default values if needed
+    this.priceCF.setValue(0);
+    this.pricePM.setValue(0);
+    
+    // Show a confirmation message
+    const snackBarRef = this.dialog.open(DialogComponent, {
+      data: {
+        title: 'Formulario Limpiado',
+        message: 'Se ha limpiado el formulario',
+        autoClose: true,
+        duration: 2000
+      }
+    });
+  }
+  
+  // Helper method to get error message for a form control
+  getErrorMessage(control: FormControl): string {
+    if (control.hasError('required')) {
+      return 'Este campo es requerido';
+    }
+    if (control.hasError('minlength')) {
+      return `Debe tener al menos ${control.errors?.['minlength'].requiredLength} caracteres`;
+    }
+    if (control.hasError('maxlength')) {
+      return `No debe exceder ${control.errors?.['maxlength'].requiredLength} caracteres`;
+    }
+    if (control.hasError('min')) {
+      return `El valor debe ser mayor o igual a ${control.errors?.['min'].min}`;
+    }
+    return '';
+  }
+  
+  // Helper method to check if the form has the price validation error
+  hasPriceValidationError(): boolean {
+    return this.bundleFormGroup.errors?.['invalidPricing'] === true;
+  }
+
+
+
+}

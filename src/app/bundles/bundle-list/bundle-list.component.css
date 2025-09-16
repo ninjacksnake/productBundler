@@ -3,8 +3,44 @@
     gap: 10px;
 }
 
+.bundle-table {
+    padding: 1rem;
+    overflow: auto;
+    max-height: 600px !important;
+    position: relative;
+}
 
+/* Target the specific table in this component */
+.bundle-table .mat-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+/* Make the header row sticky */
+.bundle-table .mat-header-row {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Ensure header cells have a background */
+.bundle-table .mat-header-cell {
+    background: white;
+    position: relative;
+    z-index: 11;
+}
+
+/* Add a border to the bottom of the header */
+.bundle-table .mat-header-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+}
 
 .mat-input {
     width: 25%;
@@ -13,4 +49,39 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 0.5rem;
-  }
+}
+
+.stripped-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.stripped-table th.mat-mdc-header-cell {
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    background: #c8d9ea;
+    padding: 12px;
+    text-align: left;
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.stripped-table td.mat-mdc-cell {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px;
+}
+
+.stripped-table tr.mat-mdc-row:nth-child(even) {
+    background: #e3e2e2; /* striped effect */
+}
+
+.stripped-table tr.mat-mdc-row:hover {
+    background: #cee5f5; /* hover effect */
+    transition: background 0.2s ease;
+}
+
+.stripped-table .mat-mdc-header-row,
+.stripped-table .mat-mdc-row {
+    height: 48px;
+}

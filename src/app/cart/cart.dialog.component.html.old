@@ -1,0 +1,103 @@
+<div class="cart-dialog">
+<div class="action-buttons">
+  <button type="button" class="close-button" (click)="closeCart()" aria-label="Close cart"><mat-icon>close</mat-icon></button>
+</div>
+  <h2 class="section-title">Lista de productos en el Combo</h2>
+  <div class="form-container" [class.loading]="isLoading">
+    <div class="loading-overlay" *ngIf="isLoading">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Guardando combo...</p>
+    </div>
+    <div class="row">
+      <div class="product-section ">
+        <table class="mat-elevation-z1" mat-table>
+          <thead>
+              <tr>  
+              <th>Nombre</th>
+              <th>Precio CF</th>
+              <th>Precio PM</th>
+              <th>Cantidad</th>
+              <th>Subtotal CF</th>
+              <th>Subtotal PM</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of getCart()">
+              <td>{{product.name}}</td>
+              <td>{{product.priceCF | currency : '$'}}</td>
+              <td>{{product.pricePM | currency : '$'}}</td>
+              <td>{{product.quantity}}</td>
+              <td>{{product.subtotal1 | currency : '$'}}</td>
+              <td>{{product.subtotal2 | currency : '$'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="totals-section">
+   
+      <p> <strong>Total CF:</strong> {{getTotalCF() | currency}}</p>
+        <p><strong>Total PM:</strong> {{getTotalPM() | currency}}</p>
+    </div>
+    <form [formGroup]="bundleFormGroup" (ngSubmit)="saveBundle()" novalidate>
+      <mat-form-field appearance="outline" class="form-field" matTooltip="Ingrese un nombre descriptivo para el combo" matTooltipPosition="above">
+        <mat-label>Nombre del Combo</mat-label>
+        <input matInput type="text" id="bundleName" name="bundleName" required placeholder="Ingrese nombre del combo" [formControl]="name" minlength="3" maxlength="50">
+        <mat-icon matSuffix>label</mat-icon>
+        <mat-hint align="start">Nombre descriptivo para el combo</mat-hint>
+        <mat-hint align="end">{{name.value?.length || 0}}/50</mat-hint>
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+          {{ getErrorMessage(name) }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" matTooltip="Describa brevemente el contenido y beneficios del combo" matTooltipPosition="above">  
+        <mat-label>Descripción del Combo</mat-label>
+        <textarea matInput id="bundleDescription" name="bundleDescription" required placeholder="Ingrese descripción" rows="2" [formControl]="description" maxlength="200"></textarea>
+        <mat-icon matSuffix>description</mat-icon>
+        <mat-hint align="start">Breve descripción del combo</mat-hint>
+        <mat-hint align="end">{{description.value?.length || 0}}/200</mat-hint>
+        <mat-error *ngIf="description.invalid && (description.dirty || description.touched)">
+          {{ getErrorMessage(description) }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" matTooltip="Precio de venta al público" matTooltipPosition="above">
+        <mat-label>Precio de Venta</mat-label>
+        <input matInput type="number" id="bundlePriceCF" name="bundlePriceCF" required min="0" step="0.01" [formControl]="priceCF">
+        <span matPrefix>$&nbsp;</span>
+        <mat-hint align="start">Precio de venta al público</mat-hint>
+        <mat-error *ngIf="priceCF.invalid && (priceCF.dirty || priceCF.touched)">
+          {{ getErrorMessage(priceCF) }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" matTooltip="Precio Por Mayor" matTooltipPosition="above">  
+        <mat-label>Precio Por Mayor</mat-label>
+        <input matInput type="number" id="bundlePricePM" name="bundlePricePM" required min="0" step="0.01" [formControl]="pricePM">
+        <span matPrefix>$&nbsp;</span>
+        <mat-hint align="start">Precio para ventas al por mayor</mat-hint>
+        <mat-error *ngIf="pricePM.invalid && (pricePM.dirty || pricePM.touched)">
+          {{ getErrorMessage(pricePM) }}
+        </mat-error>
+      </mat-form-field>
+      <!-- Display form-level validation error -->
+      <!-- <div *ngIf="hasPriceValidationError()" class="mat-error" style="margin-bottom: 15px;">
+        El Precio Por Mayor no puede ser mayor que el Precio de Venta
+      </div> -->
+      
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="bundleFormGroup.invalid" matTooltip="Guardar (Ctrl+Enter)">
+          <mat-icon>save</mat-icon> Guardar Combo
+        </button>
+        <button mat-button type="button" (click)="resetForm()" matTooltip="Limpiar (Esc)">
+          <mat-icon>refresh</mat-icon> Limpiar
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <!-- <div class="row justify-content-end">
+    <button mat-flat-button color="warn" (click)="clearCart()">Limpiar</button>
+    <button mat-flat-button color="primary" (click)="createBundle()">Crear Combo</button>
+  </div> -->

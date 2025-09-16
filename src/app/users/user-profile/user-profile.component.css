@@ -1,0 +1,186 @@
+.user-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+}
+
+.user-profile-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem;
+}
+.user-profile-card mat-card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+   
+    padding: 1rem;
+}   
+.user-profile-card mat-card-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}   
+.user-profile-card mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}   
+.user-photo {
+    display: flex;
+    flex-direction: row;
+    
+}   
+/* user-profile.component.css */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 100%;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.profile-header {
+    padding: 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+}
+
+.profile-avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-photo-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #3f51b5;
+    color: white;
+}
+
+.edit-photo-btn:hover {
+    background-color: #303f9f;
+}
+
+.profile-name {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.profile-role {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+    background-color: #3f51b5;
+}
+
+.role-admin {
+    background-color: #f44336;
+}
+
+.role-user {
+    background-color: #4caf50;
+}
+
+.profile-divider {
+    margin: 1rem 0;
+}
+
+.profile-details {
+    padding: 1rem 2rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-icon {
+    margin-right: 1rem;
+    background: #f5f7fa;
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    margin-bottom: 0.25rem;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 2rem;
+    background-color: #f9f9f9;
+}
+
+.action-button {
+    margin-left: 1rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.action-button mat-icon {
+    margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 1rem;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .action-button {
+        margin: 0.25rem 0;
+        width: 100%;
+    }
+}

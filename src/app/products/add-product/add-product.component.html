@@ -1,1 +1,70 @@
-<p>add-product works!</p>
+<div class="container">
+    <h1>Agregar nuevo producto</h1>
+    <mat-card class="form-container">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>ID del producto</mat-label>
+                    <input matInput type="text" formControlName="productId">
+                    <mat-error *ngIf="productForm.get('productId')?.hasError('required')">
+                        El ID del producto es requerido
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nombre del producto</mat-label>
+                    <input matInput type="text" formControlName="name" required />
+                    <mat-error *ngIf="productForm.get('name')?.hasError('required')">
+                        El nombre del producto es requerido
+                    </mat-error>
+                    <mat-error *ngIf="productForm.get('name')?.hasError('minlength')">
+                        El nombre debe tener al menos 3 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Descripción</mat-label>
+                    <textarea matInput formControlName="description" required></textarea>
+                    <mat-error *ngIf="productForm.get('description')?.hasError('required')">
+                        Descripción es requerida
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field  appearance="outline"  class="full-width">
+                    <mat-label>Precio CF</mat-label>
+                    <input matInput type="number" formControlName="priceCF" required />
+                    <mat-error *ngIf="productForm.get('priceCF')?.hasError('required')">
+                        El precio CF es requerido
+                    </mat-error>
+                    <mat-error *ngIf="productForm.get('priceCF')?.hasError('min')">
+                        El precio debe ser mayor a 0
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-error *ngIf="productForm.get('pricePM')?.hasError('required')">
+                        El precio PM es requerido
+                    </mat-error>
+                    <mat-error *ngIf="productForm.get('pricePM')?.hasError('min')">
+                        El precio debe ser mayor a 0
+                    </mat-error>
+                    <mat-label>Precio PM</mat-label>
+                    <input matInput type="number" formControlName="pricePM">
+                </mat-form-field>
+            </div>
+
+            <button mat-raised-button color="primary" class="ninja-form-button" type="submit"
+                [disabled]="productForm.invalid">
+                Crear
+            </button>
+        </form>
+    </mat-card>
+</div>

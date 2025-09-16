@@ -1,0 +1,57 @@
+.container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  form {
+display: flex;
+flex-direction: column;
+
+
+  }
+  .row {
+    margin-bottom: 0px;
+   
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: flex-end;
+
+
+  }
+
+  .ninja-form-button {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+
+  }
+
+  .ninja-form-input {
+    width: 25rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+  }
+
+  .ninja-form-input-select {
+    width: 26rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+  }
+  

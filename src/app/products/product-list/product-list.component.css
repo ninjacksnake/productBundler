@@ -1,0 +1,48 @@
+.stripped-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.product-table {
+  padding: 1rem;
+  overflow: auto;
+  max-height: 600px !important;
+}
+.stripped-table th.mat-mdc-header-cell {
+  font-weight: 600;
+  border-bottom: 1px solid #e0e0e0;
+  background: #c8d9ea;
+  padding: 12px;
+  text-align: left;
+  color: black;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.stripped-table td.mat-mdc-cell {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px;
+}
+
+.stripped-table tr.mat-mdc-row:nth-child(even) {
+  background: #e3e2e2; /* striped effect */
+}
+
+.stripped-table tr.mat-mdc-row:hover {
+  background: #cee5f5; /* hover effect */
+  transition: background 0.2s ease;
+}
+
+.stripped-table .mat-mdc-header-row,
+.stripped-table .mat-mdc-row {
+  height: 48px;
+}
+
+.stripped-table tr.mat-mdc-row.selected {
+  background-color: #92d598 !important; /* Light green background */
+  box-shadow: inset 0 0 0 2px #4caf50; /* Green border */
+  transition: all 0.3s ease;
+}
+
+.stripped-table tr.mat-mdc-row.selected:hover {
+  background-color: #c8e6c9 !important; /* Slightly darker green on hover */
+}

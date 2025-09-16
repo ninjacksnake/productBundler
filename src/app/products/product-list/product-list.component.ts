@@ -1,56 +1,92 @@
-import { Component } from '@angular/core';
-import { AddProductDto } from '../../Dtos/add.product.dto';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { IProduct } from '../../shared/interfaces/product.interface';
 import { CartService } from '../../shared/services/cart.service';
-import { Router } from '@angular/router';
-
-const testData: AddProductDto[] = [
-  {
-    productId: 'prod-001',
-    name: 'Product 1',
-    description: 'Description for Product 1',
-    price1: 100.00,
-    price2: 120.00,
-  },
-  {
-    productId: 'prod-002',
-    name: 'Product 2',
-    description: 'Description for Product 2',
-    price1: 200.00,
-    price2: 220.00
-  },
-  {
-    productId: 'prod-003',
-    name: 'Product 3',
-    description: 'Description for Product 3',
-    price1: 300.00,
-    price2: undefined // Optional field
-  }
-];
-
-const filterData = (filter: string ) => {
-  return testData.filter((item) => item.name === filter);
-}
+import { ProductService } from '../../shared/services/product.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
+export class ProductListComponent implements OnInit, OnDestroy {
+  filtredProducts: IProduct[] = [];
+  searchTerm: string = '';
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private cartSubscription: Subscription;
+  cartItems: any[] = [];
 
-export class ProductListComponent {
-  constructor(private cartService: CartService, private router: Router  ) {}
-  
-  columns: string[] = ['productId', 'name', 'description', 'price1', 'price2', 'options'];
-  products: AddProductDto[] = testData;
-  filter: (filter: string) => AddProductDto[] = filterData; 
-  
-  addToCart(product: AddProductDto): void {
+  constructor(
+    private cartService: CartService,
+    private productService: ProductService,
+    private snackBar: MatSnackBar
+  ) {
+    this.cartSubscription = this.cartService.cart$.subscribe(cart => {
+      this.cartItems = cart;
+    });
+  }
+
+  public dataSource = new MatTableDataSource<IProduct>();
+
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe((products: IProduct[]) => {
+      this.dataSource.data = products;
+      this.filtredProducts = products;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+  }
+
+  isInCart(productId: string): boolean {
+    return this.cartItems.some(item => item.id === productId);
+  }
+
+  filterProducts(): void {
+    this.dataSource.data = this.filtredProducts.filter(product =>
+      product.productId.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  columns: string[] = [
+    'productId',
+    'name',
+    'description',
+    'pricePM',
+    'priceCF',
+    'options',
+  ];
+
+  addToCart(product: IProduct): void {
     this.cartService.addToCart(product);
-  }
-      
-      removeFromCart(product: AddProductDto): void {
-    this.cartService.removeFromCart(product);
+    this.snackBar.open('Product added to cart', 'Close', {
+      duration: 2000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center'
+    });
   }
 
-  
+  removeFromCart(product: IProduct): void {
+    this.cartService.removeFromCart(product);
+    this.snackBar.open('Product removed from cart', 'Close', {
+      duration: 2000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center'
+    });
+  }
 }

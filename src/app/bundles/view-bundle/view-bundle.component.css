@@ -1,0 +1,92 @@
+.view-bundle-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  
+}
+
+.view-bundle-container .row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 2rem;
+}
+
+.view-bundle-container .row .col-4 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 40%;
+}
+
+.view-bundle-container .row .col-8 {
+    width: 60%;
+}
+.ninja-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+.total-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.stripped-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  .stripped-table th.mat-mdc-header-cell {
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    background: #c8d9ea;
+    padding: 12px;
+    text-align: left;
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+  
+  .stripped-table td.mat-mdc-cell {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px;
+  }
+  
+  .stripped-table tr.mat-mdc-row:nth-child(even) {
+    background: #e3e2e2; /* striped effect */
+  }
+  
+  .stripped-table tr.mat-mdc-row:hover {
+    background: #cee5f5; /* hover effect */
+    transition: background 0.2s ease;
+  }
+  
+  .stripped-table .mat-mdc-header-row,
+  .stripped-table .mat-mdc-row {
+    height: 48px;
+  }
+  .info-container{
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+
+  }
+
+  .info-list-item{
+    padding: 5px;
+    font-size: 15px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    /* border-bottom: 1px solid #e0e0e0; */
+    list-style: none;   
+
+  }
+
+  .highlight-title{
+    font-weight: 600;
+    color: #1a73e8;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }

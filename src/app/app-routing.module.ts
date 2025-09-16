@@ -16,14 +16,36 @@ import { ProductListComponent } from './products/product-list/product-list.compo
 import { AddProductComponent } from './products/add-product/add-product.component';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { ViewProductComponent } from './products/view-product/view-product.component';
+import { AuthGuard } from './guards/auth.guard';
+import { UserProfileComponent } from './users/user-profile/user-profile.component';
+import { LogInComponent } from './log-in/log-in.component';
 
 const routes: Routes = [
-  { 
+  // Public routes (not protected)
+  {
     path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LogInComponent
+  },
+
+  // Protected routes
+  {
+    path: 'bundler',
+    canActivate: [AuthGuard],
     component: LayoutComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'products/list',
+        pathMatch: 'full'
+      },
+      {
         path: 'bundles',
+        canActivate: [AuthGuard],
         component: BundlesComponent,
         children: [
           {
@@ -53,6 +75,7 @@ const routes: Routes = [
       },
       {
         path: 'users',
+        canActivate: [AuthGuard],
         component: UsersComponent,
         children: [
           {
@@ -78,10 +101,15 @@ const routes: Routes = [
             path: 'view/:id',
             component: ViewUserComponent,
           },  
+          {
+            path: 'profile',
+            component: UserProfileComponent,
+          },
         ]    
       },
       {
         path: 'products',
+        canActivate: [AuthGuard],
         component: ProductsComponent,
         children: [
           {
@@ -98,7 +126,7 @@ const routes: Routes = [
             path: 'add',
             component: AddProductComponent,
             pathMatch: 'full'
-          },
+          },  
           {
             path: 'edit/:id',
             component: EditProductComponent,
@@ -109,8 +137,10 @@ const routes: Routes = [
           },  
         ]    
       },
+     
     ]
   },
+
 ];
 
 @NgModule({

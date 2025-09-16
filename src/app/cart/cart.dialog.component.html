@@ -1,45 +1,97 @@
-<div class="cart-dialog">
-<div class="action-buttons">
-  <button  class="close-button" (click)="closeCart()" aria-label="Close cart"><mat-icon>close</mat-icon></button>
-</div>
-  <h2>Lista del Combo</h2>
+<h2 mat-dialog-title>Combo</h2>
+
+<mat-dialog-content>
+  <div class="cart-form-section">
+    <form [formGroup]="bundleForm">
+      <div class="form-body">
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre del Combo</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="bundleForm.get('name')?.hasError('required')">
+            El nombre es requerido.
+          </mat-error>
+          <mat-error *ngIf="bundleForm.get('name')?.hasError('minlength')">
+            El nombre debe tener al menos 3 caracteres.
+          </mat-error>
+          <mat-error *ngIf="bundleForm.get('name')?.hasError('maxlength')">
+            El nombre no puede exceder los 50 caracteres.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descripcion</mat-label>
+          <input matInput formControlName="description" required>
+          <mat-error *ngIf="bundleForm.get('description')?.hasError('required')">
+            La descripcion es requerida.
+          </mat-error>
+          <mat-error *ngIf="bundleForm.get('description')?.hasError('minlength')">
+            La descripcion debe tener al menos 10 caracteres.
+          </mat-error>
+          <mat-error *ngIf="bundleForm.get('description')?.hasError('maxlength')">
+            La descripcion no puede exceder los 350 caracteres.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="bundleForm.invalid">Crear Combo!
+      </button>
+    </form>
+
+  </div>
+  <div class="cart-content">
+    <div class="cart-table-section">
+      <table mat-table [dataSource]="data.products" class="mat-elevation-z">
+        <ng-container matColumnDef="productId">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let product">{{ product.productId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Product</th>
+          <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+          <td mat-cell *matCellDef="let product">{{ product.quantity }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="pricePM">
+          <th mat-header-cell *matHeaderCellDef>Al por mayor</th>
+          <td mat-cell *matCellDef="let product">{{ product.pricePM | currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="priceCF">
+          <th mat-header-cell *matHeaderCellDef>Al detalle</th>
+          <td mat-cell *matCellDef="let product">{{ product.priceCF | currency }}</td>
+        </ng-container>
 
 
-  <div class="row">
-    <div class="product-section ">
-      <table class="mat-elevation-z1">
-        <thead>
-            <tr>  
-            <th>Nombre</th>
-            <th>Precio CF</th>
-            <th>Precio PM</th>
-            <th>Cantidad</th>
-            <th>Subtotal CF</th>
-            <th>Subtotal PM</th>
-            </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let product of getCart()">
-            <td>{{product.name}}</td>
-            <td>{{product.price1 | currency : '$'}}</td>
-            <td>{{product.price2 | currency : '$'}}</td>
-            <td>{{product.quantity}}</td>
-            <td>{{product.subtotal | currency : '$'}}</td>
-            <td>{{product.subtotal2 | currency : '$'}}</td>
-          </tr>
-        </tbody>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef>Opciones</th>
+          <td mat-cell *matCellDef="let product">
+            <button type="button" mat-mini-fab color="primary" aria-label="boton eliminar producto"
+              (click)="removeProduct(product)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
       </table>
     </div>
   </div>
-
-  <div class="totals-section">
- 
-    <p> <strong>Total CF:</strong> {{getTotalCF() | currency}}</p>
-      <p><strong>Total PM:</strong> {{getTotalPM() | currency}}</p>
+  <div class="cart-info-section">
+    <p>Total Price PM: {{ getTotalPM() | currency }}</p>
+    <p>Total Price CF: {{ getTotalCF() | currency }}</p>
   </div>
 
-  <div class="row justify-content-end">
-    <button mat-flat-button color="warn" (click)="clearCart()">Limpiar</button>
-   
-    <button mat-flat-button color="primary" (click)="createBundle()">Crear Combo</button>
-  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+  <!-- <button mat-raised-button color="primary" [disabled]=".items?.length === 0"> -->
+  <!-- Checkout -->
+  <!-- </button> -->
+</mat-dialog-actions>
