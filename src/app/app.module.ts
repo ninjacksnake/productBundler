@@ -49,8 +49,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';  
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
  import{MatPaginatorModule}from '@angular/material/paginator';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatBadgeModule } from '@angular/material/badge'; 
 
-/**
+/** 
  * The root module of the application. 
  * 
  * This module is responsible for importing the necessary modules and declaring the application components.
@@ -111,6 +113,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     HttpClientModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    MatStepperModule,
+    MatBadgeModule,
     
    
     

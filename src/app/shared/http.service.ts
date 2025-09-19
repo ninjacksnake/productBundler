@@ -50,44 +50,44 @@ export class HttpService {
       );
   }
 
-  get(url: string): Observable<any> {
+  get(url: string, options: any = {}): Observable<any> {
  // console.log(url);
-    return this.http
-      .get(this.apiUrl + url, {
+    const makeRequest = () =>
+      this.http.get(this.apiUrl + url, {
         headers: this.headers,
-      })
-      .pipe(
-        catchError((error: any) => {
-          if (error.status === 401) {
-            this.matSnack.open('Session expired, refreshing....', 'Close', {
-              duration: 1500,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-              panelClass: ['mat-snackbar-error'],
-            });
-            
-            // Return the refresh observable and handle the response
-            return this.refresh().pipe(
-              switchMap((response: any) => {
-                if (!response?.access_token) {
-                  this.router.navigate(['/login']);
-                  return throwError(() => new Error('No access token received'));
-                }
-                // Retry the original request with new token
-                return this.http.get(this.apiUrl + url, {
-                  headers: this.headers,
-                });
-              }),
-              catchError((refreshError) => {
+        ...options,
+      });
+
+    return makeRequest().pipe(
+      catchError((error: any) => {
+        if (error.status === 401) {
+          this.matSnack.open('Session expired, refreshing....', 'Close', {
+            duration: 1500,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            panelClass: ['mat-snackbar-error'],
+          });
+          
+          // Return the refresh observable and handle the response
+          return this.refresh().pipe(
+            switchMap((response: any) => {
+              if (!response?.access_token) {
                 this.router.navigate(['/login']);
-                return throwError(() => refreshError);
-              })
-            );
-          }
-          // For other errors, just pass them through
-          return throwError(() => error);
-        })
-      );
+                return throwError(() => new Error('No access token received'));
+              }
+              // Retry the original request with new token
+              return makeRequest();
+            }),
+            catchError((refreshError) => {
+              this.router.navigate(['/login']);
+              return throwError(() => refreshError);
+            })
+          );
+        }
+        // For other errors, just pass them through
+        return throwError(() => error);
+      })
+    );
   }
 
   post(url: string, body: any): Observable<any> {

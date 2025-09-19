@@ -28,4 +28,8 @@ export class ProductDto {
   @IsNumber()
   @IsOptional()
   stock?: number;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
 }

@@ -30,4 +30,8 @@ export class UpdateProductDto  {
     @IsNumber()
     @IsOptional()
     stock?: number;
+
+    @IsString()
+    @IsOptional()
+    image?: string;
 }

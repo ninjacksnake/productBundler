@@ -29,7 +29,8 @@ export class EditProductComponent {
         productId: this.product.productId,
         description: this.product.description,
         pricePM:  this.product.pricePM,
-        priceCF: this.product.priceCF
+        priceCF: this.product.priceCF,
+        image: this.product.image
       });
     });
   }
@@ -41,7 +42,8 @@ export class EditProductComponent {
       productId: [''],
       description: [''],
       pricePM: [0],
-      priceCF: [0]
+      priceCF: [0],
+      image: ['']
     });
    
   }

@@ -1,33 +1,31 @@
 <div class="product-view-container">
     <div class="product-view-header">
-        <h1 class="product-view-name">{{product.name}}</h1>
+        <h1 class="product-view-name" *ngIf="product">{{ product.name}}</h1>
     </div>
     
     <div class="product-view-body">
         <div class="product-view-image-container">
-            <img src='./assets/test.jpg' alt="Nombre del producto" class="product-view-image">
+            <img *ngIf="product" src="{{imgSrc}}" class="product-view-image" alt="{{product.image}}" />
         </div>
         
         <div class="product-view-details">
             <div class="product-view-description">
                 <h2 class="description-title">Descripción</h2>
-                <p class="description-text">
-                    Aquí va la descripción detallada del producto. Debe incluir características principales, 
-                    especificaciones técnicas y cualquier información relevante que ayude al usuario a 
-                    tomar una decisión de compra informada.
+                <p class="description-text" *ngIf="product">
+                   {{product.description}}
                 </p>
             </div>
             
             <div class="price-container">
                 <div class="price-card">
                     <span class="price-label">Precio CF</span>
-                    <span class="price-value">{{product.priceCF|currency}}</span>
+                    <span class="price-value" *ngIf="product">{{product.priceCF|currency}}</span>
                     <span class="price-note">Precio al contado</span>
                 </div>
                 
                 <div class="price-card highlight">
                     <span class="price-label">Precio PM</span>
-                    <span class="price-value">{{product.pricePM|currency}}</span>
+                    <span class="price-value" *ngIf="product">{{product.pricePM|currency}}</span>
                     <span class="price-note">Precio a plazos</span>
                 </div>
             </div>
@@ -41,197 +39,5 @@
 </div>
 
 <style>
-    :host {
-        --primary-color: #2c3e50;
-        --secondary-color: #3498db;
-        --light-gray: #f8f9fa;
-        --dark-gray: #343a40;
-        --border-radius: 8px;
-        --box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .product-view-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-    
-    .product-view-header {
-        text-align: center;
-        margin-bottom: 2.5rem;
-        padding: 1rem;
-        border-bottom: 1px solid #eaeaea;
-    }
-    
-    .product-view-name {
-        color: var(--primary-color);
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin: 0;
-    }
-    
-    .product-view-body {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3rem;
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        padding: 2rem;
-    }
-    
-    .product-view-image-container {
-        flex: 1;
-        min-width: 300px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: var(--light-gray);
-        border-radius: var(--border-radius);
-        padding: 2rem;
-    }
-    
-    .product-view-image {
-        max-width: 100%;
-        max-height: 400px;
-        object-fit: contain;
-        border-radius: var(--border-radius);
-    }
-    
-    .product-view-details {
-        flex: 1;
-        min-width: 300px;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-    
-    .description-title {
-        color: var(--primary-color);
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        font-weight: 600;
-    }
-    
-    .description-text {
-        color: #555;
-        line-height: 1.6;
-        font-size: 1.1rem;
-    }
-    
-    .price-container {
-        display: flex;
-        gap: 1.5rem;
-        margin: 1rem 0;
-    }
-    
-    .price-card {
-        flex: 1;
-        padding: 1.5rem;
-        border-radius: var(--border-radius);
-        background: var(--light-gray);
-        text-align: center;
-        transition: transform 0.3s ease;
-    }
-    
-    .price-card.highlight {
-        background: var(--primary-color);
-        color: white;
-    }
-    
-    .price-card.highlight .price-label,
-    .price-card.highlight .price-note {
-        color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .price-label {
-        display: block;
-        font-size: 1.1rem;
-        color: #666;
-        margin-bottom: 0.5rem;
-    }
-    
-    .price-value {
-        display: block;
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0.5rem 0;
-        color: var(--primary-color);
-    }
-    
-    .price-card.highlight .price-value {
-        color: white;
-    }
-    
-    .price-note {
-        font-size: 0.9rem;
-        color: #777;
-        font-style: italic;
-    }
-    
-    .action-buttons {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-    
-    .btn {
-        padding: 0.8rem 1.5rem;
-        border: none;
-        border-radius: var(--border-radius);
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .btn-primary {
-        background-color: var(--secondary-color);
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-    }
-    
-    .btn-secondary {
-        background-color: white;
-        color: var(--primary-color);
-        border: 2px solid var(--primary-color);
-    }
-    
-    .btn-secondary:hover {
-        background-color: var(--primary-color);
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    @media (max-width: 768px) {
-        .product-view-body {
-            flex-direction: column;
-            padding: 1rem;
-        }
-        
-        .price-container {
-            flex-direction: column;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-        }
-        
-        .btn {
-            width: 100%;
-        }
-    }
+  
 </style>

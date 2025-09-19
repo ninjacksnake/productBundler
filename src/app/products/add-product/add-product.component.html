@@ -2,6 +2,21 @@
     <h1>Agregar nuevo producto</h1>
     <mat-card class="form-container">
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="row image-row">
+                <div appearance="outline" class="full-width">
+                
+                   
+                    <input type="file" (change)="onFileSelected($event)">
+                  
+                </div>
+                <!-- <mat-form-field appearance="outline" class="full-width" visibility="hidden">
+                    <mat-label>Imagen</mat-label>
+                    <input matInput type="text" readonly="true" formControlName="image" >
+                       <mat-error *ngIf="productForm.get('image')?.hasError('required')">
+                       La imagen es requerida
+                    </mat-error> 
+                </mat-form-field> -->
+            </div>
             <div class="row">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>ID del producto</mat-label>

@@ -20,6 +20,7 @@ export class ProductService {
       description: product.description,
       pricePM: product.pricePM,
       priceCF: product.priceCF,
+      image: product.image
     };
 
     return this.http.post('/products', productDto).pipe(
@@ -60,6 +61,7 @@ export class ProductService {
           pricePM: response.pricePM,
           priceCF: response.priceCF,
           stock: response.stock,
+          image: response.image,
         };
         return product;
       }),
@@ -72,6 +74,7 @@ export class ProductService {
           pricePM: 0,
           priceCF: 0,
           stock: 0,
+          image: '',
         })
       )
     );
@@ -90,6 +93,7 @@ export class ProductService {
           pricePM: response.pricePM,
           priceCF: response.priceCF,
           stock: response.stock,
+          image: response.image,
         };
         return product;
       }),
@@ -101,7 +105,8 @@ export class ProductService {
           description: '',
           pricePM: 0,
           priceCF: 0,
-          stock: 0,
+          stock: 0, 
+          image: '',
         })
       )
     );
@@ -119,7 +124,7 @@ export class ProductService {
           pricePM: product.pricePM,
           priceCF: product.priceCF,
           stock: product.stock,
-        }));
+          }));
         return products;
       }),
       catchError(
@@ -158,4 +163,32 @@ export class ProductService {
       return of(result as T);
     };
   }
+
+  addImage( productId: string, image: File): Observable<any> {
+    console.log(productId, image)
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('productId', productId);
+    return this.http.post('/products/save-image', formData).pipe(
+      map((response: any) => {
+        console.log('Image saved successfully:', response);
+        return response;
+      }),
+      catchError(this.handleError('addImage'))
+    );
+  }
+
+  getImage(fileName: string): Observable<Blob> {
+    const safeName = encodeURIComponent(fileName);
+    return this.http.get(`/products/image/${safeName}`, { responseType: 'blob' }) as Observable<Blob>;
+  }
+
+  // getImage(imageName: string): Observable<any> {
+  //   return this.http.get(`/products/image/${imageName}`, { responseType: 'blob' }).pipe(
+  //     map((response: any) => {
+  //       return response;
+  //     }),
+  //     catchError(this.handleError('getImage'))
+  //   );
+  // } 
 }

@@ -10,17 +10,24 @@
     flex-direction: row;
     width: 100%;
     gap: 2rem;
+    flex-wrap: wrap; /* allow columns to wrap on small screens */
+    align-items: flex-start;
 }
 
 .view-bundle-container .row .col-4 {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 40%;
+    /* Prefer ~40% but allow shrinking; keep a sensible floor */
+    flex: 1 1 40%;
+    min-width: 300px;
+    max-width: 480px;
 }
 
 .view-bundle-container .row .col-8 {
-    width: 60%;
+    /* Prefer ~60% and take remaining space; keep a sensible floor */
+    flex: 1 1 60%;
+    min-width: 360px;
 }
 .ninja-card {
     display: flex;
@@ -39,6 +46,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
+    min-width: 640px; /* allow horizontal scroll for narrow screens */
   }
   
   .stripped-table th.mat-mdc-header-cell {
@@ -89,4 +97,68 @@
     font-weight: 600;
     color: #1a73e8;
     font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+
+  .img-container{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap; /* allow images to wrap */
+  }
+  
+  .img-fluid{
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      will-change: transform;
+  }
+  .img-fluid:hover {
+    transform: scale(2);
+    z-index: 1;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Responsive utilities */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Constrain height to make sticky header effective when list is long */
+  .product-container {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  /* Stack columns only on smaller screens */
+  @media (max-width: 768px) {
+    .view-bundle-container .row {
+      gap: 1rem;
+    }
+    .view-bundle-container .row .col-4,
+    .view-bundle-container .row .col-8 {
+      width: 100%;
+      flex: 1 1 100%;
+      min-width: 0;
+    }
+    .ninja-card {
+      padding: 0.75rem;
+    }
+  }
+
+  /* Small screens: smaller fonts and images for better fit */
+  @media (max-width: 600px) {
+    .stripped-table {
+      font-size: 12px;
+      min-width: 560px;
+    }
+    .img-fluid {
+      width: 80px;
+      height: 80px;
+    }
   }
