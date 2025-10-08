@@ -4,19 +4,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../shared/services/product.service';
 import { AddProductDto } from '../../Dtos/add.product.dto';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css'],
 })
-
 export class AddProductComponent implements OnInit {
   productForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -27,7 +30,7 @@ export class AddProductComponent implements OnInit {
       pricePM: ['', [Validators.required, Validators.min(0)]],
       priceCF: ['', [Validators.required, Validators.min(0)]],
       image: [''],
-      imageData: [{file: null}],
+      imageData: [{ file: null }],
     });
 
     // Subscribe to form value changes for debugging
@@ -41,11 +44,9 @@ export class AddProductComponent implements OnInit {
     console.log(file.name);
     this.productForm.patchValue({
       image: file.name,
-      imageData: {file: file},
+      imageData: { file: file },
     });
   }
-
-
 
   onSubmit() {
     if (this.productForm.valid) {
@@ -61,22 +62,53 @@ export class AddProductComponent implements OnInit {
 
       this.productService
         .addProduct(product)
-        .pipe(
-          switchMap((created: any) => {
-            // If addProduct failed (service handles error by returning undefined), do not upload image
-            if (!created) {
-              return of(null);
-            }
-            const file = (this.productForm.value.imageData as { file: File })?.file;
-            if (!file) {
-              return of(null);
-            }
-            return this.productService.addImage(this.productForm.value.productId, file);
-          })
-        )
+        // .pipe(
+        //   switchMap((created: any) => {
+        //     // If addProduct failed (service handles error by returning undefined), do not upload image
+        //     console.log('created from addProduct',created)
+        //     if (!created) {
+        //       return of(null);
+        //     }
+        //     const file = (this.productForm.value.imageData as { file: File })
+        //       ?.file;
+        //     if (!file) {
+        //       return of(null);
+        //     }
+        //     // notify user that the product has been created
+
+        //     return this.productService.addImage(
+        //       created.id,
+        //       this.productForm.value.productId,
+        //       file
+        //     );
+        //   })
+        // )
         .subscribe({
-          next: (res) => {
-            console.log('Product created. Image uploaded only if present and product creation succeeded.', res);
+          next: (response: any) => {
+            //console.log('created from addProduct', response);
+
+            const file = (this.productForm.value.imageData as { file: File }) ?.file;
+            if (!file) {
+             throw new Error('No file selected');
+            }
+            this.productService.addImage(response.id, this.productForm.value.productId, file).subscribe({
+              next: (res: any) => {
+                //console.log('Image uploaded successfully:', res);
+              },
+              error: (err) => {
+                //console.error('Error uploading image:', err);
+              },
+            });
+
+            this.snackBar.open('Product created successfully', 'Close', {
+              duration: 2000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
+
+             this.router.navigate(['/bundler/products/view/' + response.id]);
+
+            // console.log('Product created. Image uploaded only if present and product creation succeeded.', res);
           },
           error: (err) => {
             console.error('Error creating product or uploading image:', err);
@@ -98,6 +130,6 @@ export class AddProductComponent implements OnInit {
       console.log(`${operation} failed: ${error.message}`);
       // Let the app keep running by returning an empty result.
       return of(result as T);
-    };  
+    };
   }
 }

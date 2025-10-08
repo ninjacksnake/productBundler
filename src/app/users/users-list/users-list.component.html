@@ -1,48 +1,49 @@
-<h1>lista de Usuarios</h1>
+<h1>Usuarios</h1>
 
 <input type="text" class="ninja-input" matInput placeholder="Buscar usuario" [(ngModel)]="searchTerm" (ngModelChange)="filterUsers()">
 <button mat-icon-button color="primary" matTooltip="Agregar un nuevo usuario" routerLink="/bundler/users/add"><mat-icon>add</mat-icon></button>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+<div class="table-container">
 
-<ng-container matColumnDef="name">
-<th mat-header-cell *matHeaderCellDef>Nombre</th>
-<td mat-cell *matCellDef="let user">{{user.name}}</td>
-</ng-container>
-
-<ng-container matColumnDef="email">
-<th mat-header-cell *matHeaderCellDef>Correo</th>
-<td mat-cell *matCellDef="let user">{{user.email}}</td>
-</ng-container>
-
-<ng-container matColumnDef="role">
-<th mat-header-cell *matHeaderCellDef>Rol</th>
-<td mat-cell *matCellDef="let user">{{user.role}}</td>
-</ng-container>
-
-<ng-container matColumnDef="options">
-<th mat-header-cell *matHeaderCellDef>Opciones</th>
-<td mat-cell *matCellDef="let user">
-  <div class="option-buttons-container">
-      <a  matTooltip="Visualizar {{user.name}}" class="option-button option-blue"  aria-label="Visualizar" routerLink="/bundler/users/view/{{user.id}}">
-        <mat-icon>visibility</mat-icon>
-    </a>
-    <a matTooltip="Modificar {{user.name}}" class="option-button option-gray" aria-label="Modificar" routerLink="/bundler/users/edit/{{user.id}}">
-      <mat-icon>edit</mat-icon>
-    </a>
-    <a matTooltip="Eliminar {{user.name}}" class="option-button option-red" aria-label="Eliminar" (click)="delete(user.id)">
-      <mat-icon>remove_shopping_cart</mat-icon>
-    </a>
-  </div>  
-</td>   
-</ng-container>
-
-
-
-
-<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 50]" showFirstLastButtons></mat-paginator>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 users-table">
+    
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let user">{{user.name}}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Correo</th>
+      <td mat-cell *matCellDef="let user">{{user.email}}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Rol</th>
+      <td mat-cell *matCellDef="let user">{{user.role}}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef>Opciones</th>
+      <td mat-cell *matCellDef="let user">
+        <div class="option-buttons-container">
+        
+          <a matTooltip="Modificar {{user.name}}" class="option-button option-gray" aria-label="Modificar" routerLink="/bundler/users/edit/{{user.id}}">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <a *ngIf="!user.isDeleted" matTooltip="Eliminar {{user.name}}" class="option-button option-red" aria-label="Eliminar" (click)="delete(user.id)">
+            <mat-icon>remove_shopping_cart</mat-icon>
+          </a>
+        </div>  
+      </td>   
+    </ng-container>
+    
+    
+    
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="mat-row"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 50]" showFirstLastButtons></mat-paginator>
+</div>
 
 
 

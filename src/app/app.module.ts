@@ -51,6 +51,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
  import{MatPaginatorModule}from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatBadgeModule } from '@angular/material/badge'; 
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDividerModule } from '@angular/material/divider';
 
 /** 
  * The root module of the application. 
@@ -115,6 +117,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatPaginatorModule,
     MatStepperModule,
     MatBadgeModule,
+    MatGridListModule,
+    MatDividerModule,
     
    
     

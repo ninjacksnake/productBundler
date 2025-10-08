@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12">
-    <h1>Lista de Combos</h1>
+    <h1>Combos</h1>
   </div>
   <div class="col-12">
     <input
@@ -66,12 +66,12 @@
             </a>
             <a
               matTooltip="Modificar {{ bundle.name }}"
-              class="option-button option-blue"
+              class="option-button option-black"
               routerLink="/bundler/bundles/edit/{{ bundle.id }}"
             >
               <mat-icon>edit</mat-icon>
             </a>
-            <a
+            <a *ngIf="role === 'ADMIN'"
               matTooltip="Eliminar {{ bundle.name }}"
               class="option-button option-red"
               aria-label="Eliminar"

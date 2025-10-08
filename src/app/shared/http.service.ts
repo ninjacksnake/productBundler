@@ -106,6 +106,14 @@ export class HttpService {
     return response;
   }
 
+
+  patch(url: string, body: any): Observable<any> {
+    const response = this.http.patch(this.apiUrl + url, body, {
+      headers: this.headers,
+    });
+    return response;
+  }
+
   delete(url: string): Observable<any> {
     const response = this.http.delete(this.apiUrl + url, {
       headers: this.headers,

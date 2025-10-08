@@ -47,7 +47,7 @@ export class AddUserComponent {
 
     // Subscribe to form value changes for debugging
     this.userForm.valueChanges.subscribe(value => {
-      console.log('Form values changed:', value);
+   //   console.log('Form values changed:', value);
     });
   }
 
@@ -81,7 +81,7 @@ export class AddUserComponent {
 
   onSubmit() { 
     if (this.userForm.valid) {
-      console.log('Form is valid');
+     
       const formData = this.userForm.value;
       formData.confirmPassword = undefined;
       

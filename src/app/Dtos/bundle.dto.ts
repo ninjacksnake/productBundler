@@ -1,3 +1,4 @@
+import { BundleProductDto } from "./bundle.product.dto";
 import { ProductDto } from "./product.dto";
 
 export class BundleDto {
@@ -6,7 +7,7 @@ export class BundleDto {
     description?: string;
     priceCF?: number;
     pricePM?: number;
-    products?: ProductDto[];
+    products?: BundleProductDto[];
     createdDate?: Date;
     updatedDate?: Date;
 }

@@ -7,6 +7,7 @@ export interface  IUser {
     role?: string;
     createdDate?: Date;
     updatedDate?: Date;
+    isDeleted?: boolean;
     photo?: string;
   }
   

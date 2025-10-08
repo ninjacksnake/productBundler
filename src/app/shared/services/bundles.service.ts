@@ -62,7 +62,7 @@ export class BundlesService {
   }
 
   update(id: number, bundle: IBundle): Observable<IBundle> {
-    return this.http.put(`${this.apiUrl}/${id}`, bundle).pipe(
+    return this.http.patch(`${this.apiUrl}/${id}`, bundle).pipe(
       map((response: any) => {
         return response;
       }),

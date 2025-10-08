@@ -76,7 +76,7 @@ export class CartService {
     createBundle(): void {
         const cart = this.cartSubject.getValue();
         
-        console.log('Creating bundle with:', cart);
+     //   console.log('Creating bundle with:', cart);
         //limpiar carrito
         this.clearCart();
     }

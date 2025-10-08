@@ -31,10 +31,10 @@
     <mat-card class="profile-card">
         <div class="profile-header">
             <div class="profile-avatar-container">
-                <img [src]="user?.photo || 'assets/default-avatar.png'" 
+                <img [src]="user?.photo || 'assets/avatar2.png'" 
                      class="profile-avatar" 
                      alt="Profile Photo"
-                     (error)="user && (user.photo = 'assets/default-avatar.png')">
+                     (error)="user && (user.photo = 'assets/avatar2.png')">
                 <button mat-icon-button class="edit-photo-btn" matTooltip="Change photo">
                     <mat-icon>camera_alt</mat-icon>
                 </button>
@@ -77,17 +77,20 @@
             <button mat-raised-button 
                     color="primary" 
                     class="action-button"
-                    routerLink="/users/edit/{{user?.id}}">
+                    routerLink="/bundler/users/edit/{{user?.id}}">
                 <mat-icon>edit</mat-icon>
                 Edit Profile
             </button>
+        <div *ngIf="user?.role === 'ADMIN'">
             <button mat-stroked-button 
-                    color="warn" 
-                    class="action-button"
-                    (click)="deleteUser(user?.id )">
-                <mat-icon>delete</mat-icon>
-                Delete Account
-            </button>
+            color="warn" 
+            class="action-button"
+            (click)="deleteUser(user?.id )">
+        <mat-icon>delete</mat-icon>
+        Delete Account
+    </button> 
+        </div>
+        
         </mat-card-actions>
     </mat-card>
 </div>

@@ -1,4 +1,4 @@
-<h1>Lista de productos</h1>
+<h1>Productos</h1>
 
 <input type="text" class="ninja-input" matInput placeholder="Buscar producto" [(ngModel)]="searchTerm" (ngModelChange)="filterProducts()">
 <a mat-icon-button color="primary" matTooltip="Agregar un nuevo producto" routerLink="/bundler/products/add">
@@ -43,13 +43,13 @@
                     routerLink="/bundler/products/edit/{{product.id}}" class="option-button option-gray">
                     <mat-icon>edit </mat-icon>
                 </a>
-                <button *ngIf="isInCart(product.id)" aria-label="Example icon button with a menu icon" matTooltip="Eliminar {{product.name}} del carrito"
+                <button *ngIf="isInCart(product.productId)" aria-label="Example icon button with a menu icon" matTooltip="Eliminar {{product.name}} del carrito"
                     class="option-button option-red" (click)="removeFromCart(product)">
                     <mat-icon>remove_shopping_cart</mat-icon>
                 </button>
-                <button aria-label="Example icon button with a menu icon"
+                <button *ngIf="!isInCart(product.productId)" aria-label="Example icon button with a menu icon"
                     matTooltip="Agregar al carrito {{product.name}}" (click)="addToCart(product)"
-                    class="option-button option-green">
+                    class="option-button option-green ">
                     <mat-icon>add_shopping_cart</mat-icon>
                 </button>
             </div>

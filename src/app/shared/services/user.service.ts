@@ -29,7 +29,7 @@ export class UserService {
 
     create(user: IUser): void {
         this.http.post('http://localhost:3000/users', user).subscribe(() => {
-        this.snackBar.open('User added successfully', 'Close', {
+        this.snackBar.open('Usuario agregado exitosamente', 'Cerrar', {
             duration: 2000,
             verticalPosition: 'top',
             horizontalPosition: 'center',
@@ -39,8 +39,9 @@ export class UserService {
     }   
 
     delete(id: number): void {
-        this.http.delete('http://localhost:3000/users/' + id).subscribe(() => {
-            this.snackBar.open('User deleted successfully', 'Close', {
+        this.http.delete('/users/' + id).subscribe((response) => {
+            console.log(response)
+            this.snackBar.open('Usuario eliminado exitosamente', 'Cerrar', {
                 duration: 2000,
                 verticalPosition: 'top',
                 horizontalPosition: 'center',
@@ -51,8 +52,8 @@ export class UserService {
 
     update(user: IUser, id: number): boolean {
         try {
-            this.http.put('/users/' + id, user).subscribe(() => {
-                this.snackBar.open('User updated successfully', 'Close', {
+            this.http.patch('/users/' + id, user).subscribe(() => {
+                this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', {
                     duration: 2000,
                     verticalPosition: 'top',
                     horizontalPosition: 'center',
@@ -61,7 +62,7 @@ export class UserService {
             });
             return true;
         } catch (error) {
-            this.snackBar.open('User was not updated', 'Close', {
+            this.snackBar.open('Usuario no actualizado ', 'Cerrar', {
                 duration: 2000,
                 verticalPosition: 'top',
                 horizontalPosition: 'center',

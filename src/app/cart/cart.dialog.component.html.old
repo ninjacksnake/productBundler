@@ -2,7 +2,7 @@
 <div class="action-buttons">
   <button type="button" class="close-button" (click)="closeCart()" aria-label="Close cart"><mat-icon>close</mat-icon></button>
 </div>
-  <h2 class="section-title">Lista de productos en el Combo</h2>
+  <h2 class="section-title">Productos en el Combo</h2>
   <div class="form-container" [class.loading]="isLoading">
     <div class="loading-overlay" *ngIf="isLoading">
       <mat-spinner diameter="50"></mat-spinner>

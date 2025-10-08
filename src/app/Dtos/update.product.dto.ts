@@ -1,5 +1,5 @@
 
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsObject, IsOptional, IsString } from "class-validator";
    
 
 export class UpdateProductDto  {
@@ -34,4 +34,8 @@ export class UpdateProductDto  {
     @IsString()
     @IsOptional()
     image?: string;
+
+    @IsObject()
+    @IsOptional()
+    imageData?: Object;
 }

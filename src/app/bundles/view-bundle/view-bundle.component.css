@@ -40,6 +40,13 @@
     flex-direction: row;
     gap: 1rem;
     justify-content: flex-end;
+    padding-top: 0.5rem;
+}
+.total-item {
+    background: #f6f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 6px 10px;
 }
 
 .stripped-table {
@@ -104,6 +111,8 @@
     flex-direction: row;
     gap: 1rem;
     flex-wrap: wrap; /* allow images to wrap */
+    
+  
   }
   
   .img-fluid{

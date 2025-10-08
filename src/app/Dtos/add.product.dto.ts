@@ -36,4 +36,7 @@ export class AddProductDto {
   @IsObject()
   @IsOptional()
   imageData?: Object;
+
+  @IsNumber()
+  quantity?: number = 1;
 }

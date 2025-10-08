@@ -2,41 +2,55 @@
     <div class="edit-product-header">
         <h1>Editar producto</h1>
     </div>
-    <mat-card class="form-container">       
-    <form [formGroup]="productForm">
-        <div class="edit-product-form-body" >
-            <mat-form-field appearance="outline" class="full-width" style="display: none;">
-                <mat-label>ID</mat-label>
-                <input matInput placeholder="ID" formControlName="id">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width" >
-                <mat-label>ID</mat-label>
-                <input matInput placeholder="Id" formControlName="productId">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nombre</mat-label>
-                <input matInput placeholder="Nombre" formControlName="name">
-            </mat-form-field>
+    <mat-card class="form-container">
+        <mat-card-header>
+            <mat-card-title>Datos del producto</mat-card-title>
+            <mat-card-subtitle>Actualiza la información y guarda los cambios</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="productForm">
+                <div class="edit-product-form-body">
+                    <mat-form-field appearance="outline" class="full-width" style="display: none;">
+                        <mat-label>ID</mat-label>
+                        <input matInput placeholder="ID" formControlName="id">
+                    </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Descripcion</mat-label>
-                <input matInput placeholder="Descripcion" formControlName="description">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Precio CF</mat-label>
-                <input matInput placeholder="Precio CF" formControlName="priceCF">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Precio PM</mat-label>
-                <input matInput placeholder="Precio PM" formControlName="pricePM">
-            </mat-form-field>
-    
-            <div class="edit-product-footer">
-                <button mat-flat-button color="warn" (click)="onCancel()">Cancelar</button>
-                <button mat-flat-button color="primary" (click)="onSubmit()">Guardar</button>
-            </div>
-        </div>
-    </form>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>ID</mat-label>
+                        <input matInput placeholder="Id" formControlName="productId">
+                        <mat-hint>Identificador interno del producto</mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput placeholder="Nombre" formControlName="name">
+                        <mat-hint>Como se mostrará al cliente</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Descripción</mat-label>
+                        <input matInput placeholder="Descripción" formControlName="description">
+                    </mat-form-field>
+                  <div class="file-input-container">
+
+                      <input  type="file"  (change)="onFileSelected($event)" >
+                  </div>                 
+                    
+                    <div class="two-col">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Precio CF</mat-label>
+                            <input matInput placeholder="Precio CF" formControlName="priceCF">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Precio PM</mat-label>
+                            <input matInput placeholder="Precio PM" formControlName="pricePM">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions align="end" class="edit-product-footer">
+            <button mat-stroked-button color="warn" (click)="onCancel()">Cancelar</button>
+            <button mat-flat-button color="primary" (click)="onSubmit()">Guardar</button>
+        </mat-card-actions>
     </mat-card>
-
 </div>

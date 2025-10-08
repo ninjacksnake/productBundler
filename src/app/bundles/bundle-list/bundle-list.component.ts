@@ -3,6 +3,7 @@ import { IBundle } from '../../shared/Dtos/bundle.dto';
 import { BundlesService } from '../../shared/services/bundles.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-bundle-list',
@@ -11,12 +12,22 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class BundleListComponent {
   bundles: IBundle[] = [];
+  user: any;
+  role: any;
+
+  constructor(private bundlesService: BundlesService, private authService: AuthService) {
+    this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.bundles = bundles)  
+    this.user = this.authService.getCurrentUser().subscribe((user) => {
+      this.user = user;
+      this.role = this.user.role || null;
+    });
+  }  
+
   dataSource = new MatTableDataSource<IBundle>();
   searchTerm: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private bundlesService: BundlesService) {}
 
   ngOnInit(): void {
     this.bundlesService.getAll().subscribe((bundles: IBundle[]) => {

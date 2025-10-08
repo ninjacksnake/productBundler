@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-products',
   templateUrl: './product-list.component.html',
@@ -18,15 +19,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   private cartSubscription: Subscription;
   cartItems: any[] = [];
+  user: any;
+  role: any;
 
   constructor(
     private cartService: CartService,
     private productService: ProductService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+   
   ) {
     this.cartSubscription = this.cartService.cart$.subscribe(cart => {
       this.cartItems = cart;
     });
+ 
   }
 
   public dataSource = new MatTableDataSource<IProduct>();
@@ -49,7 +54,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   isInCart(productId: string): boolean {
-    return this.cartItems.some(item => item.id === productId);
+    return this.cartItems.some(item => item.productId === productId);
   }
 
   filterProducts(): void {
@@ -89,4 +94,5 @@ export class ProductListComponent implements OnInit, OnDestroy {
       horizontalPosition: 'center'
     });
   }
+
 }

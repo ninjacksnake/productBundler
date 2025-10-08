@@ -46,12 +46,12 @@ export class NavLeftComponent {
   }
 
   validatePermission(item: string[]): boolean {
-    console.log(this.user?.role);
+    //console.log(this.user?.role);
     return item.some(permission => this.user?.role?.toLowerCase().includes(permission));
   }
 
   filterNavItems(): void {
     this.filteredNavItems = this.navItems.filter(item => this.validatePermission(item.permission));
-    console.log(this.filteredNavItems);
+   // console.log(this.filteredNavItems);
   }
 }

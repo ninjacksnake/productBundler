@@ -12,13 +12,10 @@ import { formatNumber } from '@angular/common';
 })
 export class EditUserComponent {
   userId: number = 0;
-
   userForm = new FormGroup({
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    // photo: new FormControl('', Validators.required),
-    // password: new FormControl('', Validators.minLength(8)),
-    // confirmPassword: new FormControl('', Validators.required),
+    isDeleted: new FormControl(false, Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     role: new FormControl('', Validators.required),
   });
@@ -31,8 +28,9 @@ export class EditUserComponent {
 
 ngOnInit(): void {
   this.userId = this.activatedRoute.snapshot.params['id'];
-  this.userService.findById(this.userId).subscribe((user: IUser) => {
+  this.userService.findById(this.userId).subscribe((user: IUser) => { 
    this.userForm.patchValue(user);
+
   });
   
  }
@@ -41,13 +39,14 @@ ngOnInit(): void {
   ngAfterViewInit(): void {
   }
 
- 
+ onCancel =() =>{
+  this.router.navigate(['/bundler/users']);
+ }
 
   onSubmit = () => {
-    console.log(this.userId);
-    const result = this.userService.update(this.userForm.value as IUser,+this.userId);
+    const result = this.userService.update(this.userForm.value as IUser, +this.userId);
    if(result){
-         this.router.navigate(['/users']);
+         this.router.navigate(['/bundler/users']);
    }
   };
 }

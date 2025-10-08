@@ -4,35 +4,46 @@ import { UpdateProductDto } from '../../Dtos/update.product.dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { of, switchMap } from 'rxjs';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.css']
+  styleUrls: ['./edit-product.component.css'],
 })
 export class EditProductComponent {
-   
+  imageData: { file: File } | null = null;
+
   productForm!: FormGroup;
-  
+
   product: UpdateProductDto = {} as UpdateProductDto;
-  constructor(private productService: ProductService, private route: ActivatedRoute, private fb: FormBuilder, private router: Router, private snackBar: MatSnackBar ) { } 
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     // Initialize the form with empty values first
     this.initForm();
-    
+
     // Then fetch and update the product data
-    this.productService.getProduct(this.route.snapshot.params['id']).subscribe((product: UpdateProductDto) => { 
-      this.product = product;
-      this.productForm.patchValue({
-        id: this.product.id,
-        name: this.product.name,
-        productId: this.product.productId,
-        description: this.product.description,
-        pricePM:  this.product.pricePM,
-        priceCF: this.product.priceCF,
-        image: this.product.image
+    this.productService
+      .getProduct(this.route.snapshot.params['id'])
+      .subscribe((product: UpdateProductDto) => {
+        this.product = product;
+        this.productForm.patchValue({
+          id: this.product.id,
+          name: this.product.name,
+          productId: this.product.productId,
+          description: this.product.description,
+          pricePM: this.product.pricePM,
+          priceCF: this.product.priceCF,
+          image: this.product.image,
+          imageData: this.product.imageData,
+        });
       });
-    });
   }
 
   private initForm() {
@@ -43,23 +54,42 @@ export class EditProductComponent {
       description: [''],
       pricePM: [0],
       priceCF: [0],
-      image: ['']
+      image: [''],
     });
-   
   }
 
-  onSubmit(): void {
-    const result =  this.productService.updateProduct(this.productForm.value).subscribe((product: UpdateProductDto) => {
-      this.snackBar.open('Product updated successfully', 'Close', {
-        duration: 2000,
-        verticalPosition: 'top',
-        horizontalPosition: 'center'
-      });
-      this.router.navigate(['/bundler/products']);
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.productForm.patchValue({
+      image: file.name,
+      imageData: { file: file },
+    });
+  }
+
+  onSubmit() {
+    this.productService
+      .updateProduct(this.productForm.value)
+      .subscribe({
+        next: (res) => {
+          //console.log('Product updated successfully:', res);
+          this.snackBar.open('Product updated successfully', 'Close', {
+            duration: 2000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+          });
+          const file = (this.productForm.value.imageData as { file: File })?.file;
+          if(file){
+            this.productService.addImage(res.id,this.productForm.value.productId, file);
+          }
+          this.router.navigate(['/bundler/products/view/'+res.id]);
+        },
+        error: (err) => {
+          console.error('Error updating product:', err);
+        },
       });
   }
 
   onCancel(): void {
-   this.router.navigate(['/bundler/products']);
+    this.router.navigate(['/bundler/products']);
   }
 }
