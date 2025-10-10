@@ -32,6 +32,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/phaseII/",
               "budgets": [
                 {
                   "type": "initial",
