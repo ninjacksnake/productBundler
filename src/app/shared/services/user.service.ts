@@ -28,7 +28,7 @@ export class UserService {
     }
 
     create(user: IUser): void {
-        this.http.post('http://localhost:3000/users', user).subscribe(() => {
+        this.http.post('/users/', user).subscribe(() => {
         this.snackBar.open('Usuario agregado exitosamente', 'Cerrar', {
             duration: 2000,
             verticalPosition: 'top',

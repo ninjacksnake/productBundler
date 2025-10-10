@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     public logIn(credentials: { email: string; password: string }): Observable<boolean> {
-        return this.http.post<AuthResponse>('http://localhost:3000/api/v1/auth/login', credentials).pipe(
+        return this.http.post<AuthResponse>('http://localhost/api/v1/auth/login', credentials).pipe(
             map((response) => {
                 this.access_token = response.access_token;
                 this.refresh_token = response.refresh_token;
