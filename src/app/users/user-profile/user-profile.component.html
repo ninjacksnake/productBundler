@@ -28,69 +28,79 @@
 </div> -->
 <!-- user-profile.component.html -->
 <div class="profile-container">
-    <mat-card class="profile-card">
-        <div class="profile-header">
-            <div class="profile-avatar-container">
-                <img [src]="user?.photo || 'assets/avatar2.png'" 
-                     class="profile-avatar" 
-                     alt="Profile Photo"
-                     (error)="user && (user.photo = 'assets/avatar2.png')">
-                <button mat-icon-button class="edit-photo-btn" matTooltip="Change photo">
-                    <mat-icon>camera_alt</mat-icon>
-                </button>
-            </div>
-            <h1 class="profile-name">{{user?.name || 'User Name'}}</h1>
-            <div class="profile-role" [ngClass]="'role-' + user?.role?.toLowerCase()">
-                {{user?.role || 'User'}}
-            </div>
+  <mat-card class="profile-card">
+    <div class="profile-header">
+      <div class="profile-avatar-container">
+        <img
+          [src]="user?.photo || 'assets/avatar2.png'"
+          class="profile-avatar"
+          alt="Profile Photo"
+          (error)="user && (user.photo = 'assets/avatar2.png')"
+        />
+        <button
+          mat-icon-button
+          class="edit-photo-btn"
+          matTooltip="Change photo"
+        >
+          <mat-icon>camera_alt</mat-icon>
+        </button>
+      </div>
+      <h1 class="profile-name">{{ user?.name || "User Name" }}</h1>
+      <div class="profile-role" [ngClass]="'role-' + user?.role?.toLowerCase()">
+        {{ user?.role || "User" }}
+      </div>
+    </div>
+
+    <mat-divider class="profile-divider"></mat-divider>
+
+    <div class="profile-details">
+      <div class="detail-item">
+        <mat-icon class="detail-icon" color="primary">email</mat-icon>
+        <div class="detail-content">
+          <div class="detail-label">Email</div>
+          <div class="detail-value">{{ user?.email || "Not provided" }}</div>
         </div>
+      </div>
 
-        <mat-divider class="profile-divider"></mat-divider>
-
-        <div class="profile-details">
-            <div class="detail-item">
-                <mat-icon class="detail-icon" color="primary">email</mat-icon>
-                <div class="detail-content">
-                    <div class="detail-label">Email</div>
-                    <div class="detail-value">{{user?.email || 'Not provided'}}</div>
-                </div>
-            </div>
-
-            <div class="detail-item">
-                <mat-icon class="detail-icon" color="primary">person</mat-icon>
-                <div class="detail-content">
-                    <div class="detail-label">User ID</div>
-                    <div class="detail-value">{{user?.id || 'N/A'}}</div>
-                </div>
-            </div>
-
-            <div class="detail-item" *ngIf="user?.email">
-                <mat-icon class="detail-icon" color="primary">phone</mat-icon>
-                <div class="detail-content">
-                    <div class="detail-label">Phone</div>
-                    <div class="detail-value">{{user?.email || 'Not provided'}}</div>
-                </div>
-            </div>
+      <div class="detail-item">
+        <mat-icon class="detail-icon" color="primary">person</mat-icon>
+        <div class="detail-content">
+          <div class="detail-label">User ID</div>
+          <div class="detail-value">{{ user?.id || "N/A" }}</div>
         </div>
+      </div>
 
-        <mat-card-actions class="profile-actions">
-            <button mat-raised-button 
-                    color="primary" 
-                    class="action-button"
-                    routerLink="/bundler/users/edit/{{user?.id}}">
-                <mat-icon>edit</mat-icon>
-                Edit Profile
-            </button>
-        <div *ngIf="user?.role === 'ADMIN'">
-            <button mat-stroked-button 
-            color="warn" 
-            class="action-button"
-            (click)="deleteUser(user?.id )">
-        <mat-icon>delete</mat-icon>
-        Delete Account
-    </button> 
+      <div class="detail-item" *ngIf="user?.email">
+        <mat-icon class="detail-icon" color="primary">phone</mat-icon>
+        <div class="detail-content">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value">{{ user?.email || "Not provided" }}</div>
         </div>
-        
-        </mat-card-actions>
-    </mat-card>
+      </div>
+    </div>
+
+    <mat-card-actions class="profile-actions">
+      <div *ngIf="user?.role === 'ADMIN'">
+        <button
+          mat-raised-button
+          color="primary"
+          class="action-button"
+          routerLink="/bundler/users/edit/{{ user?.id }}"
+        >
+          <mat-icon>edit</mat-icon>
+          Edit Profile
+        </button>
+
+        <button
+          mat-stroked-button
+          color="warn"
+          class="action-button"
+          (click)="deleteUser(user?.id)"
+        >
+          <mat-icon>delete</mat-icon>
+          Delete Account
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
 </div>

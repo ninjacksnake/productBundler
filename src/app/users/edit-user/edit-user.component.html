@@ -1,41 +1,45 @@
 <div class="edit-user-container">
-    <div class="edit-user-header">
-        <h1>Editar usuario</h1>
-    </div>
-    <mat-card class="form-container">       
+  <div class="edit-user-header">
+    <h1>Editar usuario</h1>
+  </div>
+  <mat-card class="form-container">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <div class="edit-user-form-body" >
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nombre</mat-label>
-                <input matInput placeholder="Nombre" formControlName="name">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Apellido</mat-label>
-                <input matInput placeholder="Apellido" formControlName="lastName">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Email</mat-label>
-                <input matInput placeholder="Email" formControlName="email">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Estatus</mat-label>
-                <mat-select placeholder="Estatus" formControlName="isDeleted"  >
-                    <mat-option [value]= false>Activo</mat-option>
-                    <mat-option [value]= true>Eliminado</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Rol</mat-label>
-                <mat-select placeholder="Rol" formControlName="role">
-                    <mat-option  value="ADMIN">Administrador</mat-option>
-                    <mat-option value="USER">Usuario</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div class="edit-user-footer">
-                <button mat-flat-button color="warn" (click)="onCancel()">Cancelar</button>
-                <button mat-flat-button color="primary" type="submit">Guardar</button>
-            </div>
+      <div class="edit-user-form-body">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput placeholder="Nombre" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Apellido</mat-label>
+          <input matInput placeholder="Apellido" formControlName="lastName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" formControlName="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Estatus</mat-label>
+          <mat-select placeholder="Estatus" formControlName="isDeleted">
+            <mat-option [value]="false">Activo</mat-option>
+            <mat-option [value]="true">Eliminado</mat-option>
+          </mat-select>
+        </mat-form-field>
+       
+        <mat-form-field appearance="outline" class="full-width" *ngIf="role === 'ADMIN'">
+          <mat-label>Rol</mat-label>
+          <mat-select placeholder="Rol" formControlName="role">
+            <mat-option value="ADMIN">Administrador</mat-option>
+            <mat-option value="USER">Usuario</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <div class="edit-user-footer">
+          <button mat-flat-button color="warn" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button mat-flat-button color="primary" type="submit">Guardar</button>
         </div>
+      </div>
     </form>
-    </mat-card>
+  </mat-card>
 </div>
