@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpService} from '../../shared/http.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -12,7 +13,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AddUserComponent {
   userForm!: FormGroup;
 
-  constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(
+   // private http: HttpClient, 
+    private router: Router, 
+    private snackBar: MatSnackBar,
+    private http: HttpService
+  ) { }
 
   access_token = localStorage.getItem('access_token');
   headers = new HttpHeaders({
@@ -85,7 +91,7 @@ export class AddUserComponent {
       const formData = this.userForm.value;
       formData.confirmPassword = undefined;
       
-      this.http.post('http://localhost:3000/api/v1/users', formData, { headers: this.headers }).subscribe(() => {
+      this.http.post('/users', formData).subscribe(() => {
         this.snackBar.open('User added successfully', 'Close', {
           duration: 2000,
           verticalPosition: 'top',

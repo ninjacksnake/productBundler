@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class HttpService {
-  private apiUrl = 'http://localhost:3000/api/v1';
-  private refresshUrl = 'http://localhost:3000/api/v1/auth/refresh';
+  private apiUrl = 'http://localhost/api/v1';
+  private refresshUrl = 'http://localhost/api/v1/auth/refresh';
 
   refresh_token = localStorage.getItem('refresh_token');
   access_token = localStorage.getItem('access_token');
