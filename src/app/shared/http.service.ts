@@ -12,8 +12,7 @@ import { environment } from "../../environments/environment";
 export class HttpService {
   private apiUrl = environment.apiUrl;
   private refresshUrl = environment.refresshUrl;
- // private apiUrl = 'http://localhost/api/v1';
-//  private refresshUrl = 'http://localhost/api/v1/auth/refresh';
+
 
   refresh_token = localStorage.getItem('refresh_token');
   access_token = localStorage.getItem('access_token');
