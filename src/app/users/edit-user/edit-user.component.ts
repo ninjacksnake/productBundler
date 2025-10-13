@@ -11,6 +11,7 @@ import { formatNumber } from '@angular/common';
   styleUrls: ['./edit-user.component.css'],
 })
 export class EditUserComponent {
+  role:string = '';
   userId: number = 0;
   userForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -27,10 +28,11 @@ export class EditUserComponent {
   ) {}
 
 ngOnInit(): void {
+  
   this.userId = this.activatedRoute.snapshot.params['id'];
   this.userService.findById(this.userId).subscribe((user: IUser) => { 
    this.userForm.patchValue(user);
-
+   this.role = user.role || 'USER';
   });
   
  }
