@@ -4,13 +4,16 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  private apiUrl = 'http://localhost/api/v1';
-  private refresshUrl = 'http://localhost/api/v1/auth/refresh';
+  private apiUrl = environment.apiUrl;
+  private refresshUrl = environment.refresshUrl;
+ // private apiUrl = 'http://localhost/api/v1';
+//  private refresshUrl = 'http://localhost/api/v1/auth/refresh';
 
   refresh_token = localStorage.getItem('refresh_token');
   access_token = localStorage.getItem('access_token');

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of, map, catchError } from "rxjs";
 import { IUser } from "../interfaces/user.interface";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 
 interface AuthResponse {
@@ -39,7 +40,8 @@ export class AuthService {
     }
 
     public logIn(credentials: { email: string; password: string }): Observable<boolean> {
-        return this.http.post<AuthResponse>('http://localhost/api/v1/auth/login', credentials).pipe(
+        const apiUrl = environment.apiUrl;
+        return this.http.post<AuthResponse>(apiUrl + '/auth/login', credentials).pipe(
             map((response) => {
                 this.access_token = response.access_token;
                 this.refresh_token = response.refresh_token;
