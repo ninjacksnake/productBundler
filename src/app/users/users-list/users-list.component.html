@@ -1,4 +1,4 @@
-<h1>Usuarios</h1>
+<h1 class="ninja-title">Usuarios</h1>
 
 <input type="text" class="ninja-input" matInput placeholder="Buscar usuario" [(ngModel)]="searchTerm" (ngModelChange)="filterUsers()">
 <button mat-icon-button color="primary" matTooltip="Agregar un nuevo usuario" routerLink="/bundler/users/add"><mat-icon>add</mat-icon></button>
@@ -6,7 +6,7 @@
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 users-table">
     
-    <ng-container matColumnDef="name">
+      <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Nombre</th>
       <td mat-cell *matCellDef="let user">{{user.name}}</td>
     </ng-container>

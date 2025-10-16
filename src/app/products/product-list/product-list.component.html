@@ -1,68 +1,108 @@
-<h1>Productos</h1>
-
-<input type="text" class="ninja-input" matInput placeholder="Buscar producto" [(ngModel)]="searchTerm" (ngModelChange)="filterProducts()">
-<a mat-icon-button color="primary" matTooltip="Agregar un nuevo producto" routerLink="/bundler/products/add">
+<h1 class="ninja-title">Productos</h1>
+<div class="search-container">
+  <input
+    type="text"
+    class="ninja-input"
+    matInput
+    placeholder="Buscar producto"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="filterProducts()"
+  />
+  <a
+    mat-icon-button
+    color="primary"
+    matTooltip="Agregar un nuevo producto"
+    routerLink="/bundler/products/add"
+  >
     <mat-icon>add</mat-icon>
-</a>
+  </a>
+</div>
 <mat-card class="product-table">
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z2 stripped-table">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z2 stripped-table"
+  >
     <ng-container matColumnDef="productId">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let product"> {{product.productId}} </td>
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let product">{{ product.productId }}</td>
     </ng-container>
 
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> name </th>
-        <td mat-cell *matCellDef="let product"> {{product.name}} </td>
+      <th mat-header-cell *matHeaderCellDef>name</th>
+      <td mat-cell *matCellDef="let product">{{ product.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef> description </th>
-        <td mat-cell *matCellDef="let product"> {{product.description}} </td>
+      <th mat-header-cell *matHeaderCellDef>description</th>
+      <td mat-cell *matCellDef="let product">{{ product.description }}</td>
     </ng-container>
 
     <ng-container matColumnDef="pricePM">
-        <th mat-header-cell *matHeaderCellDef> Precio PM </th>
-        <td mat-cell *matCellDef="let product"> {{product.pricePM | currency}} </td>
+      <th mat-header-cell *matHeaderCellDef>Precio PM</th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.pricePM | currency }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="priceCF">
-        <th mat-header-cell *matHeaderCellDef> Precio CF </th>
-        <td mat-cell *matCellDef="let product"> {{product.priceCF | currency}} </td>
+      <th mat-header-cell *matHeaderCellDef>Precio CF</th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.priceCF | currency }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef> Opciones </th>
-        <td mat-cell *matCellDef="let product">
-            <div class="option-buttons-container">
-                <a aria-label="Example icon button with a menu icon" routerLink="/bundler/products/view/{{product.id}}"
-                    matTooltip="Visualizar detalles de {{product.name}}" class="option-button option-blue">
-                    <mat-icon>visibility</mat-icon>
-                </a>
-                <a aria-label="Example icon button with a menu icon" matTooltip="Modificar {{product.name}} "
-                    routerLink="/bundler/products/edit/{{product.id}}" class="option-button option-gray">
-                    <mat-icon>edit </mat-icon>
-                </a>
-                <button *ngIf="isInCart(product.productId)" aria-label="Example icon button with a menu icon" matTooltip="Eliminar {{product.name}} del carrito"
-                    class="option-button option-red" (click)="removeFromCart(product)">
-                    <mat-icon>remove_shopping_cart</mat-icon>
-                </button>
-                <button *ngIf="!isInCart(product.productId)" aria-label="Example icon button with a menu icon"
-                    matTooltip="Agregar al carrito {{product.name}}" (click)="addToCart(product)"
-                    class="option-button option-green ">
-                    <mat-icon>add_shopping_cart</mat-icon>
-                </button>
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Opciones</th>
+      <td mat-cell *matCellDef="let product">
+        <div class="option-buttons-container">
+          <a
+            aria-label="Example icon button with a menu icon"
+            routerLink="/bundler/products/view/{{ product.id }}"
+            matTooltip="Visualizar detalles de {{ product.name }}"
+            class="option-button option-blue"
+          >
+            <mat-icon>visibility</mat-icon>
+          </a>
+          <a
+            aria-label="Example icon button with a menu icon"
+            matTooltip="Modificar {{ product.name }} "
+            routerLink="/bundler/products/edit/{{ product.id }}"
+            class="option-button option-gray"
+          >
+            <mat-icon>edit </mat-icon>
+          </a>
+          <button
+            *ngIf="isInCart(product.productId)"
+            aria-label="Example icon button with a menu icon"
+            matTooltip="Eliminar {{ product.name }} del carrito"
+            class="option-button option-red"
+            (click)="removeFromCart(product)"
+          >
+            <mat-icon>remove_shopping_cart</mat-icon>
+          </button>
+          <button
+            *ngIf="!isInCart(product.productId)"
+            aria-label="Example icon button with a menu icon"
+            matTooltip="Agregar al carrito {{ product.name }}"
+            (click)="addToCart(product)"
+            class="option-button option-green"
+          >
+            <mat-icon>add_shopping_cart</mat-icon>
+          </button>
+        </div>
+      </td>
     </ng-container>
 
-
-
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row 
-        *matRowDef="let row; columns: columns;" 
-        [class.selected]="isInCart(row.productId)">
-    </tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 50]" showFirstLastButtons></mat-paginator>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: columns"
+      [class.selected]="isInCart(row.productId)"
+    ></tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 50]"
+    showFirstLastButtons
+  ></mat-paginator>
 </mat-card>
