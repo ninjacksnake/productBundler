@@ -62,6 +62,7 @@ export class HttpService {
 
     return makeRequest().pipe(
       catchError((error: any) => {
+        console.log(error)
         if (error.status === 401) {
           this.matSnack.open('Session expired, refreshing....', 'Close', {
             duration: 1500,

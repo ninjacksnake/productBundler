@@ -40,3 +40,9 @@
     background-color: #c8e6c9 !important; /* Slightly darker green on hover */
 }
 
+.ninja-title {
+  font-family: "Ninja", sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
