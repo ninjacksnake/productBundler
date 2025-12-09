@@ -16,12 +16,12 @@ export class BundleListComponent {
   role: any;
 
   constructor(private bundlesService: BundlesService, private authService: AuthService) {
-    this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.bundles = bundles)  
+    this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.bundles = bundles)
     this.user = this.authService.getCurrentUser().subscribe((user) => {
       this.user = user;
       this.role = this.user.role || null;
     });
-  }  
+  }
 
   dataSource = new MatTableDataSource<IBundle>();
   searchTerm: string = '';
@@ -46,8 +46,8 @@ export class BundleListComponent {
       bundle.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       bundle.description.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-    if (this.dataSource.paginator) {  
-      this.dataSource.paginator.firstPage();  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     };
   }
 
@@ -57,5 +57,11 @@ export class BundleListComponent {
     this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.dataSource.data = bundles)
     // this.bundles = this.bundlesService.getAll()
   }
-  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'options'];
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.filterBundles();
+  }
+
+  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'createdDate', 'updatedDate', 'options'];
 }

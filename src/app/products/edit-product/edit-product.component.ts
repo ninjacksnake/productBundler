@@ -12,6 +12,7 @@ import { of, switchMap } from 'rxjs';
 })
 export class EditProductComponent {
   imageData: { file: File } | null = null;
+  imagePreview: string | null = null;
 
   productForm!: FormGroup;
 
@@ -22,7 +23,7 @@ export class EditProductComponent {
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize the form with empty values first
@@ -60,9 +61,31 @@ export class EditProductComponent {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
+    if (file) {
+      this.processFile(file);
+    }
+  }
+
+  processFile(file: File) {
     this.productForm.patchValue({
       image: file.name,
       imageData: { file: file },
+    });
+
+    // Create image preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage(event: Event) {
+    event.stopPropagation();
+    this.imagePreview = null;
+    this.productForm.patchValue({
+      image: '',
+      imageData: { file: null },
     });
   }
 
@@ -78,10 +101,10 @@ export class EditProductComponent {
             horizontalPosition: 'center',
           });
           const file = (this.productForm.value.imageData as { file: File })?.file;
-          if(file){
-            this.productService.addImage(res.id,this.productForm.value.productId, file);
+          if (file) {
+            this.productService.addImage(res.id, this.productForm.value.productId, file);
           }
-          this.router.navigate(['/bundler/products/view/'+res.id]);
+          this.router.navigate(['/bundler/products/view/' + res.id]);
         },
         error: (err) => {
           console.error('Error updating product:', err);

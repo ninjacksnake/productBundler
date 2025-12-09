@@ -1,44 +1,98 @@
 <div class="edit-user-container">
-  <div class="edit-user-header">
-    <h1>Editar usuario</h1>
+  <div class="header-section">
+    <h1 class="page-title">Editar Usuario</h1>
+    <p class="page-subtitle">Actualice la información del usuario</p>
   </div>
-  <mat-card class="form-container">
+
+  <mat-card class="form-card">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <div class="edit-user-form-body">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre</mat-label>
-          <input matInput placeholder="Nombre" formControlName="name" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Apellido</mat-label>
-          <input matInput placeholder="Apellido" formControlName="lastName" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput placeholder="Email" formControlName="email" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Estatus</mat-label>
-          <mat-select placeholder="Estatus" formControlName="isDeleted">
-            <mat-option [value]="false">Activo</mat-option>
-            <mat-option [value]="true">Eliminado</mat-option>
-          </mat-select>
-        </mat-form-field>
-       
-        <mat-form-field appearance="outline" class="full-width" *ngIf="role === 'ADMIN'">
-          <mat-label>Rol</mat-label>
-          <mat-select placeholder="Rol" formControlName="role">
-            <mat-option value="ADMIN">Administrador</mat-option>
-            <mat-option value="USER">Usuario</mat-option>
-          </mat-select>
-        </mat-form-field>
-        
-        <div class="edit-user-footer">
-          <button mat-flat-button color="warn" (click)="onCancel()">
-            Cancelar
-          </button>
-          <button mat-flat-button color="primary" type="submit">Guardar</button>
+
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Información Personal</h2>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Juan">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="userForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="lastName" placeholder="Ej: Pérez">
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">
+              El apellido es requerido
+            </mat-error>
+          </mat-form-field>
         </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Correo Electrónico</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="ejemplo@correo.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+              El correo es requerido
+            </mat-error>
+            <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+              Correo electrónico inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Account Settings Section -->
+      <div class="form-section">
+        <h2 class="section-title">Configuración de Cuenta</h2>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Estado de la Cuenta</mat-label>
+            <mat-select formControlName="isDeleted">
+              <mat-option [value]="false">
+                <mat-icon class="status-icon active">check_circle</mat-icon>
+                Activo
+              </mat-option>
+              <mat-option [value]="true">
+                <mat-icon class="status-icon inactive">cancel</mat-icon>
+                Eliminado
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>toggle_on</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field" *ngIf="role === 'ADMIN'">
+            <mat-label>Rol de Usuario</mat-label>
+            <mat-select formControlName="role">
+              <mat-option value="ADMIN">
+                <mat-icon class="role-icon">admin_panel_settings</mat-icon>
+                Administrador
+              </mat-option>
+              <mat-option value="USER">
+                <mat-icon class="role-icon">person</mat-icon>
+                Usuario
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button class="cancel-btn" (click)="onCancel()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        <button type="submit" mat-raised-button color="primary" class="submit-btn" [disabled]="userForm.invalid">
+          <mat-icon>save</mat-icon>
+          Guardar Cambios
+        </button>
       </div>
     </form>
   </mat-card>

@@ -14,13 +14,15 @@ import { Router } from '@angular/router';
 })
 export class AddProductComponent implements OnInit {
   productForm!: FormGroup;
+  imagePreview: string | null = null;
+  isDragOver: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -41,11 +43,70 @@ export class AddProductComponent implements OnInit {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
+    if (file) {
+      this.processFile(file);
+    }
+  }
+
+  processFile(file: File) {
     console.log(file.name);
     this.productForm.patchValue({
       image: file.name,
       imageData: { file: file },
     });
+
+    // Create image preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        this.processFile(file);
+      } else {
+        this.snackBar.open('Por favor selecciona un archivo de imagen válido', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+          panelClass: ['mat-snackbar-error']
+        });
+      }
+    }
+  }
+
+  removeImage(event: Event) {
+    event.stopPropagation();
+    this.imagePreview = null;
+    this.productForm.patchValue({
+      image: '',
+      imageData: { file: null },
+    });
+  }
+
+  onCancel() {
+    this.router.navigate(['/bundler/products']);
   }
 
   onSubmit() {
@@ -62,56 +123,55 @@ export class AddProductComponent implements OnInit {
 
       this.productService
         .addProduct(product)
-        // .pipe(
-        //   switchMap((created: any) => {
-        //     // If addProduct failed (service handles error by returning undefined), do not upload image
-        //     console.log('created from addProduct',created)
-        //     if (!created) {
-        //       return of(null);
-        //     }
-        //     const file = (this.productForm.value.imageData as { file: File })
-        //       ?.file;
-        //     if (!file) {
-        //       return of(null);
-        //     }
-        //     // notify user that the product has been created
-
-        //     return this.productService.addImage(
-        //       created.id,
-        //       this.productForm.value.productId,
-        //       file
-        //     );
-        //   })
-        // )
         .subscribe({
           next: (response: any) => {
-            //console.log('created from addProduct', response);
+            // Product created successfully
+            const file = (this.productForm.value.imageData as { file: File })?.file;
 
-            const file = (this.productForm.value.imageData as { file: File }) ?.file;
-            if (!file) {
-             throw new Error('No file selected');
+            if (file) {
+              // Upload image if file exists
+              this.productService.addImage(response.id, this.productForm.value.productId, file).subscribe({
+                next: (res: any) => {
+                  // Product and image uploaded successfully
+                  this.snackBar.open('Producto creado exitosamente', 'Cerrar', {
+                    duration: 3000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center',
+                    panelClass: ['mat-snackbar-success']
+                  });
+                  this.router.navigate(['/bundler/products']);
+                },
+                error: (err) => {
+                  // Product created but image upload failed
+                  this.snackBar.open('Producto creado, pero la imagen no se pudo subir', 'Cerrar', {
+                    duration: 4000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center',
+                    panelClass: ['mat-snackbar-warning']
+                  });
+                  this.router.navigate(['/bundler/products']);
+                },
+              });
+            } else {
+              // Product created without image
+              this.snackBar.open('Producto creado exitosamente', 'Cerrar', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+              });
+              this.router.navigate(['/bundler/products']);
             }
-            this.productService.addImage(response.id, this.productForm.value.productId, file).subscribe({
-              next: (res: any) => {
-                //console.log('Image uploaded successfully:', res);
-              },
-              error: (err) => {
-                //console.error('Error uploading image:', err);
-              },
-            });
-
-            this.snackBar.open('Product created successfully', 'Close', {
-              duration: 2000,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-            });
-
-             this.router.navigate(['/bundler/products/view/' + response.id]);
-
-            // console.log('Product created. Image uploaded only if present and product creation succeeded.', res);
           },
           error: (err) => {
-            console.error('Error creating product or uploading image:', err);
+            // Product creation failed
+            console.error('Error creating product:', err);
+            this.snackBar.open('Error al crear el producto. Por favor, intenta de nuevo.', 'Cerrar', {
+              duration: 4000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+              panelClass: ['mat-snackbar-error']
+            });
           },
         });
 

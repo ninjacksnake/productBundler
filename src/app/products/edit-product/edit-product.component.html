@@ -1,56 +1,98 @@
 <div class="edit-product-container">
-    <div class="edit-product-header">
-        <h1>Editar producto</h1>
+    <div class="header-section">
+        <h1 class="page-title">Editar Producto</h1>
+        <p class="page-subtitle">Actualice la información del producto</p>
     </div>
-    <mat-card class="form-container">
-        <mat-card-header>
-            <mat-card-title>Datos del producto</mat-card-title>
-            <mat-card-subtitle>Actualiza la información y guarda los cambios</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-            <form [formGroup]="productForm">
-                <div class="edit-product-form-body">
-                    <mat-form-field appearance="outline" class="full-width" style="display: none;">
-                        <mat-label>ID</mat-label>
-                        <input matInput placeholder="ID" formControlName="id">
-                    </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>ID</mat-label>
-                        <input matInput placeholder="Id" formControlName="productId">
+    <mat-card class="form-card">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+            <!-- Image Upload Section -->
+            <div class="form-section">
+                <h2 class="section-title">Imagen del Producto</h2>
+                <div class="upload-area" (click)="fileInput.click()">
+                    <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+                        style="display: none;">
+
+                    <div class="upload-content" *ngIf="!imagePreview">
+                        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                        <p class="upload-text">Haz clic para cambiar la imagen</p>
+                        <p class="upload-hint">PNG, JPG o WEBP (máx. 5MB)</p>
+                    </div>
+
+                    <div class="image-preview-container" *ngIf="imagePreview">
+                        <img [src]="imagePreview" alt="Vista previa" class="image-preview">
+                        <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
+                            (click)="removeImage($event)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Information Section -->
+            <div class="form-section">
+                <h2 class="section-title">Información del Producto</h2>
+
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>ID del Producto</mat-label>
+                        <input matInput type="text" formControlName="productId" placeholder="Ej: PROD-001">
+                        <mat-icon matPrefix>tag</mat-icon>
                         <mat-hint>Identificador interno del producto</mat-hint>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Nombre</mat-label>
-                        <input matInput placeholder="Nombre" formControlName="name">
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Nombre del Producto</mat-label>
+                        <input matInput type="text" formControlName="name" placeholder="Ej: Laptop Dell XPS 13">
+                        <mat-icon matPrefix>inventory_2</mat-icon>
                         <mat-hint>Como se mostrará al cliente</mat-hint>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Descripción</mat-label>
-                        <input matInput placeholder="Descripción" formControlName="description">
-                    </mat-form-field>
-                  <div class="file-input-container">
-
-                      <input  type="file"  (change)="onFileSelected($event)" >
-                  </div>                 
-                    
-                    <div class="two-col">
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Precio CF</mat-label>
-                            <input matInput placeholder="Precio CF" formControlName="priceCF">
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Precio PM</mat-label>
-                            <input matInput placeholder="Precio PM" formControlName="pricePM">
-                        </mat-form-field>
-                    </div>
                 </div>
-            </form>
-        </mat-card-content>
-        <mat-card-actions align="end" class="edit-product-footer">
-            <button mat-stroked-button color="warn" (click)="onCancel()">Cancelar</button>
-            <button mat-flat-button color="primary" (click)="onSubmit()">Guardar</button>
-        </mat-card-actions>
+
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="form-field full-width">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput formControlName="description" rows="4"
+                            placeholder="Describe las características principales del producto..."></textarea>
+                        <mat-icon matPrefix>description</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="form-section">
+                <h2 class="section-title">Precios</h2>
+
+                <div class="form-row pricing-row">
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Precio Consumidor Final</mat-label>
+                        <input matInput type="number" formControlName="priceCF" placeholder="0.00" step="0.01">
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-icon matSuffix>attach_money</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Precio Por Mayor (PM)</mat-label>
+                        <input matInput type="number" formControlName="pricePM" placeholder="0.00" step="0.01">
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-icon matSuffix>attach_money</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <button type="button" mat-stroked-button class="cancel-btn" (click)="onCancel()">
+                    <mat-icon>close</mat-icon>
+                    Cancelar
+                </button>
+                <button type="submit" mat-raised-button color="primary" class="submit-btn"
+                    [disabled]="productForm.invalid">
+                    <mat-icon>save</mat-icon>
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
     </mat-card>
 </div>

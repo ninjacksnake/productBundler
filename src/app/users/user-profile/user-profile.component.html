@@ -31,17 +31,9 @@
   <mat-card class="profile-card">
     <div class="profile-header">
       <div class="profile-avatar-container">
-        <img
-          [src]="user?.photo || 'assets/avatar2.png'"
-          class="profile-avatar"
-          alt="Profile Photo"
-          (error)="user && (user.photo = 'assets/avatar2.png')"
-        />
-        <button
-          mat-icon-button
-          class="edit-photo-btn"
-          matTooltip="Change photo"
-        >
+        <img [src]="user?.photo || 'assets/avatar2.png'" class="profile-avatar" alt="Profile Photo"
+          (error)="user && (user.photo = 'assets/avatar2.png')" />
+        <button mat-icon-button class="edit-photo-btn" matTooltip="Change photo">
           <mat-icon>camera_alt</mat-icon>
         </button>
       </div>
@@ -80,25 +72,20 @@
     </div>
 
     <mat-card-actions class="profile-actions">
+      <button mat-raised-button matTooltip="Actualizar contraseña" color="primary" class="action-button"
+        (click)="openPasswordDialog()">
+        <mat-icon>autorenew</mat-icon>
+        Contraseña
+      </button>
       <div *ngIf="user?.role === 'ADMIN'">
-        <button
-          mat-raised-button
-          color="primary"
-          class="action-button"
-          routerLink="/bundler/users/edit/{{ user?.id }}"
-        >
-          <mat-icon>edit</mat-icon>
-          Edit Profile
+        <button mat-raised-button color="primary" class="action-button" routerLink="/bundler/users/edit/{{ user?.id }}">
+          <mat-icon> edit</mat-icon>
+          Editar
         </button>
 
-        <button
-          mat-stroked-button
-          color="warn"
-          class="action-button"
-          (click)="deleteUser(user?.id)"
-        >
+        <button mat-stroked-button color="warn" class="action-button" (click)="deleteUser(user?.id)">
           <mat-icon>delete</mat-icon>
-          Delete Account
+          Eliminar
         </button>
       </div>
     </mat-card-actions>

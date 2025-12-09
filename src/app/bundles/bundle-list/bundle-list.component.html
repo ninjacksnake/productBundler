@@ -1,94 +1,161 @@
-<div class="row">
-  <div class="col-12">
-    <h1 class="ninja-title">Combos</h1>
+<div class="bundle-list-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">Combos</h1>
+        <p class="page-subtitle">Gestione los combos de productos</p>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar combos</mat-label>
+        <input matInput placeholder="Buscar por nombre o descripción..." [(ngModel)]="searchTerm"
+          (ngModelChange)="filterBundles()">
+        <mat-icon matPrefix>search</mat-icon>
+        <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()" aria-label="Limpiar búsqueda">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="results-count" *ngIf="dataSource.data.length > 0">
+        <mat-icon>inventory</mat-icon>
+        <span>{{ dataSource.data.length }} combo(s)</span>
+      </div>
+    </div>
   </div>
-  <div class="col-12">
-    <input
-      type="text"
-      class="ninja-input"
-      matInput
-      placeholder="Buscar combo"
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="filterBundles()"
-    />
-    <!-- <button mat-icon-button color="primary" matTooltip="Agregar un nuevo combo" routerLink="/bundler/bundles/add"><mat-icon>add</mat-icon></button> -->
-  </div>
-</div>
-<mat-card>
-  <div class="bundle-table">
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      class="mat-elevation-z1 stripped-table"
-    >
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let bundle">{{ bundle.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef>Descripción</th>
-        <td mat-cell *matCellDef="let bundle">{{ bundle.description }}</td>
-      </ng-container>
-      <ng-container matColumnDef="priceCF">
-        <th mat-header-cell *matHeaderCellDef>Precio CF</th>
-        <td mat-cell *matCellDef="let bundle">
-          {{ bundle.priceCF | currency }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="pricePM">
-        <th mat-header-cell *matHeaderCellDef>Precio PM</th>
-        <td mat-cell *matCellDef="let bundle">
-          {{ bundle.pricePM | currency }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="createdDate">
-        <th mat-header-cell *matHeaderCellDef>Fecha de creación</th>
-        <td mat-cell *matCellDef="let bundle">
-          {{ bundle.createdDate | date : "dd/MM/YYYY" }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="updatedDate">
-        <th mat-header-cell *matHeaderCellDef>Fecha de actualización</th>
-        <td mat-cell *matCellDef="let bundle">
-          {{ bundle.updatedDate | date : "dd/MM/YYYY" }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef>Opciones</th>
-        <td mat-cell *matCellDef="let bundle">
-          <div class="option-buttons-container">
-            <a
-              matTooltip="Visualizar {{ bundle.name }}"
-              class="option-button option-blue"
-              routerLink="/bundler/bundles/view/{{ bundle.id }}"
-            >
-              <mat-icon>visibility</mat-icon>
-            </a>
-            <a
-              matTooltip="Modificar {{ bundle.name }}"
-              class="option-button option-black"
-              routerLink="/bundler/bundles/edit/{{ bundle.id }}"
-            >
+
+  <!-- Table Card -->
+  <mat-card class="table-card">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="bundles-table">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>inventory</mat-icon>
+              <span>Nombre</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="bundle-name">{{ bundle.name }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>description</mat-icon>
+              <span>Descripción</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="bundle-description">{{ bundle.description }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Price CF Column -->
+        <ng-container matColumnDef="priceCF">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>attach_money</mat-icon>
+              <span>Precio CF</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="price">{{ bundle.priceCF | currency }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Price PM Column -->
+        <ng-container matColumnDef="pricePM">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>payments</mat-icon>
+              <span>Precio PM</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="price">{{ bundle.pricePM | currency }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Created Date Column -->
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>event</mat-icon>
+              <span>Creado</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="date-badge created">
+              <mat-icon>add_circle</mat-icon>
+              {{ bundle.createdDate | date : 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Updated Date Column -->
+        <ng-container matColumnDef="updatedDate">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>update</mat-icon>
+              <span>Actualizado</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <span class="date-badge updated">
               <mat-icon>edit</mat-icon>
-            </a>
-            <a *ngIf="role === 'ADMIN'"
-              matTooltip="Eliminar {{ bundle.name }}"
-              class="option-button option-red"
-              aria-label="Eliminar"
-              (click)="deleteBundle(bundle.id)"
-            >
-              <mat-icon>remove_shopping_cart</mat-icon>
-            </a>
-          </div>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="columns"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns"></tr>
-    </table>
-    <mat-paginator class="mat-paginator"
-      [pageSize]="5"
-      [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons
-    ></mat-paginator>
-  </div>
-</mat-card>
+              {{ bundle.updatedDate | date : 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Options Column -->
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>settings</mat-icon>
+              <span>Acciones</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let bundle">
+            <div class="action-buttons">
+              <button mat-icon-button class="action-btn view-btn" routerLink="/bundler/bundles/view/{{ bundle.id }}"
+                matTooltip="Ver detalles">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button class="action-btn edit-btn" routerLink="/bundler/bundles/edit/{{ bundle.id }}"
+                matTooltip="Editar combo">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="role === 'ADMIN'" class="action-btn delete-btn"
+                (click)="deleteBundle(bundle.id)" matTooltip="Eliminar combo">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="dataSource.data.length === 0">
+        <mat-icon>inventory</mat-icon>
+        <h3>No se encontraron combos</h3>
+        <p *ngIf="searchTerm">Intenta con otros términos de búsqueda</p>
+        <p *ngIf="!searchTerm">No hay combos disponibles en este momento</p>
+      </div>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons class="table-paginator">
+    </mat-paginator>
+  </mat-card>
+</div>
