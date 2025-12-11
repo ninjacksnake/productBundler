@@ -41,11 +41,13 @@
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
     transition: all 0.3s ease;
+    background-color: #279d2b !important;
 }
 
 .add-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
+    color: rgb(12, 11, 11) !important;
 }
 
 .add-button mat-icon {
@@ -235,6 +237,10 @@
 
 .reset-btn {
     color: #4299e1;
+}
+
+.admin-btn {
+    color: #4242e1;
 }
 
 .reset-btn:hover {

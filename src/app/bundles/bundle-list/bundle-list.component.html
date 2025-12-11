@@ -88,14 +88,13 @@
           <th mat-header-cell *matHeaderCellDef>
             <div class="header-cell">
               <mat-icon>event</mat-icon>
-              <span>Creado</span>
+              <span>Creado en</span>
             </div>
           </th>
           <td mat-cell *matCellDef="let bundle">
-            <span class="date-badge created">
-              <mat-icon>add_circle</mat-icon>
-              {{ bundle.createdDate | date : 'dd/MM/yyyy' }}
-            </span>
+
+            <span class="price">{{ bundle.createdAt | date : 'dd/MM/yyyy' }}</span>
+
           </td>
         </ng-container>
 
@@ -108,10 +107,7 @@
             </div>
           </th>
           <td mat-cell *matCellDef="let bundle">
-            <span class="date-badge updated">
-              <mat-icon>edit</mat-icon>
-              {{ bundle.updatedDate | date : 'dd/MM/yyyy' }}
-            </span>
+            <span class="price">{{ bundle.updatedAt | date : 'dd/MM/yyyy' }}</span>
           </td>
         </ng-container>
 
@@ -132,6 +128,10 @@
               <button mat-icon-button class="action-btn edit-btn" routerLink="/bundler/bundles/edit/{{ bundle.id }}"
                 matTooltip="Editar combo">
                 <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="action-btn print-btn" (click)="printBundle(bundle)"
+                matTooltip="Imprimir combo">
+                <mat-icon>print</mat-icon>
               </button>
               <button mat-icon-button *ngIf="role === 'ADMIN'" class="action-btn delete-btn"
                 (click)="deleteBundle(bundle.id)" matTooltip="Eliminar combo">

@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./users-list.component.css'],
 })
 export class UsersListComponent implements OnInit {
+  public loggedUser: IUser | null = JSON.parse(localStorage.getItem('loggedUser') || '{}');
   public dataSource = new MatTableDataSource<IUser>();
   searchTerm: string = '';
   filtredUsers: IUser[] = [];
@@ -28,6 +29,15 @@ export class UsersListComponent implements OnInit {
       this.dataSource.data = users;
       this.filtredUsers = users;
     });
+  }
+
+  makeAdmin(id: number) {
+    this.userService.makeAdmin(id);
+    this.userService.find().subscribe((users: IUser[]) => {
+      this.dataSource.data = users;
+      this.filtredUsers = users;
+    });
+    this.reloadComponent();
   }
 
   ngAfterViewInit(): void {

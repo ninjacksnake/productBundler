@@ -121,59 +121,46 @@ export class AddProductComponent implements OnInit {
         imageData: this.productForm.value.imageData,
       };
 
-      this.productService
-        .addProduct(product)
-        .subscribe({
-          next: (response: any) => {
-            // Product created successfully
-            const file = (this.productForm.value.imageData as { file: File })?.file;
+      this.productService.addProduct(product).pipe(
+        switchMap((response: any) => {
+          // Product created successfully
+          const file = (this.productForm.value.imageData as { file: File })?.file;
 
-            if (file) {
-              // Upload image if file exists
-              this.productService.addImage(response.id, this.productForm.value.productId, file).subscribe({
-                next: (res: any) => {
-                  // Product and image uploaded successfully
-                  this.snackBar.open('Producto creado exitosamente', 'Cerrar', {
-                    duration: 3000,
-                    verticalPosition: 'top',
-                    horizontalPosition: 'center',
-                    panelClass: ['mat-snackbar-success']
-                  });
-                  this.router.navigate(['/bundler/products']);
-                },
-                error: (err) => {
-                  // Product created but image upload failed
-                  this.snackBar.open('Producto creado, pero la imagen no se pudo subir', 'Cerrar', {
-                    duration: 4000,
-                    verticalPosition: 'top',
-                    horizontalPosition: 'center',
-                    panelClass: ['mat-snackbar-warning']
-                  });
-                  this.router.navigate(['/bundler/products']);
-                },
-              });
-            } else {
-              // Product created without image
-              this.snackBar.open('Producto creado exitosamente', 'Cerrar', {
-                duration: 3000,
-                verticalPosition: 'top',
-                horizontalPosition: 'center',
-                panelClass: ['mat-snackbar-success']
-              });
-              this.router.navigate(['/bundler/products']);
-            }
-          },
-          error: (err) => {
-            // Product creation failed
-            console.error('Error creating product:', err);
-            this.snackBar.open('Error al crear el producto. Por favor, intenta de nuevo.', 'Cerrar', {
-              duration: 4000,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-              panelClass: ['mat-snackbar-error']
-            });
-          },
-        });
+          if (file) {
+            // Upload image if file exists
+            return this.productService.addImage(response.id, this.productForm.value.productId, file).pipe(
+              map(() => ({ type: 'success', message: 'Producto creado exitosamente' })),
+              catchError((err) => {
+                console.error('Image upload failed', err);
+                return of({ type: 'warning', message: 'Producto creado, pero la imagen no se pudo subir' });
+              })
+            );
+          } else {
+            // Product created without image
+            return of({ type: 'success', message: 'Producto creado exitosamente' });
+          }
+        })
+      ).subscribe({
+        next: (result) => {
+          this.snackBar.open(result.message, 'Cerrar', {
+            duration: result.type === 'success' ? 3000 : 4000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            panelClass: result.type === 'success' ? ['mat-snackbar-success'] : ['mat-snackbar-warning']
+          });
+          this.router.navigate(['/bundler/products']);
+        },
+        error: (err) => {
+          // Product creation failed
+          console.error('Error creating product:', err);
+          this.snackBar.open('Error al crear el producto. Por favor, intenta de nuevo.', 'Cerrar', {
+            duration: 4000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            panelClass: ['mat-snackbar-error']
+          });
+        },
+      });
 
       // this.productForm.reset();
     } else {

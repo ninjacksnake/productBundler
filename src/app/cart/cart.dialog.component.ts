@@ -1,11 +1,11 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject, Input, OnInit, OnDestroy } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AddProductBundleDto } from "../Dtos/add.product.bundle.dto";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CartService } from "../shared/services/cart.service";
 import { ProductDto } from "../shared/Dtos/product.dto";
 import { BundlesService } from "../shared/services/bundles.service";
-import { finalize, map, shareReplay, take, tap } from "rxjs";
+import { finalize, map, shareReplay, take, tap, Subscription } from "rxjs";
 import { HttpResponse, HttpStatusCode } from "@angular/common/http";
 import {
     MatSnackBar,
@@ -32,23 +32,24 @@ const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'quan
     styleUrls: ['./cart.dialog.component.css']
 })
 
-export class CartDialogComponent implements OnInit {
-    product: ProductDto[] = this.data.products;
+export class CartDialogComponent implements OnInit, OnDestroy {
+    products: AddProductBundleDto[] = [];
     tableColumns = tableColumns;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
+    private cartSubscription?: Subscription;
 
     bundleForm: FormGroup = this.fb.group({
         name: ['', Validators.required],
         description: ['', Validators.required],
         priceCF: [0, Validators.required],
         pricePM: [0, Validators.required],
-        products: [this.data.products]
+        products: [[]]
     });
 
-    @Input() closeDialog! :() => void;
+    @Input() closeDialog!: () => void;
 
-   
+
 
     // Injecting data into the dialog component
     constructor(
@@ -58,7 +59,7 @@ export class CartDialogComponent implements OnInit {
         private BundlesService: BundlesService,
         private matSnackBar: MatSnackBar,
         private router: Router,
-    ) {}
+    ) { }
 
     onClose(): void {
         if (this.data.closeDialog) {
@@ -67,7 +68,16 @@ export class CartDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        //  console.log(this.data.products);
+        this.cartSubscription = this.cartService.cart$.subscribe(cartItems => {
+            this.products = cartItems;
+            this.bundleForm.patchValue({ products: cartItems });
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.cartSubscription) {
+            this.cartSubscription.unsubscribe();
+        }
     }
 
     onSubmit(): void {
@@ -102,7 +112,7 @@ export class CartDialogComponent implements OnInit {
                     this.cartService.clearCart();
                     this.onClose();
                     this.router.navigate(['/bundler/bundles']);
-                    
+
                 }
             })
 
@@ -120,9 +130,9 @@ export class CartDialogComponent implements OnInit {
         return this.cartService.getTotalPM();
     }
 
-    removeProduct(theTroduct: ProductDto): void {
-        this.cartService.removeFromCart(theTroduct);
+    removeProduct(product: AddProductBundleDto): void {
+        this.cartService.removeFromCart(product);
     }
 
-   
+
 }

@@ -202,6 +202,14 @@
     background-color: #edf2f7;
 }
 
+.print-btn {
+    color: #667eea;
+}
+
+.print-btn:hover {
+    background-color: #edf2f7;
+}
+
 .delete-btn {
     color: #f56565;
 }

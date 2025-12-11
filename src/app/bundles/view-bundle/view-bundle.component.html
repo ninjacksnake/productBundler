@@ -1,95 +1,204 @@
 <div class="view-bundle-container">
-    <div class="row">
-        <h1> Información de <span class="highlight-title">{{Bundle.name}} </span></h1>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="header-content">
+            <div class="title-section">
+                <h1 class="page-title">{{Bundle.name}}</h1>
+                <p class="page-subtitle">Detalles completos del combo</p>
+            </div>
+            <div class="action-buttons">
+                <button mat-raised-button class="action-btn back-btn" (click)="back()">
+                    <mat-icon>arrow_back</mat-icon>
+                    Volver
+                </button>
+                <button mat-raised-button class="action-btn print-btn" (click)="printBundle()">
+                    <mat-icon>print</mat-icon>
+                    Imprimir
+                </button>
+                <button mat-raised-button class="action-btn edit-btn" (click)="edit()">
+                    <mat-icon>edit</mat-icon>
+                    Editar
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <div class="col-4">
-            <mat-card class="mat-elevation-z2 ninja-card">
-                <mat-list>
-                    <mat-list-item>
-                        <strong>
-                            Nombre:
-                        </strong>
-                        {{Bundle.name}}
-                    </mat-list-item>
-                    <mat-list-item>
-                        <strong>
-                            Descripción:
-                        </strong> {{Bundle.description}}
-                    </mat-list-item>
-                    <mat-list-item>
-                        <strong>
-                            Total al pormayor:
-                        </strong> {{Bundle.pricePM | currency}}
-                    </mat-list-item>    
-                    <mat-list-item>
-                        <strong>
-                            Total cliente Final:
-                        </strong> {{Bundle.priceCF | currency}}
-                    </mat-list-item>
-                </mat-list>
-
-
-
-            </mat-card>
-            <mat-card class="mat-elevation-z2 ninja-card">
-                <h2>Imagenes</h2>
-                <div class="img-container">
-                    <img *ngFor="let image of images" 
-                         [src]="image" 
-                         [alt]="image" 
-                         class="img-fluid"
-                    />
-                    
+    <!-- Main Content -->
+    <div class="content-grid">
+        <!-- Left Column: Bundle Info & Images -->
+        <div class="left-column">
+            <!-- Bundle Information Card -->
+            <mat-card class="info-card">
+                <div class="card-header">
+                    <mat-icon class="header-icon">info</mat-icon>
+                    <h2>Información del Combo</h2>
                 </div>
-                <div class="button-container">
-                    <!-- <button mat-button color="primary" matTooltip="Imprimir">Imprimir</button>
-                    <button mat-button color="primary" matTooltip="Descargar">Descargar</button> -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon-wrapper">
+                            <mat-icon>label</mat-icon>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Nombre</span>
+                            <span class="info-value">{{Bundle.name}}</span>
+                        </div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-icon-wrapper">
+                            <mat-icon>description</mat-icon>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Descripción</span>
+                            <span class="info-value">{{Bundle.description}}</span>
+                        </div>
+                    </div>
+                    <div class="info-item price-item">
+                        <div class="info-icon-wrapper gradient-pm">
+                            <mat-icon>payments</mat-icon>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Precio Por Mayor</span>
+                            <span class="info-value price-highlight">{{Bundle.pricePM | currency}}</span>
+                        </div>
+                    </div>
+                    <div class="info-item price-item">
+                        <div class="info-icon-wrapper gradient-cf">
+                            <mat-icon>attach_money</mat-icon>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Precio Cliente Final</span>
+                            <span class="info-value price-highlight">{{Bundle.priceCF | currency}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <!-- Images Card -->
+            <mat-card class="images-card" *ngIf="images.length > 0">
+                <div class="card-header">
+                    <mat-icon class="header-icon">photo_library</mat-icon>
+                    <h2>Galería de Imágenes</h2>
+                    <span class="image-count">{{images.length}}</span>
+                </div>
+                <div class="images-gallery">
+                    <div class="image-wrapper" *ngFor="let image of images">
+                        <img [src]="image" [alt]="Bundle.name" class="gallery-image" matTooltip="{{image}}" />
+                        <div class="image-overlay">
+                            <!-- <mat-icon>zoom_in</mat-icon> -->
+                            {{image}}
+                        </div>
+                    </div>
                 </div>
             </mat-card>
         </div>
-        <div class="col-8">
-            <mat-card class="mat-elevation-z2 ninja-card">
-                <mat-card-header>
-                    <h2>Productos</h2>
-                </mat-card-header>
-                <mat-card-content>
 
-                    <div class="product-container">
-                        <div class="table-responsive">
-                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z3 stripped-table">
-                                <ng-container matColumnDef="name">
-                                    <th mat-header-cell *matHeaderCellDef>Nombre</th>
-                                    <td mat-cell *matCellDef="let product">{{product.product.name}}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="priceCF">
-                                    <th mat-header-cell *matHeaderCellDef>Precio CF</th>
-                                    <td mat-cell *matCellDef="let product">{{product.product.priceCF | currency}}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="pricePM">
-                                    <th mat-header-cell *matHeaderCellDef>Precio PM</th>
-                                    <td mat-cell *matCellDef="let product">{{product.product.pricePM | currency}}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="createdAt">
-                                    <th mat-header-cell *matHeaderCellDef>Fecha de creación</th>
-                                    <td mat-cell *matCellDef="let product">{{product.createdAt | date:'dd/MM/yyyy'}}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="quantity">
-                                    <th mat-header-cell *matHeaderCellDef>Cantidad</th>
-                                    <td mat-cell *matCellDef="let product">{{product.quantity | number}}</td>
-                                </ng-container>
-                                <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-                                <tr mat-row *matRowDef="let row; columns: columns"></tr>
-                            </table>
-                            <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
-                        </div>
+        <!-- Right Column: Products Table -->
+        <div class="right-column">
+            <mat-card class="products-card">
+                <div class="card-header">
+                    <div class="header-left">
+                        <mat-icon class="header-icon">inventory_2</mat-icon>
+                        <h2>Productos del Combo</h2>
                     </div>
-                </mat-card-content>
-                <mat-dialog-actions align="end">
-                    <button mat-button mat-dialog-close color="warn" (click)="back()">Cancelar</button>
-                    <button mat-button mat-dialog-close color="primary" (click)="edit()">Editar</button>
-                </mat-dialog-actions>
+                    <div class="products-count">
+                        <mat-icon>shopping_cart</mat-icon>
+                        <span>{{products.length}} producto(s)</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSource" class="products-table">
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>inventory</mat-icon>
+                                        <span>Producto</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="product-name">{{product.product.name}}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Quantity Column -->
+                            <ng-container matColumnDef="quantity">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>format_list_numbered</mat-icon>
+                                        <span>Cantidad</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="quantity-badge">{{product.quantity | number}}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Price PM Column -->
+                            <ng-container matColumnDef="pricePM">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>payments</mat-icon>
+                                        <span>Precio PM</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="price">{{product.product.pricePM | currency}}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Price CF Column -->
+                            <ng-container matColumnDef="priceCF">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>attach_money</mat-icon>
+                                        <span>Precio CF</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="price">{{product.product.priceCF | currency}}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Created Date Column -->
+                            <ng-container matColumnDef="createdAt">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>event</mat-icon>
+                                        <span>Fecha</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="date-badge">
+                                        <mat-icon>calendar_today</mat-icon>
+                                        {{product.createdAt | date:'dd/MM/yyyy'}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columns" class="table-row"></tr>
+                        </table>
+                    </div>
+
+                    <!-- Totals Summary -->
+                    <!-- <div class="totals-summary">
+                        <div class="total-item">
+                            <mat-icon>calculate</mat-icon>
+                            <span class="total-label">Total PM:</span>
+                            <span class="total-value pm">{{totalPM | currency}}</span>
+                        </div>
+                        <div class="total-item">
+                            <mat-icon>calculate</mat-icon>
+                            <span class="total-label">Total CF:</span>
+                            <span class="total-value cf">{{totalCF | currency}}</span>
+                        </div>
+                    </div> -->
+
+                    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons class="table-paginator">
+                    </mat-paginator>
+                </div>
             </mat-card>
         </div>
     </div>

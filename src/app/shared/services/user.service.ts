@@ -97,6 +97,18 @@ export class UserService {
         });
     }
 
+    makeAdmin(id: number): void {
+        this.http.patch('/users/make-admin/', { id }).subscribe((response) => {
+            console.log(response)
+            this.snackBar.open('Usuario convertido en administrador exitosamente', 'Cerrar', {
+                duration: 2000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+            });
+        });
+    }
+
     changePassword(actualPassword: string, newPassword: string, id: number): void {
         this.http.patch('/users/update-password', {
             id,

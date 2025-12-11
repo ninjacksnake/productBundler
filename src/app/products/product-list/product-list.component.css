@@ -41,15 +41,19 @@
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
   transition: all 0.3s ease;
+  background-color: #4299e1 !important;
+
 }
 
 .add-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
+  color: #030303 !important;
 }
 
 .add-button mat-icon {
   margin-right: 0.5rem;
+
 }
 
 /* Search Section */
