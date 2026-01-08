@@ -134,5 +134,17 @@ export class CartDialogComponent implements OnInit, OnDestroy {
         this.cartService.removeFromCart(product);
     }
 
+    incrementQuantity(product: AddProductBundleDto): void {
+        const newQuantity = (product.quantity || 0) + 1;
+        this.cartService.updateQuantity(product.productId, newQuantity);
+    }
+
+    decrementQuantity(product: AddProductBundleDto): void {
+        if ((product.quantity || 0) > 1) {
+            const newQuantity = (product.quantity || 0) - 1;
+            this.cartService.updateQuantity(product.productId, newQuantity);
+        }
+    }
+
 
 }

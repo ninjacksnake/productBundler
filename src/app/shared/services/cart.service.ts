@@ -8,7 +8,7 @@ import { AddProductDto } from 'src/app/Dtos/add.product.dto';
     providedIn: 'root'
 })
 export class CartService {
-    private cartSubject = new BehaviorSubject<AddProductBundleDto[]>([]); 
+    private cartSubject = new BehaviorSubject<AddProductBundleDto[]>([]);
     cart$ = this.cartSubject.asObservable();
 
     constructor() {
@@ -25,21 +25,33 @@ export class CartService {
     addToCart(product: AddProductBundleDto): void {
         const cart = this.cartSubject.getValue();
         const productInCart = cart.find((item) => item.productId === product.productId);
-        
+
         if (productInCart) {
-            productInCart.quantity = (productInCart.quantity || 0) + 1;
-            productInCart.subtotal1 = (productInCart.quantity) * (product.pricePM || 0);
-            productInCart.subtotal2 = (productInCart.quantity) * (product.priceCF || 0);
+            this.updateQuantity(product.productId, (productInCart.quantity || 0) + 1);
         } else {
             product.quantity = 1;
             product.subtotal1 = product.pricePM || 0;
             product.subtotal2 = product.priceCF || 0;
             cart.push(product);
+            this.cartSubject.next(cart);
+            localStorage.setItem('cart', JSON.stringify(cart));
         }
-        
-        this.cartSubject.next(cart);
-        // Update localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    updateQuantity(productId: string, quantity: number): void {
+        if (quantity < 1) return;
+
+        const cart = this.cartSubject.getValue();
+        const product = cart.find(item => item.productId === productId);
+
+        if (product) {
+            product.quantity = quantity;
+            product.subtotal1 = quantity * (product.pricePM || 0);
+            product.subtotal2 = quantity * (product.priceCF || 0);
+
+            this.cartSubject.next(cart);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
     }
 
     removeFromCart(product: AddProductBundleDto): void {
@@ -59,7 +71,7 @@ export class CartService {
         this.cartSubject.next([]);
         // Clear localStorage
         localStorage.removeItem('cart');
-    }   
+    }
 
     getTotalProducts(): number {
         return this.cartSubject.getValue().reduce((total, product) => total + (product.quantity || 0), 0);
@@ -75,8 +87,8 @@ export class CartService {
 
     createBundle(): void {
         const cart = this.cartSubject.getValue();
-        
-     //   console.log('Creating bundle with:', cart);
+
+        //   console.log('Creating bundle with:', cart);
         //limpiar carrito
         this.clearCart();
     }

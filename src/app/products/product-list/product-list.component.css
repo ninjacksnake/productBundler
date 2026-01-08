@@ -95,6 +95,7 @@
 .table-container {
   overflow-x: auto;
   min-height: 400px;
+  scrollbar-gutter: stable;
 }
 
 /* Table Styles */
@@ -134,13 +135,12 @@
 
 /* Table Rows */
 .products-table tr.mat-mdc-row {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .products-table tr.mat-mdc-row:hover {
   background-color: #f7fafc;
-  transform: scale(1.01);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(66, 153, 225, 0.1);
 }
 
 .products-table tr.mat-mdc-row.in-cart {
@@ -197,6 +197,7 @@
   font-size: 0.9rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -357,6 +358,7 @@
 @media (max-width: 768px) {
   .product-description {
     -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
 
   .action-buttons {

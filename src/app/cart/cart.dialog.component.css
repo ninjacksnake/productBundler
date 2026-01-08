@@ -58,6 +58,7 @@
     padding: 1.5rem;
     overflow-y: auto;
     max-height: calc(90vh - 200px);
+    scrollbar-gutter: stable;
 }
 
 /* Sections */
@@ -100,9 +101,10 @@
 .table-container {
     border: 1px solid #e2e8f0;
     border-radius: 8px;
-    overflow: hidden;
     max-height: 400px;
     overflow-y: auto;
+    scrollbar-gutter: stable;
+    background: white;
 }
 
 /* Products Table */
@@ -159,18 +161,53 @@
     color: #2d3748;
 }
 
-/* Quantity Badge */
-.quantity-badge {
-    display: inline-flex;
+/* Quantity Control */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f1f5f9;
+    padding: 0.25rem;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.qty-btn {
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    background: white !important;
+    color: #4a5568 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background: #667eea !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+.qty-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.qty-btn mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-    color: white;
-    padding: 0.35rem 0.75rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    min-width: 2rem;
+}
+
+.quantity-value {
+    font-weight: 700;
+    color: #2d3748;
+    min-width: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
 }
 
 /* Price */
