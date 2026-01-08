@@ -1,13 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { 
+html,
+body {
   display: flex;
   flex-direction: column;
   padding: 0;
   margin: 0;
   overflow: auto;
-height: 100vh;
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 
@@ -16,50 +17,49 @@ height: 100vh;
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 60px; /* Add padding to prevent footer overlap */
+  padding-bottom: 60px;
+  /* Add padding to prevent footer overlap */
 }
 
 .ninja-input {
-    width: 25%;
-    margin: 1rem;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-  }
-
-.option-buttons-container {
-    display: flex;
-    gap: 10px;
+  width: 25%;
+  margin: 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
 }
 
-.option-button {    
-    padding: 5px;
-    color: black ;
-    border: none;
-    background-color: transparent;
-    font-size: 1rem;
+.option-buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.option-button {
+  padding: 5px;
+  color: black;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
 }
 
 .option-button:hover {
-    cursor: pointer;
-    background-color: rgb(202, 199, 199);
+  cursor: pointer;
+  background-color: rgb(202, 199, 199);
 }
 
-.option-green{
-       color: rgb(90, 128, 90);
+.option-green {
+  color: rgb(90, 128, 90);
 }
 
-.option-red{
-    color: rgb(218, 10, 10);
+.option-red {
+  color: rgb(218, 10, 10);
 }
 
-.option-blue{
-    color: rgb(10, 10, 218);
+.option-blue {
+  color: rgb(20, 80, 201);
 }
 
-.option-gray   {
-    color: rgb(56, 54, 54);
+.option-gray {
+  color: rgb(56, 54, 54);
 }
-
-

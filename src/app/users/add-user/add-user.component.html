@@ -1,78 +1,139 @@
-<div class="container">
-  <h1>Crear nuevo usuario</h1>
-  <mat-card class="form-container">
+<div class="add-user-container">
+  <div class="header-section">
+    <h1 class="page-title">Crear Nuevo Usuario</h1>
+    <p class="page-subtitle">Complete la información del usuario para agregarlo al sistema</p>
+  </div>
+
+  <mat-card class="form-card">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
-      <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre</mat-label>
-          <input matInput formControlName="name"  required />
-          <mat-error *ngIf="userForm.get('name')?.hasError('required')">
-            Nombre es requerido
-          </mat-error>
-          <mat-error *ngIf="userForm.get('name')?.hasError('minlength')">
-            El nombre debe tener al menos 3 caracteres
-          </mat-error>
-        </mat-form-field>
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Información Personal</h2>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Juan Pérez" required>
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="userForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="userForm.get('name')?.hasError('minlength')">
+              El nombre debe tener al menos 3 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Correo Electrónico</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="ejemplo@correo.com" required>
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+              El correo es requerido
+            </mat-error>
+            <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+              Correo electrónico inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Rol de Usuario</mat-label>
+            <mat-select formControlName="role" required>
+              <mat-option value="">Seleccione un rol</mat-option>
+              <mat-option value="ADMIN">
+                <mat-icon class="role-icon">admin_panel_settings</mat-icon>
+                Administrador
+              </mat-option>
+              <mat-option value="USER">
+                <mat-icon class="role-icon">person</mat-icon>
+                Usuario
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="userForm.get('role')?.hasError('required')">
+              Debe seleccionar un rol
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Correo</mat-label>
-          <input matInput formControlName="email"  required />
-          <mat-error *ngIf="userForm.get('email')?.hasError('email')">
-            Correo inválido
-          </mat-error>
-        </mat-form-field>
+      <!-- Security Section -->
+      <div class="form-section">
+        <h2 class="section-title">Seguridad</h2>
+
+        <div class="password-requirements">
+          <p class="requirements-title">La contraseña debe contener:</p>
+          <ul class="requirements-list">
+            <li [class.valid]="hasMinLength()">
+              <mat-icon>{{ hasMinLength() ? 'check_circle' : 'cancel' }}</mat-icon>
+              Mínimo 8 caracteres
+            </li>
+            <li [class.valid]="hasUpperCase()">
+              <mat-icon>{{ hasUpperCase() ? 'check_circle' : 'cancel' }}</mat-icon>
+              Al menos una mayúscula
+            </li>
+            <li [class.valid]="hasLowerCase()">
+              <mat-icon>{{ hasLowerCase() ? 'check_circle' : 'cancel' }}</mat-icon>
+              Al menos una minúscula
+            </li>
+            <li [class.valid]="hasNumber()">
+              <mat-icon>{{ hasNumber() ? 'check_circle' : 'cancel' }}</mat-icon>
+              Al menos un número
+            </li>
+          </ul>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+              placeholder="Ingrese una contraseña segura" required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Ocultar contraseña'">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+              La contraseña es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword"
+              placeholder="Vuelva a ingresar la contraseña" required>
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword"
+              [attr.aria-label]="'Ocultar contraseña'">
+              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
+              Debe confirmar la contraseña
+            </mat-error>
+            <mat-error *ngIf="userForm.hasError('match') && userForm.get('confirmPassword')?.touched">
+              Las contraseñas no coinciden
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Privilegios</mat-label>
-          <mat-select matInput  formControlName="role"  required>
-            <mat-option value="">Seleccione un rol</mat-option>
-            <mat-option value="ADMIN">ADMIN</mat-option>
-            <mat-option value="USER">USER</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button class="cancel-btn" (click)="onCancel()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        <button type="submit" mat-raised-button color="primary" class="submit-btn" [disabled]="userForm.invalid">
+          <mat-icon>person_add</mat-icon>
+          Crear Usuario
+        </button>
       </div>
-
-      <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="password"  />
-          <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-            Contraseña es requerida
-          </mat-error>
-          <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">
-            La contraseña debe tener al menos 8 caracteres
-          </mat-error>
-          <mat-error *ngIf="userForm.get('password')?.hasError('missingUpperCase')">
-            La contraseña debe contener al menos una mayúscula
-          </mat-error>
-          <mat-error *ngIf="userForm.get('password')?.hasError('missingLowerCase')">
-            La contraseña debe contener al menos una minúscula
-          </mat-error>
-          <mat-error *ngIf="userForm.get('password')?.hasError('missingNumber')">
-            La contraseña debe contener al menos un número
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirmar contraseña</mat-label>
-          <input matInput type="password" formControlName="confirmPassword"  />
-        </mat-form-field>
-        <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
-          Confirmar contraseña es requerido
-        </mat-error>
-        <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('match')">
-          Las contraseñas no coinciden
-        </mat-error>
-      </div>
-      <button mat-raised-button color="primary" class="ninja-form-button" type="submit" [disabled]="userForm.invalid">
-        Crear
-      </button>
     </form>
   </mat-card>
 </div>

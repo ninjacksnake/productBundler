@@ -10,7 +10,7 @@ import { UpdateProductDto } from 'src/app/Dtos/update.product.dto';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) { }
 
   addProduct(product: AddProductDto): Observable<any> {
     // Ensure we're sending the correct DTO structure
@@ -84,7 +84,7 @@ export class ProductService {
     //console.log(`getProductByName name=${name}`);
     return this.http.get(`/products/?name=${name}`).pipe(
       map((response: any) => {
-     //   console.log(`fetched product name=${name}`);
+        //   console.log(`fetched product name=${name}`);
         const product: IProduct[] = response.map((product: IProduct) => ({
           id: product.id,
           productId: product.productId,
@@ -106,7 +106,7 @@ export class ProductService {
   getProductsByProductId(productId: string): Observable<IProduct[]> {
     return this.http.get(`/products/?productId=${productId}`).pipe(
       map((response: any) => {
-   //     console.log(`fetched products productId=${productId}`);
+        //     console.log(`fetched products productId=${productId}`);
         const products: IProduct[] = response.map((product: IProduct) => ({
           id: product.id,
           productId: product.productId,
@@ -115,7 +115,7 @@ export class ProductService {
           pricePM: product.pricePM,
           priceCF: product.priceCF,
           stock: product.stock,
-          }));
+        }));
         return products;
       }),
       catchError(
@@ -124,12 +124,12 @@ export class ProductService {
     );
   }
 
-  
+
 
   updateProduct(product: UpdateProductDto): Observable<any> {
     return this.http.put(`/products/${product.id}`, product).pipe(
       map((response: any) => {
-    //    console.log('Product updated successfully:', response);
+        //    console.log('Product updated successfully:', response);
         return response;
       }),
       catchError(this.handleError<IProduct>('updateProduct'))
@@ -139,24 +139,24 @@ export class ProductService {
   deleteProduct(id: string): Observable<any> {
     return this.http.delete(`/products/${id}`).pipe(
       map((response: any) => {
-   //     console.log('Product deleted successfully:', response);
+        //     console.log('Product deleted successfully:', response);
         return response;
       }),
       catchError(this.handleError<IProduct>('deleteProduct'))
     );
   }
 
- 
 
-  addImage( id: string, productId: string, image: File): Observable<any> {
+
+  addImage(id: string, productId: string, image: File): Observable<any> {
 
     const formData = new FormData();
     formData.append('image', image);
     formData.append('productId', productId);
-    formData.append('id', id);
+    // formData.append('id', id);
     return this.http.post('/products/save-product-image', formData).pipe(
       map((response: any) => {
-       // console.log('Image saved successfully:', response);
+        // console.log('Image saved successfully:', response);
         return response;
       }),
       catchError(this.handleError('addImage'))
@@ -171,7 +171,7 @@ export class ProductService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-    //  console.log(`${operation} failed: ${error.message}`);
+      //  console.log(`${operation} failed: ${error.message}`);
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };

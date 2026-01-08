@@ -1,43 +1,76 @@
-<div class="product-view-container">
-    <div class="product-view-header">
-        <h1 class="product-view-name" *ngIf="product">{{ product.name}}</h1>
-    </div>
-    
-    <div class="product-view-body">
-        <div class="product-view-image-container">
-            <img *ngIf="product" src="{{imgSrc}}" class="product-view-image" alt="{{product.image}}" />
-        </div>
-        
-        <div class="product-view-details">
-            <div class="product-view-description">
-                <h2 class="description-title">Descripción</h2>
-                <p class="description-text" *ngIf="product">
-                   {{product.description}}
-                </p>
+<div class="view-product-container">
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="header-content">
+            <div class="title-section">
+                <h1 class="page-title" *ngIf="product">{{ product.name }}</h1>
+                <p class="page-subtitle">Detalles completos del producto</p>
             </div>
-            
-            <div class="price-container">
-                <div class="price-card">
-                    <span class="price-label">Precio CF</span>
-                    <span class="price-value" *ngIf="product">{{product.priceCF|currency}}</span>
-                    <span class="price-note">Precio al contado</span>
-                </div>
-                
-                <div class="price-card highlight">
-                    <span class="price-label">Precio PM</span>
-                    <span class="price-value" *ngIf="product">{{product.pricePM|currency}}</span>
-                    <span class="price-note">Precio a plazos</span>
-                </div>
-            </div>
-            
             <div class="action-buttons">
-                <button class="btn btn-secondary" (click)="editProduct()">Editar</button>
-                <button class="btn btn-primary">Añadir al carrito</button>
+                <button mat-raised-button class="action-btn back-btn" routerLink="/bundler/products">
+                    <mat-icon>arrow_back</mat-icon>
+                    Volver
+                </button>
+                <button mat-raised-button class="action-btn edit-btn" (click)="editProduct()">
+                    <mat-icon>edit</mat-icon>
+                    Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-grid">
+        <!-- Left Column: Product Image -->
+        <div class="left-column">
+            <mat-card class="image-card">
+                <div class="card-header">
+                    <mat-icon class="header-icon">photo_library</mat-icon>
+                    <h2>Imagen del Producto</h2>
+                </div>
+                <div class="image-container">
+                    <img *ngIf="product" [src]="imgSrc" [alt]="product.name" class="product-image" />
+                </div>
+            </mat-card>
+        </div>
+
+        <!-- Right Column: Product Details -->
+        <div class="right-column">
+            <!-- Description Card -->
+            <mat-card class="details-card">
+                <div class="card-header">
+                    <mat-icon class="header-icon">description</mat-icon>
+                    <h2>Descripción</h2>
+                </div>
+                <mat-card-content>
+                    <p class="description-text" *ngIf="product">{{ product.description }}</p>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Price Cards -->
+            <div class="price-grid">
+                <mat-card class="price-card pm">
+                    <div class="price-icon-wrapper">
+                        <mat-icon>payments</mat-icon>
+                    </div>
+                    <div class="price-content">
+                        <span class="price-label">Precio Por Mayor</span>
+                        <span class="price-value" *ngIf="product">{{ product.pricePM | currency }}</span>
+                        <span class="price-note">Precio al por mayor</span>
+                    </div>
+                </mat-card>
+
+                <mat-card class="price-card cf">
+                    <div class="price-icon-wrapper">
+                        <mat-icon>attach_money</mat-icon>
+                    </div>
+                    <div class="price-content">
+                        <span class="price-label">Precio Cliente Final</span>
+                        <span class="price-value" *ngIf="product">{{ product.priceCF | currency }}</span>
+                        <span class="price-note">Precio al detalle</span>
+                    </div>
+                </mat-card>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-  
-</style>

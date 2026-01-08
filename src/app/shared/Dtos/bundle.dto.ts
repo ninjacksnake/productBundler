@@ -10,4 +10,6 @@ export interface IBundle {
   pricePM: number;
   createdDate: Date;
   updatedDate: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

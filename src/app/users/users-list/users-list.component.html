@@ -1,49 +1,150 @@
-<h1 class="ninja-title">Usuarios</h1>
+<div class="user-list-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">Usuarios</h1>
+        <p class="page-subtitle">Gestione los usuarios del sistema</p>
+      </div>
+      <button mat-raised-button color="primary" class="add-button" routerLink="/bundler/users/add">
+        <mat-icon>person_add</mat-icon>
+        Nuevo Usuario
+      </button>
+    </div>
 
-<input type="text" class="ninja-input" matInput placeholder="Buscar usuario" [(ngModel)]="searchTerm" (ngModelChange)="filterUsers()">
-<button mat-icon-button color="primary" matTooltip="Agregar un nuevo usuario" routerLink="/bundler/users/add"><mat-icon>add</mat-icon></button>
-<div class="table-container">
+    <!-- Search Bar -->
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar usuarios</mat-label>
+        <input matInput placeholder="Buscar por nombre o correo..." [(ngModel)]="searchTerm"
+          (ngModelChange)="filterUsers()">
+        <mat-icon matPrefix>search</mat-icon>
+        <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()" aria-label="Limpiar búsqueda">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="results-count" *ngIf="dataSource.data.length > 0">
+        <mat-icon>people</mat-icon>
+        <span>{{ dataSource.data.length }} usuario(s)</span>
+      </div>
+    </div>
+  </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 users-table">
-    
-      <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Nombre</th>
-      <td mat-cell *matCellDef="let user">{{user.name}}</td>
-    </ng-container>
-    
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Correo</th>
-      <td mat-cell *matCellDef="let user">{{user.email}}</td>
-    </ng-container>
-    
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef>Rol</th>
-      <td mat-cell *matCellDef="let user">{{user.role}}</td>
-    </ng-container>
-    
-    <ng-container matColumnDef="options">
-      <th mat-header-cell *matHeaderCellDef>Opciones</th>
-      <td mat-cell *matCellDef="let user">
-        <div class="option-buttons-container">
-        
-          <a matTooltip="Modificar {{user.name}}" class="option-button option-gray" aria-label="Modificar" routerLink="/bundler/users/edit/{{user.id}}">
-            <mat-icon>edit</mat-icon>
-          </a>
-          <a *ngIf="!user.isDeleted" matTooltip="Eliminar {{user.name}}" class="option-button option-red" aria-label="Eliminar" (click)="delete(user.id)">
-            <mat-icon>remove_shopping_cart</mat-icon>
-          </a>
-        </div>  
-      </td>   
-    </ng-container>
-    
-    
-    
-    
-    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="mat-row"></tr>
-  </table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 50]" showFirstLastButtons></mat-paginator>
+  <!-- Table Card -->
+  <mat-card class="table-card">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="users-table">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>person</mat-icon>
+              <span>Nombre</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <div class="user-name">
+              {{ user.name }}
+              <span class="deleted-badge" *ngIf="user.isDeleted">
+                <mat-icon>block</mat-icon>
+                Eliminado
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>email</mat-icon>
+              <span>Correo Electrónico</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="user-email">{{ user.email }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Role Column -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>badge</mat-icon>
+              <span>Rol</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="role-badge" [class.admin]="user.role === 'ADMIN'" [class.user]="user.role === 'USER'">
+              <mat-icon>{{ loggedUser?.role === 'ADMIN' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+              {{ user.role === 'ADMIN' ? 'Administrador' : 'Usuario' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Options Column -->
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>settings</mat-icon>
+              <span>Acciones</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <div class="action-buttons">
+              <!-- Restore Button (for deleted users) -->
+              <button mat-icon-button *ngIf="loggedUser?.role === 'ADMIN' && user.isDeleted"
+                class="action-btn restore-btn" (click)="restore(user.id)" matTooltip="Restaurar usuario">
+                <mat-icon>restore</mat-icon>
+              </button>
+
+              <!-- Reset Password Button (for active admins) -->
+              <button mat-icon-button *ngIf="loggedUser?.role === 'ADMIN' && !user.isDeleted"
+                class="action-btn reset-btn" (click)="resetPassword(user.id)" matTooltip="Restablecer contraseña">
+                <mat-icon>lock_reset</mat-icon>
+              </button>
+
+              <!-- Edit Button (for active users) -->
+              <button mat-icon-button *ngIf="loggedUser?.role === 'ADMIN' && !user.isDeleted"
+                class="action-btn edit-btn" routerLink="/bundler/users/edit/{{ user.id }}" matTooltip="Editar usuario">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button *ngIf="loggedUser?.role === 'ADMIN' && !user.isDeleted && user.role !== 'ADMIN'"
+                class="action-btn admin-btn" (click)="makeAdmin(user.id)" matTooltip="Hacer Administrador">
+                <mat-icon>add_moderator</mat-icon>
+              </button>
+
+              <!-- Delete Button (for active admins) -->
+              <button mat-icon-button *ngIf="loggedUser?.role === 'ADMIN' && !user.isDeleted"
+                class="action-btn delete-btn" (click)="delete(user.id)" matTooltip="Eliminar usuario">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.deleted-row]="row.isDeleted"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="dataSource.data.length === 0">
+        <mat-icon>people</mat-icon>
+        <h3>No se encontraron usuarios</h3>
+        <p *ngIf="searchTerm">Intenta con otros términos de búsqueda</p>
+        <p *ngIf="!searchTerm">Comienza agregando tu primer usuario</p>
+        <button mat-raised-button color="primary" routerLink="/bundler/users/add" *ngIf="!searchTerm">
+          <mat-icon>person_add</mat-icon>
+          Agregar Usuario
+        </button>
+      </div>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons class="table-paginator">
+    </mat-paginator>
+  </mat-card>
 </div>
-
-
-

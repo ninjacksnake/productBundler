@@ -1,139 +1,152 @@
 <div class="edit-bundle-container">
-  <div class="row">
-    <div class="col-12">
-      <h1>Actualizar Combo</h1>
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">Editar Combo</h1>
+        <p class="page-subtitle">Actualiza la información y productos del combo</p>
+      </div>
+      <div class="action-buttons">
+        <button mat-raised-button class="action-btn back-btn" (click)="back()">
+          <mat-icon>arrow_back</mat-icon>
+          Cancelar
+        </button>
+        <button mat-raised-button class="action-btn save-btn" (click)="updateBundle()">
+          <mat-icon>save</mat-icon>
+          Actualizar Combo
+        </button>
+      </div>
     </div>
   </div>
-  <div class="side-by-side">
-    <div class="col-4">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Información general</mat-card-title>
-        </mat-card-header>
 
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Left Column: Bundle Information Form -->
+    <div class="left-column">
+      <mat-card class="info-card">
+        <div class="card-header">
+          <mat-icon class="header-icon">edit_note</mat-icon>
+          <h2>Información General</h2>
+        </div>
         <mat-card-content>
-          <form [formGroup]="bundleForm" (ngSubmit)="updateBundle()">
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              style="display: none"
-            >
-              <mat-label>Nombre</mat-label>
-              <input matInput placeholder="id" formControlName="id" />
+          <form [formGroup]="bundleForm" class="bundle-form">
+            <mat-form-field appearance="outline" class="full-width" style="display: none">
+              <mat-label>ID</mat-label>
+              <input matInput formControlName="id" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Nombre</mat-label>
-              <input matInput placeholder="Nombre" formControlName="name" />
+              <mat-label>Nombre del Combo</mat-label>
+              <input matInput placeholder="Ingrese el nombre" formControlName="name" />
+              <mat-icon matPrefix>label</mat-icon>
             </mat-form-field>
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Descripción</mat-label>
-              <input
-                matInput
-                placeholder="Descripción"
-                formControlName="description"
-              />
+              <textarea matInput placeholder="Ingrese la descripción" formControlName="description" rows="3"></textarea>
+              <mat-icon matPrefix>description</mat-icon>
             </mat-form-field>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              style="display: none"
-            >
+
+            <mat-form-field appearance="outline" class="full-width" style="display: none">
               <mat-label>Precio al por mayor</mat-label>
-              <input
-                matInput
-                placeholder="Precio al por mayor"
-                formControlName="pricePM"
-              />
+              <input matInput formControlName="pricePM" />
             </mat-form-field>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              style="display: none"
-            >
+
+            <mat-form-field appearance="outline" class="full-width" style="display: none">
               <mat-label>Precio al detalle</mat-label>
-              <input
-                matInput
-                placeholder="Precio al detalle"
-                formControlName="priceCF"
-              />
+              <input matInput formControlName="priceCF" />
             </mat-form-field>
           </form>
+
+          <!-- Price Display -->
+          <div class="price-display" *ngIf="totalPM || totalCF">
+            <div class="price-item pm">
+              <mat-icon>payments</mat-icon>
+              <div class="price-content">
+                <span class="price-label">Precio Por Mayor</span>
+                <span class="price-value">{{ totalPM | currency }}</span>
+              </div>
+            </div>
+            <div class="price-item cf">
+              <mat-icon>attach_money</mat-icon>
+              <div class="price-content">
+                <span class="price-label">Precio Cliente Final</span>
+                <span class="price-value">{{ totalCF | currency }}</span>
+              </div>
+            </div>
+          </div>
         </mat-card-content>
-        <div class="price-container">
-          <p *ngIf="totalPM">Precio al por mayor: {{ totalPM | currency }}</p>
-          <p *ngIf="totalCF">Precio al detalle: {{ totalCF | currency }}</p>
-        </div> 
       </mat-card>
     </div>
 
-    <div class="col-6">
-      <mat-card class="animated-resize animated-fadeIn add-product-card">
-        <mat-card-header>
-          <h1>Agregar Productos</h1>
-        </mat-card-header>
+    <!-- Right Column: Product Search -->
+    <div class="right-column">
+      <mat-card class="search-card">
+        <div class="card-header">
+          <mat-icon class="header-icon">add_shopping_cart</mat-icon>
+          <h2>Agregar Productos</h2>
+        </div>
         <mat-card-content>
-          <mat-form-field appearance="outline" class="mid-width">
-            <input
-              type="text"
-              matInput
-              placeholder="Buscar producto por el nombre"
-              [(ngModel)]="search"
-              (keyup.enter)="searchProduct()"
-              (ngModelChange)="checkEmpty()"
-            />
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Buscar producto</mat-label>
+            <input type="text" matInput placeholder="Buscar por nombre..." [(ngModel)]="search"
+              (keyup.enter)="searchProduct()" (ngModelChange)="checkEmpty()" />
             <mat-icon matPrefix>search</mat-icon>
-            <button *ngIf="search.length > 0" matSuffix mat-icon-button aria-label="Clear" (click)="cleanSearch()">
+            <button *ngIf="search.length > 0" matSuffix mat-icon-button (click)="cleanSearch()">
               <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
-          <div *ngIf="productToAdd">
-            <div class="product-table-container">
-              <table
-                mat-table
-                [dataSource]="productToAdd"
-                class="stripped-table animated-fadeIn "
-              >
+
+          <div *ngIf="productToAdd" class="search-results">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="productToAdd" class="search-table">
                 <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">
+                      <mat-icon>inventory</mat-icon>
+                      <span>Producto</span>
+                    </div>
+                  </th>
                   <td mat-cell *matCellDef="let product">{{ product.name }}</td>
                 </ng-container>
+
                 <ng-container matColumnDef="priceCF">
-                  <th mat-header-cell *matHeaderCellDef>Precio CF</th>
-                  <td mat-cell *matCellDef="let product">
-                    {{ product.priceCF }}
-                  </td>
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">
+                      <mat-icon>attach_money</mat-icon>
+                      <span>Precio CF</span>
+                    </div>
+                  </th>
+                  <td mat-cell *matCellDef="let product">{{ product.priceCF | currency }}</td>
                 </ng-container>
+
                 <ng-container matColumnDef="pricePM">
-                  <th mat-header-cell *matHeaderCellDef>Precio PM</th>
-                  <td mat-cell *matCellDef="let product">
-                    {{ product.pricePM }}
-                  </td>
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">
+                      <mat-icon>payments</mat-icon>
+                      <span>Precio PM</span>
+                    </div>
+                  </th>
+                  <td mat-cell *matCellDef="let product">{{ product.pricePM | currency }}</td>
                 </ng-container>
+
                 <ng-container matColumnDef="options">
-                  <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">
+                      <mat-icon>settings</mat-icon>
+                      <span>Acción</span>
+                    </div>
+                  </th>
                   <td mat-cell *matCellDef="let product">
-                    <mat-icon
-                      matTooltip="Agregar {{ product.name }}"
-                      class="option-button green"
-                      aria-label="Agregar"
-                      (click)="addProduct(product)"
-                      >add</mat-icon
-                    >
+                    <button mat-icon-button class="add-btn" (click)="addProduct(product)" matTooltip="Agregar producto">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
                   </td>
                 </ng-container>
 
-                <tr
-                  mat-header-row
-                  *matHeaderRowDef="['name', 'priceCF', 'pricePM', 'options'] "
-                ></tr>
-                <tr
-                  mat-row
-                  *matRowDef="
-                    let row;
-                    columns: ['name', 'priceCF', 'pricePM', 'options']
-                  "
-                ></tr>
+                <tr mat-header-row *matHeaderRowDef="['name', 'priceCF', 'pricePM', 'options']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['name', 'priceCF', 'pricePM', 'options']" class="table-row">
+                </tr>
               </table>
             </div>
           </div>
@@ -142,77 +155,103 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-12">
-      <mat-card>
-        <mat-card-content>
-          <table
-            mat-table
-            [dataSource]="dataSource"
-            class="mat-elevation-z0 stripped-table"
-          >
+  <!-- Products in Bundle Table -->
+  <div class="products-section">
+    <mat-card class="products-card">
+      <div class="card-header">
+        <div class="header-left">
+          <mat-icon class="header-icon">inventory_2</mat-icon>
+          <h2>Productos en el Combo</h2>
+        </div>
+        <div class="products-count">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>{{ products?.length || 0 }} producto(s)</span>
+        </div>
+      </div>
+
+      <mat-card-content>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" class="products-table">
             <ng-container matColumnDef="productId">
-              <th mat-header-cell *matHeaderCellDef>Id</th>
-              <td mat-cell *matCellDef="let product">
-                {{ product.product.productId }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Nombre</th>
-              <td mat-cell *matCellDef="let product">
-                {{ product.product.name }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="priceCF">
-              <th mat-header-cell *matHeaderCellDef>Precio CF</th>
-              <td mat-cell *matCellDef="let product">
-                {{ product.product.priceCF | currency }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="pricePM">
-              <th mat-header-cell *matHeaderCellDef>Precio PM</th>
-              <td mat-cell *matCellDef="let product">
-                {{ product.product.pricePM | currency }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="quantity">
-              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
-              <td mat-cell *matCellDef="let product">{{ product.quantity }}</td>
-            </ng-container>
-            <ng-container matColumnDef="options">
-              <th mat-header-cell *matHeaderCellDef>Opciones</th>
-              <td mat-cell *matCellDef="let product">
-                <div class="option-buttons-container">
-                  <a
-                    matTooltip="Eliminar {{ product.product.name }}"
-                    class="option-button red-white"
-                    aria-label="Eliminar"
-                    (click)="deleteProduct(product.id)"
-                  >
-                    <mat-icon>remove_shopping_cart</mat-icon>
-                  </a>
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>tag</mat-icon>
+                  <span>ID</span>
                 </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="product-id">{{ product.product.productId }}</span>
               </td>
             </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>inventory</mat-icon>
+                  <span>Producto</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="product-name">{{ product.product.name }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>format_list_numbered</mat-icon>
+                  <span>Cantidad</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="quantity-badge">{{ product.quantity }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pricePM">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>payments</mat-icon>
+                  <span>Precio PM</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="price">{{ product.product.pricePM | currency }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="priceCF">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>attach_money</mat-icon>
+                  <span>Precio CF</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="price">{{ product.product.priceCF | currency }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="options">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>settings</mat-icon>
+                  <span>Acciones</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <button mat-icon-button class="delete-btn" (click)="deleteProduct(product.id)"
+                  matTooltip="Eliminar producto">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="columns"></tr>
-            <tr mat-row *matRowDef="let row; columns: columns"></tr>
+            <tr mat-row *matRowDef="let row; columns: columns" class="table-row"></tr>
           </table>
-        </mat-card-content>
-        <br/>
-        <mat-card-actions align="end">
-          <!-- <button mat-button color="warn" (click)="deleteAllProducts()">
-            Eliminar todos
-          </button> -->
-          <button mat-button color="warn" (click)="back()">
-            Cancelar
-          </button>
-          
-          <button mat-button color="primary" (click)="updateBundle()">
-            Actualizar Combo
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
-

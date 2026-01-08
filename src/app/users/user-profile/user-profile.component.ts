@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IUser } from 'src/app/shared/interfaces/user.interface';
-
+import { MatDialog } from '@angular/material/dialog';
+import { PasswordDialogComponent } from '../password-dialog/password-dialog.component';
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -8,6 +9,7 @@ import { IUser } from 'src/app/shared/interfaces/user.interface';
 })
 export class UserProfileComponent {
   user: IUser | null = null;
+  constructor(private dialog: MatDialog) { }
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser') || '{}');
 
@@ -27,5 +29,11 @@ export class UserProfileComponent {
 
   updateProfile() {
     console.log('Updating profile');
+  }
+
+  openPasswordDialog() {
+    const dialogRef = this.dialog.open(PasswordDialogComponent, {
+      width: '400px',
+    });
   }
 }

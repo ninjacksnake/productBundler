@@ -26,12 +26,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private productService: ProductService,
     private snackBar: MatSnackBar,
-   
+
   ) {
     this.cartSubscription = this.cartService.cart$.subscribe(cart => {
       this.cartItems = cart;
     });
- 
+
   }
 
   public dataSource = new MatTableDataSource<IProduct>();
@@ -93,6 +93,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
       verticalPosition: 'top',
       horizontalPosition: 'center'
     });
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.filterProducts();
   }
 
 }

@@ -14,29 +14,29 @@ export class UserService {
     constructor(private snackBar: MatSnackBar, private http: HttpService) { }
 
     find(): Observable<IUser[]> {
-        return  this.http.get('/users');
+        return this.http.get('/users');
     }
     findById(id: number): Observable<IUser> {
         return this.http.get('/users/' + id);
     }
-  findByEmail(email: string): Observable<IUser> {
+    findByEmail(email: string): Observable<IUser> {
         const body = {
             email: email,
-            
+
         }
         return this.http.post('/users', body);
     }
 
     create(user: IUser): void {
         this.http.post('/users/', user).subscribe(() => {
-        this.snackBar.open('Usuario agregado exitosamente', 'Cerrar', {
-            duration: 2000,
-            verticalPosition: 'top',
-            horizontalPosition: 'center',
-            panelClass: ['mat-snackbar-success']
+            this.snackBar.open('Usuario agregado exitosamente', 'Cerrar', {
+                duration: 2000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+            });
         });
-    });
-    }   
+    }
 
     delete(id: number): void {
         this.http.delete('/users/' + id).subscribe((response) => {
@@ -70,6 +70,72 @@ export class UserService {
             });
             return false;
         }
-       
-    }       
+
+    }
+
+    restore(id: number): void {
+        this.http.patch('/users/restore/', { id }).subscribe((response) => {
+            console.log(response)
+            this.snackBar.open('Usuario restaurado exitosamente', 'Cerrar', {
+                duration: 2000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+            });
+        });
+    }
+
+    resetPassword(id: number): void {
+        this.http.patch('/users/reset-password/', { id }).subscribe((response) => {
+            console.log(response)
+            this.snackBar.open('Contraseña restablecida exitosamente', 'Cerrar', {
+                duration: 2000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+            });
+        });
+    }
+
+    makeAdmin(id: number): void {
+        this.http.patch('/users/make-admin/', { id }).subscribe((response) => {
+            console.log(response)
+            this.snackBar.open('Usuario convertido en administrador exitosamente', 'Cerrar', {
+                duration: 2000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['mat-snackbar-success']
+            });
+        });
+    }
+
+    changePassword(actualPassword: string, newPassword: string, id: number): void {
+        this.http.patch('/users/update-password', {
+            id,
+            currentPassword: actualPassword,
+            newPassword: newPassword
+        }).subscribe({
+            next: () => {
+                this.snackBar.open('Contraseña actualizada exitosamente', 'Cerrar', {
+                    duration: 2000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center',
+                    panelClass: ['mat-snackbar-success']
+                });
+            },
+            error: (error) => {
+                // Handle different error scenarios
+                let errorMessage = error.error.message;
+
+                if (errorMessage === "Current password is incorrect") {
+                    this.snackBar.open('Contraseña incorrecta', 'Cerrar', {
+                        duration: 2000,
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center',
+                        panelClass: ['mat-snackbar-error']
+                    });
+                }
+            }
+        });
+    }
 }       

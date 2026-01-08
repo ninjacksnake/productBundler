@@ -4,6 +4,7 @@ import { BundlesService } from '../../shared/services/bundles.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { BundlePrintService } from '../../shared/services/bundle-print.service';
 
 @Component({
   selector: 'app-bundle-list',
@@ -15,13 +16,17 @@ export class BundleListComponent {
   user: any;
   role: any;
 
-  constructor(private bundlesService: BundlesService, private authService: AuthService) {
-    this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.bundles = bundles)  
+  constructor(
+    private bundlesService: BundlesService,
+    private authService: AuthService,
+    private bundlePrintService: BundlePrintService
+  ) {
+    this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.bundles = bundles)
     this.user = this.authService.getCurrentUser().subscribe((user) => {
       this.user = user;
       this.role = this.user.role || null;
     });
-  }  
+  }
 
   dataSource = new MatTableDataSource<IBundle>();
   searchTerm: string = '';
@@ -46,16 +51,26 @@ export class BundleListComponent {
       bundle.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       bundle.description.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-    if (this.dataSource.paginator) {  
-      this.dataSource.paginator.firstPage();  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     };
   }
 
   deleteBundle(id: number) {
-    alert("Bundle deleted");
+
     this.bundlesService.delete(id)
     this.bundlesService.getAll().subscribe((bundles: IBundle[]) => this.dataSource.data = bundles)
     // this.bundles = this.bundlesService.getAll()
   }
-  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'options'];
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.filterBundles();
+  }
+
+  printBundle(bundle: IBundle): void {
+    this.bundlePrintService.printBundle(bundle);
+  }
+
+  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'createdDate', 'updatedDate', 'options'];
 }

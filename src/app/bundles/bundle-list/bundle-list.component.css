@@ -1,94 +1,366 @@
-.option-buttons-container {
+/* Container */
+.bundle-list-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem;
+}
+
+/* Header Section */
+.header-section {
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.header-content {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
 }
 
-.bundle-table {
-    padding: 1rem;
-    overflow: auto;
-    max-height: 600px !important;
-    position: relative;
+.title-section {
+    flex: 1;
 }
 
-/* Target the specific table in this component */
-.bundle-table .mat-table {
-    width: 100%;
-    border-collapse: collapse;
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
 }
 
-/* Make the header row sticky */
-.bundle-table .mat-header-row {
-    position: sticky;
-    top: 0;
+.page-subtitle {
+    font-size: 1.1rem;
+    color: #718096;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Search Section */
+.search-section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.search-field {
+    flex: 1;
+    max-width: 600px;
+}
+
+.results-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
     background: white;
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #4a5568;
+    font-weight: 500;
 }
 
-/* Ensure header cells have a background */
-.bundle-table .mat-header-cell {
-    background: white;
-    position: relative;
-    z-index: 11;
+.results-count mat-icon {
+    color: #4299e1;
 }
 
-/* Add a border to the bottom of the header */
-.bundle-table .mat-header-row::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+/* Table Card */
+.table-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out;
 }
 
-.mat-input {
-    width: 25%;
-    margin: 1rem;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
+.table-container {
+    overflow-x: auto;
+    min-height: 400px;
+    scrollbar-gutter: stable;
 }
 
-.stripped-table{
+/* Table Styles */
+.bundles-table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+    background: white;
 }
 
-.stripped-table th.mat-mdc-header-cell {
+/* Header Cells */
+.bundles-table th.mat-mdc-header-cell {
+    background: linear-gradient(135deg, #6b6d78 0%, #50606d 100%);
+    color: white;
     font-weight: 600;
-    border-bottom: 1px solid #e0e0e0;
-    background: #c8d9ea;
-    padding: 12px;
-    text-align: left;
-    color: black;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.95rem;
+    padding: 1rem;
+    border: none;
 }
 
-.stripped-table td.mat-mdc-cell {
-    border-bottom: 1px solid #f0f0f0;
-    padding: 12px;
+.header-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.stripped-table tr.mat-mdc-row:nth-child(even) {
-    background: #e3e2e2; /* striped effect */
+.header-cell mat-icon {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
-.stripped-table tr.mat-mdc-row:hover {
-    background: #cee5f5; /* hover effect */
-    transition: background 0.2s ease;
+/* Table Cells */
+.bundles-table td.mat-mdc-cell {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #4a5568;
 }
 
-.stripped-table .mat-mdc-header-row,
-.stripped-table .mat-mdc-row {
-    height: 48px;
+/* Table Rows */
+.bundles-table tr.mat-mdc-row {
+    transition: all 0.2s ease;
 }
 
-.ninja-title {
-  font-family: "Ninja", sans-serif;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+.bundles-table tr.mat-mdc-row:hover {
+    background-color: #f7fafc;
+    box-shadow: inset 0 0 0 1px rgba(66, 153, 225, 0.1);
+}
+
+/* Bundle Name */
+.bundle-name {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+/* Bundle Description */
+.bundle-description {
+    color: #718096;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Price */
+.price {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 1rem;
+}
+
+/* Date Badges */
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+}
+
+.date-badge mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.date-badge.created {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.date-badge.updated {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+}
+
+.view-btn {
+    color: #4299e1;
+}
+
+.view-btn:hover {
+    background-color: #ebf8ff;
+}
+
+.edit-btn {
+    color: #718096;
+}
+
+.edit-btn:hover {
+    background-color: #edf2f7;
+}
+
+.print-btn {
+    color: #667eea;
+}
+
+.print-btn:hover {
+    background-color: #edf2f7;
+}
+
+.delete-btn {
+    color: #f56565;
+}
+
+.delete-btn:hover {
+    background-color: #fff5f5;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-state mat-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: #cbd5e0;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+    color: #718096;
+    margin: 0 0 1.5rem 0;
+}
+
+/* Paginator */
+.table-paginator {
+    border-top: 1px solid #e2e8f0;
+    background: #f7fafc;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .bundle-list-container {
+        padding: 1rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-field {
+        max-width: 100%;
+    }
+
+    .results-count {
+        justify-content: center;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .bundle-description {
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+
+    .bundles-table th.mat-mdc-header-cell,
+    .bundles-table td.mat-mdc-cell {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .header-cell span {
+        display: none;
+    }
+
+    .date-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .date-badge mat-icon {
+        font-size: 0.9rem;
+        width: 0.9rem;
+        height: 0.9rem;
+    }
+}
+
+/* Material Form Field Customization */
+::ng-deep .search-field .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #cbd5e0;
+}
+
+::ng-deep .search-field .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #667eea;
+}
+
+::ng-deep .search-field .mat-form-field-appearance-outline .mat-form-field-label {
+    color: #4a5568;
+}
+
+::ng-deep .search-field .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+    color: #667eea;
+}
+
+::ng-deep .search-field .mat-icon {
+    color: #718096;
+}
+
+::ng-deep .search-field .mat-form-field-appearance-outline.mat-focused .mat-icon {
+    color: #667eea;
 }
