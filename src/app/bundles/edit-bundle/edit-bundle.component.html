@@ -74,6 +74,13 @@
                 <span class="price-value">{{ totalCF | currency }}</span>
               </div>
             </div>
+            <div class="price-item dc">
+              <mat-icon>attach_money</mat-icon>
+              <div class="price-content">
+                <span class="price-label">Precio con descuento</span>
+                <span class="price-value">{{ totalDC | currency }}</span>
+              </div>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -130,6 +137,16 @@
                   <td mat-cell *matCellDef="let product">{{ product.pricePM | currency }}</td>
                 </ng-container>
 
+                <ng-container matColumnDef="priceDC">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">
+                      <mat-icon>attach_money</mat-icon>
+                      <span>Precio DC</span>
+                    </div>
+                  </th>
+                  <td mat-cell *matCellDef="let product">{{ product.priceDC | currency }}</td>
+                </ng-container>
+
                 <ng-container matColumnDef="options">
                   <th mat-header-cell *matHeaderCellDef>
                     <div class="header-cell">
@@ -144,8 +161,9 @@
                   </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="['name', 'priceCF', 'pricePM', 'options']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['name', 'priceCF', 'pricePM', 'options']" class="table-row">
+                <tr mat-header-row *matHeaderRowDef="['name', 'priceCF', 'pricePM', 'priceDC', 'options']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['name', 'priceCF', 'pricePM', 'priceDC', 'options']"
+                  class="table-row">
                 </tr>
               </table>
             </div>
@@ -165,7 +183,7 @@
         </div>
         <div class="products-count">
           <mat-icon>shopping_cart</mat-icon>
-          <span>{{ products.length || 0 }} producto(s)</span>
+          <span>{{ countProducts() }} producto(s)</span>
         </div>
       </div>
 
@@ -229,6 +247,18 @@
               </th>
               <td mat-cell *matCellDef="let product">
                 <span class="price">{{ product.product.priceCF | currency }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="priceDC">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="header-cell">
+                  <mat-icon>attach_money</mat-icon>
+                  <span>Precio DC</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <span class="price">{{ product.product.priceDC | currency }}</span>
               </td>
             </ng-container>
 

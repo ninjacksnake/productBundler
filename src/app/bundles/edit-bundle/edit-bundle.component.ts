@@ -25,9 +25,10 @@ export class EditBundleComponent {
   dataSource!: MatTableDataSource<BundleProductDto>;
   lastSearch: string = '';
 
-  columns = ['productId', 'name', 'priceCF', 'pricePM', 'quantity', 'options'];
+  columns = ['productId', 'name', 'quantity', 'pricePM', 'priceCF', 'priceDC', 'options'];
   totalCF = 0;
   totalPM = 0;
+  totalDC = 0;
 
   constructor(
     private bundlesService: BundlesService,
@@ -36,7 +37,7 @@ export class EditBundleComponent {
     private router: Router,
     private fb: FormBuilder,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -44,7 +45,7 @@ export class EditBundleComponent {
       .getById(this.route.snapshot.params['id'])
       .subscribe((_bundle: BundleDto) => {
         this.bundle = _bundle;
-       // console.log(this.bundle);
+        // console.log(this.bundle);
         this.products = this.getProductsFromBundle(_bundle);
         this.bundleForm.patchValue(_bundle);
         this.dataSource = new MatTableDataSource(this.products);
@@ -59,6 +60,7 @@ export class EditBundleComponent {
       description: [''],
       pricePM: [0],
       priceCF: [0],
+      priceDC: [0],
     });
     this.search = '';
   }
@@ -119,7 +121,7 @@ export class EditBundleComponent {
       this.bundle.products?.map((p: BundleProductDto) => {
         if (p.productId === product.productId) {
           p.quantity = p.quantity ? p.quantity + 1 : 1;
-         // console.log(this.products);
+          // console.log(this.products);
         }
       });
       this.products = this.getProductsFromBundle(this.bundle);
@@ -132,7 +134,7 @@ export class EditBundleComponent {
     let index = this.bundle?.products?.length;
     index = index ? index : 0; // if index is null, set it to 0
     index++;
-   // console.log(index);
+    // console.log(index);
     const bundleProduct: any = {
       id: index,
       bundleId: this.bundle.name,
@@ -158,42 +160,44 @@ export class EditBundleComponent {
   private setTotals() {
     this.updateTotalPM();
     this.updateTotalCF();
+    this.updateTotalDC();
     this.setBundleTotals()
   }
 
 
   private updateTotalPM() {
-    let totalPMArr :number[] = [];
-    this.bundle.products?.map((item) => {
-      let price = item.product?.pricePM || 0;
-      let quantity = item.quantity || 0;
-      totalPMArr.push(price * quantity);
-    });
-    this.totalPM = totalPMArr.reduce((acc, item) => acc + item, 0);
+    this.totalPM = this.bundle.products?.reduce((acc, item) =>
+      acc + (item.product?.pricePM || 0) * (item.quantity || 0), 0) || 0;
   }
 
   private updateTotalCF() {
-    let totalCFArr :number[] = [];
-    this.bundle.products?.map((item) => {
-      let price = item.product?.priceCF || 0;
-      let quantity = item.quantity || 0;
-      totalCFArr.push(price * quantity);
-    });
-    this.totalCF = totalCFArr.reduce((acc, item) => acc + item, 0);
+    this.totalCF = this.bundle.products?.reduce((acc, item) =>
+      acc + (item.product?.priceCF || 0) * (item.quantity || 0), 0) || 0;
   }
-  
+
+  private updateTotalDC() {
+    this.totalDC = this.bundle.products?.reduce((acc, item) =>
+      acc + (item.product?.priceDC || 0) * (item.quantity || 0), 0) || 0;
+  }
+
 
   private setBundleTotals() {
     this.bundle.priceCF = this.totalCF;
     this.bundle.pricePM = this.totalPM;
+    this.bundle.priceDC = this.totalDC;
+    this.bundleForm.patchValue({
+      priceCF: this.totalCF,
+      pricePM: this.totalPM,
+      priceDC: this.totalDC
+    });
   }
 
-  private setBundleProducts() {
-    this.bundle.products = this.products;
+  countProducts() {
+    return this.bundle.products?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
   }
 
   deleteProduct(id: number) {
-   // console.log(id);
+    // console.log(id);
     // this.products = this.products.filter((product) => product.id !== id);
     this.bundle.products = this.bundle.products?.filter(
       (product) => product.id !== id

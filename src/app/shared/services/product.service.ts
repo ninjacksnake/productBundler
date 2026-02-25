@@ -20,6 +20,7 @@ export class ProductService {
       description: product.description,
       pricePM: product.pricePM,
       priceCF: product.priceCF,
+      priceDC: product.priceDC,
       image: product.image
     };
 
@@ -122,6 +123,7 @@ export class ProductService {
           description: product.description,
           pricePM: product.pricePM,
           priceCF: product.priceCF,
+          priceDC: product.priceDC,
           stock: product.stock,
         }));
         return products;

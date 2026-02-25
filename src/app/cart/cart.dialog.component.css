@@ -25,7 +25,11 @@
     font-size: 2.5rem;
     width: 2.5rem;
     height: 2.5rem;
-    color: white;
+    color: white !important;
+}
+
+.close-icon {
+    color: white !important;
 }
 
 .header-text {
@@ -111,6 +115,7 @@
 .products-table {
     width: 100%;
     background: white;
+    min-width: 102%;
 }
 
 .products-table th.mat-mdc-header-cell {
@@ -217,14 +222,19 @@
     font-size: 0.95rem;
 }
 
-/* Remove Button */
 .remove-btn {
-    color: #f56565;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+}
+
+/* Remove Button */
+.remove-btn mat-icon {
+    color: rgb(226, 70, 70) !important;
+
 }
 
 .remove-btn:hover {
-    background-color: #fff5f5;
+
+    background-color: #f0dddd;
     transform: scale(1.1);
 }
 
@@ -434,7 +444,7 @@
 }
 
 ::ng-deep .cart-dialog .mat-icon {
-    color: #ecedee;
+    color: #718096;
 }
 
 ::ng-deep .cart-dialog .mat-form-field-appearance-outline.mat-focused .mat-icon {

@@ -9,7 +9,7 @@
       </div>
     </div>
     <button mat-icon-button mat-dialog-close class="close-btn">
-      <mat-icon>close</mat-icon>
+      <mat-icon class="close-icon">close</mat-icon>
     </button>
   </div>
 
@@ -170,8 +170,8 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
 

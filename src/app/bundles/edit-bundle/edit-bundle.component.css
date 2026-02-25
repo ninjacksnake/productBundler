@@ -220,7 +220,7 @@ mat-card:hover {
 /* Price Display */
 .price-display {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
@@ -258,6 +258,11 @@ mat-card:hover {
 .price-item.cf mat-icon {
   background: linear-gradient(135deg, #52725d 0%, #38f9d7 100%);
   box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
+}
+
+.price-item.dc mat-icon {
+  background: linear-gradient(135deg, #38a169 0%, #005aba 100%);
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
 }
 
 .price-content {

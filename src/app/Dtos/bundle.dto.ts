@@ -7,6 +7,7 @@ export class BundleDto {
     description?: string;
     priceCF?: number;
     pricePM?: number;
+    priceDC?: number;
     products?: BundleProductDto[];
     createdDate?: Date;
     updatedDate?: Date;

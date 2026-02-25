@@ -27,6 +27,10 @@ export class AddProductDto {
 
   @IsNumber()
   @IsOptional()
+  priceDC?: number;
+
+  @IsNumber()
+  @IsOptional()
   stock?: number;
 
   @IsString()

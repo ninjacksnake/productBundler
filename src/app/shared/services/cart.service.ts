@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AddProductBundleDto } from 'src/app/Dtos/add.product.bundle.dto';
-import { AddProductDto } from 'src/app/Dtos/add.product.dto';
 
 
 @Injectable({
@@ -30,6 +29,7 @@ export class CartService {
             this.updateQuantity(product.productId, (productInCart.quantity || 0) + 1);
         } else {
             product.quantity = 1;
+            product.priceDC = product.priceDC || 0;
             product.subtotal1 = product.pricePM || 0;
             product.subtotal2 = product.priceCF || 0;
             product.subtotal3 = product.priceDC || 0;
@@ -50,7 +50,6 @@ export class CartService {
             product.subtotal1 = quantity * (product.pricePM || 0);
             product.subtotal2 = quantity * (product.priceCF || 0);
             product.subtotal3 = quantity * (product.priceDC || 0);
-
             this.cartSubject.next(cart);
             localStorage.setItem('cart', JSON.stringify(cart));
         }

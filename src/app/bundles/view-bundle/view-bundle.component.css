@@ -280,6 +280,11 @@ mat-card:hover {
   box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
 }
 
+.info-icon-wrapper.gradient-dc {
+  background: linear-gradient(135deg, #38a169 0%, #005aba 100%);
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
 .info-icon-wrapper mat-icon {
   font-size: 24px;
   width: 24px;
@@ -585,6 +590,13 @@ mat-card:hover {
 
 .total-value.cf {
   background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.total-value.dc {
+  background: linear-gradient(135deg, #38a169 0%, #005aba 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

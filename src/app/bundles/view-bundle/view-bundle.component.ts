@@ -27,10 +27,11 @@ export class ViewBundleComponent {
     images: any[] = [];
     products: any[] = [];
 
-    columns = ['name', 'priceCF', 'pricePM', 'createdAt', 'quantity'];
+    columns = ['name', 'quantity', 'pricePM', 'priceCF', 'priceDC', 'createdAt'];
 
     totalCF: number = 0;
     totalPM: number = 0;
+    totalDC: number = 0;
     constructor(
         private bundlesService: BundlesService,
         private route: ActivatedRoute,
@@ -45,8 +46,9 @@ export class ViewBundleComponent {
             // console.log(this.Bundle.products);
             this.products = this.Bundle?.products || [];
             this.products.forEach(product => this.getImage(product.product.image));
-            this.totalCF = this.products.reduce((acc, product) => acc + (product.product.priceCF || 0), 0);
-            this.totalPM = this.products.reduce((acc, product) => acc + (product.product.pricePM || 0), 0);
+            this.totalCF = this.products.reduce((acc, product) => acc + ((product.product.priceCF || 0) * (product.quantity || 1)), 0);
+            this.totalPM = this.products.reduce((acc, product) => acc + ((product.product.pricePM || 0) * (product.quantity || 1)), 0);
+            this.totalDC = this.products.reduce((acc, product) => acc + ((product.product.priceDC || 0) * (product.quantity || 1)), 0);
             this.dataSource = new MatTableDataSource(this.products);
         });
 
@@ -55,6 +57,10 @@ export class ViewBundleComponent {
 
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
+    }
+
+    get totalProducts(): number {
+        return this.products.reduce((acc, product) => acc + (product.quantity || 1), 0);
     }
 
     async getImage(fileName: string) {

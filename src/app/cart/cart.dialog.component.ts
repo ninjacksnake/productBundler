@@ -3,10 +3,9 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AddProductBundleDto } from "../Dtos/add.product.bundle.dto";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CartService } from "../shared/services/cart.service";
-import { ProductDto } from "../shared/Dtos/product.dto";
 import { BundlesService } from "../shared/services/bundles.service";
-import { finalize, map, shareReplay, take, tap, Subscription } from "rxjs";
-import { HttpResponse, HttpStatusCode } from "@angular/common/http";
+import { Subscription } from "rxjs";
+import { HttpResponse } from "@angular/common/http";
 import {
     MatSnackBar,
     MatSnackBarHorizontalPosition,
@@ -23,9 +22,6 @@ interface CartDialogData {
     closeDialog: () => void;
 }
 
-
-const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'priceDC', 'quantity', 'options'];
-
 @Component({
     selector: 'app-cart-dialog',
     templateUrl: './cart.dialog.component.html',
@@ -34,7 +30,7 @@ const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'pric
 
 export class CartDialogComponent implements OnInit, OnDestroy {
     products: AddProductBundleDto[] = [];
-    tableColumns = tableColumns;
+    displayedColumns: string[] = ['productId', 'name', 'quantity', 'pricePM', 'priceCF', 'priceDC', 'options'];
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     private cartSubscription?: Subscription;

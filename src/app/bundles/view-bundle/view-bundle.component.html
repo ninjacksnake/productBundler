@@ -52,24 +52,6 @@
                             <span class="info-value">{{Bundle.description}}</span>
                         </div>
                     </div>
-                    <div class="info-item price-item">
-                        <div class="info-icon-wrapper gradient-pm">
-                            <mat-icon>payments</mat-icon>
-                        </div>
-                        <div class="info-content">
-                            <span class="info-label">Precio Por Mayor</span>
-                            <span class="info-value price-highlight">{{Bundle.pricePM | currency}}</span>
-                        </div>
-                    </div>
-                    <div class="info-item price-item">
-                        <div class="info-icon-wrapper gradient-cf">
-                            <mat-icon>attach_money</mat-icon>
-                        </div>
-                        <div class="info-content">
-                            <span class="info-label">Precio Cliente Final</span>
-                            <span class="info-value price-highlight">{{Bundle.priceCF | currency}}</span>
-                        </div>
-                    </div>
                 </div>
             </mat-card>
 
@@ -102,7 +84,7 @@
                     </div>
                     <div class="products-count">
                         <mat-icon>shopping_cart</mat-icon>
-                        <span>{{products.length}} producto(s)</span>
+                        <span>{{totalProducts}} producto(s)</span>
                     </div>
                 </div>
 
@@ -161,6 +143,19 @@
                                 </td>
                             </ng-container>
 
+                            <!-- Price DC Column -->
+                            <ng-container matColumnDef="priceDC">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="header-cell">
+                                        <mat-icon>attach_money</mat-icon>
+                                        <span>Precio DC</span>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let product">
+                                    <span class="price">{{product.product.priceDC | currency}}</span>
+                                </td>
+                            </ng-container>
+
                             <!-- Created Date Column -->
                             <ng-container matColumnDef="createdAt">
                                 <th mat-header-cell *matHeaderCellDef>
@@ -183,7 +178,7 @@
                     </div>
 
                     <!-- Totals Summary -->
-                    <!-- <div class="totals-summary">
+                    <div class="totals-summary">
                         <div class="total-item">
                             <mat-icon>calculate</mat-icon>
                             <span class="total-label">Total PM:</span>
@@ -194,7 +189,12 @@
                             <span class="total-label">Total CF:</span>
                             <span class="total-value cf">{{totalCF | currency}}</span>
                         </div>
-                    </div> -->
+                        <div class="total-item">
+                            <mat-icon>calculate</mat-icon>
+                            <span class="total-label">Total DC:</span>
+                            <span class="total-value dc">{{totalDC | currency}}</span>
+                        </div>
+                    </div>
 
                     <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons class="table-paginator">
                     </mat-paginator>
