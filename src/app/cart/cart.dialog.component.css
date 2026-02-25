@@ -290,6 +290,10 @@
     background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
 }
 
+.summary-card.dc {
+    background: linear-gradient(135deg, #38a169 0%, #005aba 100%);
+}
+
 .card-icon {
     display: flex;
     align-items: center;
@@ -430,7 +434,7 @@
 }
 
 ::ng-deep .cart-dialog .mat-icon {
-    color: #718096;
+    color: #ecedee;
 }
 
 ::ng-deep .cart-dialog .mat-form-field-appearance-outline.mat-focused .mat-icon {

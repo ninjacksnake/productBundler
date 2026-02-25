@@ -24,7 +24,7 @@ interface CartDialogData {
 }
 
 
-const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'quantity', 'options'];
+const tableColumns: string[] = ['productId', 'name', 'priceCF', 'pricePM', 'priceDC', 'quantity', 'options'];
 
 @Component({
     selector: 'app-cart-dialog',
@@ -44,6 +44,7 @@ export class CartDialogComponent implements OnInit, OnDestroy {
         description: ['', Validators.required],
         priceCF: [0, Validators.required],
         pricePM: [0, Validators.required],
+        priceDC: [0, Validators.required],
         products: [[]]
     });
 
@@ -85,6 +86,7 @@ export class CartDialogComponent implements OnInit, OnDestroy {
         this.bundleForm.value.bundleId = this.bundleForm.value.name;
         this.bundleForm.value.priceCF = this.cartService.getTotalCF();
         this.bundleForm.value.pricePM = this.cartService.getTotalPM();
+        this.bundleForm.value.priceDC = this.cartService.getTotalDC();
 
         if (this.bundleForm.valid) {
             this.BundlesService.create(this.bundleForm.value).subscribe({
@@ -128,6 +130,10 @@ export class CartDialogComponent implements OnInit, OnDestroy {
 
     getTotalPM(): number {
         return this.cartService.getTotalPM();
+    }
+
+    getTotalDC(): number {
+        return this.cartService.getTotalDC();
     }
 
     removeProduct(product: AddProductBundleDto): void {

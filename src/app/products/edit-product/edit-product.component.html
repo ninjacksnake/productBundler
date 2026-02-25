@@ -6,29 +6,53 @@
 
     <mat-card class="form-card">
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <!-- Image Upload Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Imagen del Producto</h2>
+                    <div class="upload-area" (click)="fileInput.click()">
+                        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+                            style="display: none;">
 
-            <!-- Image Upload Section -->
-            <div class="form-section">
-                <h2 class="section-title">Imagen del Producto</h2>
-                <div class="upload-area" (click)="fileInput.click()">
-                    <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
-                        style="display: none;">
+                        <div class="upload-content" *ngIf="!imagePreview">
+                            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                            <p class="upload-text">Haz clic para cambiar la imagen</p>
+                            <p class="upload-hint">PNG, JPG o WEBP (máx. 5MB)</p>
+                        </div>
 
-                    <div class="upload-content" *ngIf="!imagePreview">
-                        <mat-icon class="upload-icon">cloud_upload</mat-icon>
-                        <p class="upload-text">Haz clic para cambiar la imagen</p>
-                        <p class="upload-hint">PNG, JPG o WEBP (máx. 5MB)</p>
+                        <div class="image-preview-container" *ngIf="imagePreview">
+                            <img [src]="imagePreview" alt="Vista previa" class="image-preview">
+                            <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
+                                (click)="removeImage($event)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="image-preview-container" *ngIf="imagePreview">
-                        <img [src]="imagePreview" alt="Vista previa" class="image-preview">
-                        <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
-                            (click)="removeImage($event)">
-                            <mat-icon>close</mat-icon>
-                        </button>
+                <div class="form-section">
+                    <h2 class="section-title">Documento del Producto</h2>
+                    <div class="upload-area" (click)="fileInput.click()">
+                        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+                            style="display: none;">
+
+                        <div class="upload-content" *ngIf="!imagePreview">
+                            <mat-icon class="upload-icon">attachment</mat-icon>
+                            <p class="upload-text">Haz clic para cambiar el documento</p>
+                            <p class="upload-hint">PDF, DOC, DOCX (máx. 5MB)</p>
+                        </div>
+
+                        <div class="image-preview-container" *ngIf="imagePreview">
+                            <img [src]="imagePreview" alt="Vista previa" class="image-preview">
+                            <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
+                                (click)="removeImage($event)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Product Information Section -->
             <div class="form-section">
@@ -63,20 +87,23 @@
             <!-- Pricing Section -->
             <div class="form-section">
                 <h2 class="section-title">Precios</h2>
-
                 <div class="form-row pricing-row">
                     <mat-form-field appearance="outline" class="form-field">
                         <mat-label>Precio Consumidor Final</mat-label>
                         <input matInput type="number" formControlName="priceCF" placeholder="0.00" step="0.01">
                         <span matPrefix>$&nbsp;</span>
-                        <mat-icon matSuffix>attach_money</mat-icon>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="form-field">
                         <mat-label>Precio Por Mayor (PM)</mat-label>
                         <input matInput type="number" formControlName="pricePM" placeholder="0.00" step="0.01">
                         <span matPrefix>$&nbsp;</span>
-                        <mat-icon matSuffix>attach_money</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Precio con Descuento (DC)</mat-label>
+                        <input matInput type="number" formControlName="priceDC" placeholder="0.00" step="0.01">
+                        <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
                 </div>
             </div>

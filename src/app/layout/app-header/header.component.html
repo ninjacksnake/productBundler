@@ -5,7 +5,7 @@
     <div class="nav-right">
       <a matMiniFab aria-label="Carrito de compras" [mat-menu-trigger-for]="cartMenu" class="nav-link">
         <mat-icon matBadge="{{getTotalProducts()}}" matBadgePosition="before" matBadgeSize="small"
-          matBadgeHideZero="true">trolley</mat-icon>
+          matBadgeHideZero="true" [class.cart-pulse]="getTotalProducts() > 0">trolley</mat-icon>
         <mat-menu #cartMenu="matMenu">
           <button mat-menu-item (click)="openCart()">Ver</button>
           <button mat-menu-item (click)="clearCart()">Limpiar</button>

@@ -32,6 +32,7 @@ export class CartService {
             product.quantity = 1;
             product.subtotal1 = product.pricePM || 0;
             product.subtotal2 = product.priceCF || 0;
+            product.subtotal3 = product.priceDC || 0;
             cart.push(product);
             this.cartSubject.next(cart);
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -48,6 +49,7 @@ export class CartService {
             product.quantity = quantity;
             product.subtotal1 = quantity * (product.pricePM || 0);
             product.subtotal2 = quantity * (product.priceCF || 0);
+            product.subtotal3 = quantity * (product.priceDC || 0);
 
             this.cartSubject.next(cart);
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -64,7 +66,7 @@ export class CartService {
 
     getCart(): AddProductBundleDto[] {
         const cart = this.cartSubject.getValue();
-        return [...cart]; // Return a copy to prevent direct modification
+        return [...cart];
     }
 
     clearCart(): void {
@@ -83,6 +85,10 @@ export class CartService {
 
     getTotalPM(): number {
         return this.cartSubject.getValue().reduce((total, product) => total + (product.subtotal1 || 0), 0);
+    }
+
+    getTotalDC(): number {
+        return this.cartSubject.getValue().reduce((total, product) => total + (product.subtotal3 || 0), 0);
     }
 
     createBundle(): void {

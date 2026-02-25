@@ -4,7 +4,9 @@ export interface IProduct {
     name: string;
     description: string;
     pricePM: number;
-    priceCF: number; 
+    priceCF: number;
+    priceDC: number;
+    manualDoc: string;
     stock: number;
     image?: string;
     product?: IProduct;

@@ -141,6 +141,19 @@
             </td>
           </ng-container>
 
+          <!-- Price DC Column -->
+          <ng-container matColumnDef="priceDC">
+            <th mat-header-cell *matHeaderCellDef>
+              <div class="header-cell">
+                <mat-icon>attach_money</mat-icon>
+                <span>Precio DC</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let product">
+              <span class="price">{{ product.priceDC | currency }}</span>
+            </td>
+          </ng-container>
+
           <!-- Options Column -->
           <ng-container matColumnDef="options">
             <th mat-header-cell *matHeaderCellDef>
@@ -193,6 +206,15 @@
           <div class="card-content">
             <span class="card-label">Total Consumidor Final</span>
             <span class="card-value">{{ getTotalCF() | currency }}</span>
+          </div>
+        </div>
+        <div class="summary-card dc">
+          <div class="card-icon">
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="card-content">
+            <span class="card-label">Total con Descuento</span>
+            <span class="card-value">{{ getTotalDC() | currency }}</span>
           </div>
         </div>
       </div>

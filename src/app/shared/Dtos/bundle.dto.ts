@@ -8,6 +8,7 @@ export interface IBundle {
   products: AddProductDto[];
   priceCF: number;
   pricePM: number;
+  priceDC: number;
   createdDate: Date;
   updatedDate: Date;
   createdAt?: Date;

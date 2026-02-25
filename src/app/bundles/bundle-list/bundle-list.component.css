@@ -81,12 +81,13 @@
 /* Table Styles */
 .bundles-table {
     width: 100%;
+    min-width: 102%;
     background: white;
 }
 
 /* Header Cells */
 .bundles-table th.mat-mdc-header-cell {
-    background: linear-gradient(135deg, #6b6d78 0%, #50606d 100%);
+    background: #033497;
     color: white;
     font-weight: 600;
     font-size: 0.95rem;

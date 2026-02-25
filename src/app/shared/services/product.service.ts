@@ -42,6 +42,8 @@ export class ProductService {
           description: product.description,
           pricePM: product.pricePM,
           priceCF: product.priceCF,
+          priceDC: product.priceDC,
+          manualDoc: product.manualDoc,
           stock: product.stock,
           image: product.image,
         }));
@@ -60,6 +62,8 @@ export class ProductService {
           description: response.description,
           pricePM: response.pricePM,
           priceCF: response.priceCF,
+          priceDC: response.priceDC,
+          manualDoc: response.manualDoc,
           stock: response.stock,
           image: response.image,
         };
@@ -73,6 +77,8 @@ export class ProductService {
           description: '',
           pricePM: 0,
           priceCF: 0,
+          priceDC: 0,
+          manualDoc: '',
           stock: 0,
           image: '',
         })
@@ -92,6 +98,8 @@ export class ProductService {
           description: product.description,
           pricePM: product.pricePM,
           priceCF: product.priceCF,
+          priceDC: product.priceDC,
+          manualDoc: product.manualDoc,
           stock: product.stock,
           image: product.image,
         }));
@@ -129,7 +137,7 @@ export class ProductService {
   updateProduct(product: UpdateProductDto): Observable<any> {
     return this.http.put(`/products/${product.id}`, product).pipe(
       map((response: any) => {
-        //    console.log('Product updated successfully:', response);
+        // console.log('Product updated successfully:', response);
         return response;
       }),
       catchError(this.handleError<IProduct>('updateProduct'))

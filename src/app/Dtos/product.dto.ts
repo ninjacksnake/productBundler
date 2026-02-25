@@ -27,6 +27,14 @@ export class ProductDto {
 
   @IsNumber()
   @IsOptional()
+  priceDC?: number;
+
+  @IsString()
+  @IsOptional()
+  manualDoc?: string;
+
+  @IsNumber()
+  @IsOptional()
   stock?: number;
 
   @IsString()

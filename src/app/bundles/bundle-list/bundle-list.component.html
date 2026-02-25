@@ -74,7 +74,7 @@
         <ng-container matColumnDef="pricePM">
           <th mat-header-cell *matHeaderCellDef>
             <div class="header-cell">
-              <mat-icon>payments</mat-icon>
+              <mat-icon>attach_money</mat-icon>
               <span>Precio PM</span>
             </div>
           </th>
@@ -84,30 +84,17 @@
         </ng-container>
 
         <!-- Created Date Column -->
-        <ng-container matColumnDef="createdDate">
+        <ng-container matColumnDef="priceDC">
           <th mat-header-cell *matHeaderCellDef>
             <div class="header-cell">
-              <mat-icon>event</mat-icon>
-              <span>Creado en</span>
+              <mat-icon>attach_money</mat-icon>
+              <span>Precio DC</span>
             </div>
           </th>
           <td mat-cell *matCellDef="let bundle">
 
-            <span class="price">{{ bundle.createdAt | date : 'dd/MM/yyyy' }}</span>
+            <span class="price">{{ bundle.priceDC | currency }}</span>
 
-          </td>
-        </ng-container>
-
-        <!-- Updated Date Column -->
-        <ng-container matColumnDef="updatedDate">
-          <th mat-header-cell *matHeaderCellDef>
-            <div class="header-cell">
-              <mat-icon>update</mat-icon>
-              <span>Actualizado</span>
-            </div>
-          </th>
-          <td mat-cell *matCellDef="let bundle">
-            <span class="price">{{ bundle.updatedAt | date : 'dd/MM/yyyy' }}</span>
           </td>
         </ng-container>
 

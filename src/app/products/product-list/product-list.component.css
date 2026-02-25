@@ -96,17 +96,20 @@
   overflow-x: auto;
   min-height: 400px;
   scrollbar-gutter: stable;
+
+
 }
 
 /* Table Styles */
 .products-table {
   width: 100%;
+  min-width: 102%;
   background: white;
 }
 
 /* Header Cells */
 .products-table th.mat-mdc-header-cell {
-  background: linear-gradient(135deg, #6b6d78 0%, #50606d 100%);
+  background: #012264;
   color: white;
   font-weight: 600;
   font-size: 0.95rem;
@@ -117,7 +120,12 @@
 .header-cell {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+
+}
+
+.option-column {
+  position: relative;
+
 }
 
 .header-cell mat-icon {

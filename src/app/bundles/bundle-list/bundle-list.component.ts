@@ -72,5 +72,5 @@ export class BundleListComponent {
     this.bundlePrintService.printBundle(bundle);
   }
 
-  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'createdDate', 'updatedDate', 'options'];
+  columns: string[] = ['name', 'description', 'priceCF', 'pricePM', 'priceDC', 'options'];
 }

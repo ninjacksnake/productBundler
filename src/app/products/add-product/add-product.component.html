@@ -101,6 +101,19 @@
                             El precio debe ser mayor a 0
                         </mat-error>
                     </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                        <mat-label>Precio con Descuento (DC)</mat-label>
+                        <input matInput type="number" formControlName="priceDC" placeholder="0.00" step="0.01">
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-icon matSuffix>attach_money</mat-icon>
+                        <mat-error *ngIf="productForm.get('priceDC')?.hasError('required')">
+                            El precio con Descuento (DC) es requerido
+                        </mat-error>
+                        <mat-error *ngIf="productForm.get('priceDC')?.hasError('min')">
+                            El precio debe ser mayor a 0
+                        </mat-error>
+                    </mat-form-field>
                 </div>
             </div>
 

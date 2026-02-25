@@ -70,6 +70,17 @@
                         <span class="price-note">Precio al detalle</span>
                     </div>
                 </mat-card>
+
+                <mat-card class="price-card cf">
+                    <div class="price-icon-wrapper">
+                        <mat-icon>attach_money</mat-icon>
+                    </div>
+                    <div class="price-content">
+                        <span class="price-label">Precio con descuento</span>
+                        <span class="price-value" *ngIf="product">{{ product.priceDC | currency }}</span>
+                        <span class="price-note">Precio con descuento</span>
+                    </div>
+                </mat-card>
             </div>
         </div>
     </div>

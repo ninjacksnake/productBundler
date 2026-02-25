@@ -74,6 +74,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     'description',
     'pricePM',
     'priceCF',
+    'priceDC',
     'options',
   ];
 

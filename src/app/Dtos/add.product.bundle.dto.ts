@@ -9,37 +9,45 @@ export class AddProductBundleDto {
     @IsString()
     @IsNotEmpty()
     name!: string;
-    
+
     @IsString()
-    
+
     @IsOptional()
     description?: string;
-   
-    @IsNumber() 
+
+    @IsNumber()
     @IsNotEmpty()
     pricePM!: number;
-   
-    @IsNumber() 
+
+    @IsNumber()
     @IsOptional()
     priceCF?: number;
 
-    @IsNumber() 
+    @IsNumber()
+    @IsOptional()
+    priceDC?: number;
+
+    @IsNumber()
     @IsOptional()
     quantity?: number;
 
-    @IsNumber() 
+    @IsNumber()
     @IsOptional()
     subtotal1?: number;
-    
-    @IsNumber() 
+
+    @IsNumber()
     @IsOptional()
     subtotal2?: number;
-    
-    
+
+    @IsNumber()
+    @IsOptional()
+    subtotal3?: number;
 
 
 
-  
+
+
+
 
 
 }

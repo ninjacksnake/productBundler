@@ -35,7 +35,9 @@ export class EditProductComponent {
       description: [''],
       pricePM: [0],
       priceCF: [0],
+      priceDC: [0],
       image: [''],
+      manualDoc: [''],
       imageData: [null],
     });
   }
@@ -48,6 +50,7 @@ export class EditProductComponent {
     this.productService
       .getProduct(this.id)
       .subscribe((product: UpdateProductDto) => {
+        console.log(product);
         this.product = product;
         this.productForm.patchValue({
           id: this.product.id,
@@ -56,6 +59,8 @@ export class EditProductComponent {
           description: this.product.description,
           pricePM: this.product.pricePM,
           priceCF: this.product.priceCF,
+          priceDC: this.product.priceDC,
+          manualDoc: this.product.manualDoc,
           image: this.product.image || '',
           imageData: this.product.imageData,
         });

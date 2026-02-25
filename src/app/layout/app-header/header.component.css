@@ -1,40 +1,68 @@
 .header {
-    background-color: #2c3e50;
-    padding: 1rem;
-    color: white;
-   
-  }
-  .nav-menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+  background-color: #2c3e50;
+  padding: 1rem;
+  color: white;
+
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-menu a {
+  color: white;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.nav-menu a:hover {
+  color: rgba(237, 207, 89, 0.8);
+  text-decoration: underline;
+
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.profile-menu-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+}
+
+/* Cart Pulse Animation */
+.cart-pulse {
+  animation: pulse 2s infinite;
+  color: #edcf59;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(237, 207, 89, 0));
   }
 
-  .nav-left,
-  .nav-right {
-    display: flex;
-    gap: 1.5rem;
+  50% {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px rgba(237, 207, 89, 0.8));
   }
-  .nav-menu a {
-    color: white;
-    font-size: 1.2rem;
-    text-decoration: none;
+
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(237, 207, 89, 0));
   }
-  .nav-menu a:hover {
-    color: rgba(237, 207, 89, 0.8);
-    text-decoration: underline;
-    
-  }
-.header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-  }   
-  .profile-menu-name {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.1rem;
-  }
+}

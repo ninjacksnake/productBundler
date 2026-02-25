@@ -97,7 +97,7 @@
         <ng-container matColumnDef="priceCF">
           <th mat-header-cell *matHeaderCellDef>
             <div class="header-cell">
-              <mat-icon>payments</mat-icon>
+              <mat-icon>attach_money</mat-icon>
               <span>Precio CF</span>
             </div>
           </th>
@@ -106,9 +106,21 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="priceDC">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell">
+              <mat-icon>attach_money</mat-icon>
+              <span>Precio DC</span>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let product">
+            <span class="price">{{ product.priceDC | currency }}</span>
+          </td>
+        </ng-container>
+
         <!-- Options Column -->
         <ng-container matColumnDef="options">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef class="option-column">
             <div class="header-cell">
               <mat-icon>settings</mat-icon>
               <span>Acciones</span>
