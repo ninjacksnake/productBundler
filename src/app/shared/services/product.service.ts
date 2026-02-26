@@ -173,6 +173,18 @@ export class ProductService {
     );
   }
 
+  addDocument(id: string, productId: string, document: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('document', document);
+    formData.append('productId', productId);
+    return this.http.post('/products/save-product-document', formData).pipe(
+      map((response: any) => {
+        return response;
+      }),
+      catchError(this.handleError('addDocument'))
+    );
+  }
+
   getImage(fileName: string): Observable<Blob> {
     const safeName = encodeURIComponent(fileName);
     return this.http.get(`/products/image/${safeName}`, { responseType: 'blob' }) as Observable<Blob>;

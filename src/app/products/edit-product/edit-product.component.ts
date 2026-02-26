@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of, switchMap, map, catchError } from 'rxjs';
+
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -13,11 +14,21 @@ import { of, switchMap, map, catchError } from 'rxjs';
 export class EditProductComponent {
   imageData: { file: File } | null = null;
   imagePreview: string | null = null;
+  documentData: { file: File } | null = null;
+  documentPreview: string | null = null;
   id: string = this.route.snapshot.params['id'];
+  isDragOverImage: boolean = false;
+  isDragOverDocument: boolean = false;
+  private readonly IMAGES_BASE_URL = 'http://192.168.10.203/api/v1/products/images/';
+  private readonly DOCS_BASE_URL = 'http://192.168.10.203/api/v1/products/documents/';
+  // private readonly IMAGES_BASE_URL = 'http://localhost:3000/api/v1/products/image/';
+  // private readonly DOCS_BASE_URL = 'http://localhost:3000/api/v1/products/documents/';
+
 
   productForm!: FormGroup;
 
   product: UpdateProductDto = {} as UpdateProductDto;
+
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -26,7 +37,35 @@ export class EditProductComponent {
     private snackBar: MatSnackBar
   ) { }
 
-  // Initialize the form
+  ngOnInit(): void {
+    this.initForm();
+    this.productService.getProduct(this.id).subscribe((product: UpdateProductDto) => {
+      this.product = product;
+      this.productForm.patchValue({
+        id: this.product.id,
+        name: this.product.name,
+        productId: this.product.productId,
+        description: this.product.description,
+        pricePM: this.product.pricePM,
+        priceCF: this.product.priceCF,
+        priceDC: this.product.priceDC,
+        manualDoc: this.product.manualDoc,
+        image: this.product.image || '',
+      });
+
+      if (this.product.image) {
+        this.imagePreview = this.product.image.startsWith('http')
+          ? this.product.image
+          : `${this.IMAGES_BASE_URL}${this.product.image}`;
+      }
+      if (this.product.manualDoc) {
+        this.documentPreview = this.product.manualDoc.startsWith('http')
+          ? this.product.manualDoc
+          : `${this.DOCS_BASE_URL}${this.product.manualDoc}`;
+      }
+    });
+  }
+
   private initForm() {
     this.productForm = this.fb.group({
       id: [this.id],
@@ -39,38 +78,13 @@ export class EditProductComponent {
       image: [''],
       manualDoc: [''],
       imageData: [null],
+      documentData: [null],
     });
-  }
-
-  ngOnInit(): void {
-    // Initialize the form with empty values first
-    this.initForm();
-
-    // Then fetch and update the product data
-    this.productService
-      .getProduct(this.id)
-      .subscribe((product: UpdateProductDto) => {
-        console.log(product);
-        this.product = product;
-        this.productForm.patchValue({
-          id: this.product.id,
-          name: this.product.name,
-          productId: this.product.productId,
-          description: this.product.description,
-          pricePM: this.product.pricePM,
-          priceCF: this.product.priceCF,
-          priceDC: this.product.priceDC,
-          manualDoc: this.product.manualDoc,
-          image: this.product.image || '',
-          imageData: this.product.imageData,
-        });
-      });
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      console.log('process file')
       this.processFile(file);
     }
   }
@@ -81,12 +95,75 @@ export class EditProductComponent {
       imageData: { file: file },
     });
 
-    // Create image preview
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagePreview = e.target.result;
     };
     reader.readAsDataURL(file);
+  }
+
+  onDocumentSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.processDocument(file);
+    }
+  }
+
+  processDocument(file: File) {
+    this.productForm.patchValue({
+      manualDoc: file.name,
+      documentData: { file: file },
+    });
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.documentPreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onImageError() {
+    this.imagePreview = null;
+    this.snackBar.open('No se pudo cargar la imagen del producto', 'Cerrar', {
+      duration: 3000,
+      panelClass: ['mat-snackbar-warning']
+    });
+  }
+
+  onDragOver(event: DragEvent, type: 'image' | 'document') {
+    event.preventDefault();
+    event.stopPropagation();
+    if (type === 'image') this.isDragOverImage = true;
+    else this.isDragOverDocument = true;
+  }
+
+  onDragLeave(event: DragEvent, type: 'image' | 'document') {
+    event.preventDefault();
+    event.stopPropagation();
+    if (type === 'image') this.isDragOverImage = false;
+    else this.isDragOverDocument = false;
+  }
+
+  onDrop(event: DragEvent, type: 'image' | 'document') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOverImage = false;
+    this.isDragOverDocument = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (type === 'image' && file.type.startsWith('image/')) {
+        this.processFile(file);
+      } else if (type === 'document' && (file.type.includes('pdf') || file.type.includes('word') || file.name.match(/\.(pdf|doc|docx)$/i))) {
+        this.processDocument(file);
+      } else {
+        this.snackBar.open('Tipo de archivo no válido', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['mat-snackbar-error']
+        });
+      }
+    }
   }
 
   removeImage(event: Event) {
@@ -98,41 +175,57 @@ export class EditProductComponent {
     });
   }
 
-  onSubmit() {
-    this.productService.updateProduct(this.productForm.value).pipe(
-      switchMap((res) => {
-        console.log('Product updated successfully:', res);
-        const file = (this.productForm.value.imageData as { file: File })?.file;
-        if (file) {
-          return this.productService.addImage(this.id, this.productForm.value.productId, file).pipe(
-            map(() => ({ type: 'success', message: 'Product and image updated successfully', id: this.id })),
-            catchError((err: any) => {
-              console.error('Image upload failed', err);
-              return of({ type: 'warning', message: 'Product updated, but image upload failed', id: this.id });
-            })
-          );
-        } else {
-          return of({ type: 'success', message: 'Product updated successfully', id: this.id });
-        }
-      })
-    ).subscribe({
-      next: (result: any) => {
-        this.snackBar.open(result.message, 'Close', {
-          duration: result.type === 'success' ? 2000 : 4000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-          panelClass: result.type === 'success' ? ['mat-snackbar-success'] : ['mat-snackbar-warning']
-        });
-        this.router.navigate(['/bundler/products/view/' + this.id]);
-      },
-      error: (err) => {
-        console.error('Error updating product:', err);
-        this.snackBar.open('Error updating product', 'Close', {
-          duration: 3000,
-          panelClass: ['mat-snackbar-error']
-        });
-      },
+  removeDocument(event: Event) {
+    event.stopPropagation();
+    this.documentPreview = null;
+    this.productForm.patchValue({
+      manualDoc: '',
+      documentData: { file: null },
     });
+  }
+
+  onSubmit() {
+    if (this.productForm.valid) {
+      const productDto: UpdateProductDto = {
+        ...this.productForm.value,
+        pricePM: parseFloat(this.productForm.value.pricePM),
+        priceCF: parseFloat(this.productForm.value.priceCF),
+        priceDC: parseFloat(this.productForm.value.priceDC),
+      };
+
+      this.productService.updateProduct(productDto).pipe(
+        switchMap(() => {
+          const imageFile = (this.productForm.get('imageData')?.value as { file: File })?.file;
+          const docFile = (this.productForm.get('documentData')?.value as { file: File })?.file;
+
+          let finalObs = of(null);
+
+          if (imageFile) {
+            finalObs = this.productService.addImage(this.id, productDto.productId!, imageFile);
+          }
+
+          if (docFile) {
+            const docObs = this.productService.addDocument(this.id, productDto.productId!, docFile);
+            finalObs = finalObs.pipe(switchMap(() => docObs));
+          }
+
+          return finalObs.pipe(
+            map(() => ({ success: true })),
+            catchError(() => of({ success: false, partial: true }))
+          );
+        })
+      ).subscribe({
+        next: (res: any) => {
+          const message = res.success ? 'Producto actualizado exitosamente' : 'Producto actualizado, pero hubo errores en la carga de archivos';
+          this.snackBar.open(message, 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/bundler/products']);
+        },
+        error: (err) => {
+          console.error('Error updating product:', err);
+          this.snackBar.open('Error al actualizar el producto', 'Cerrar', { duration: 3000 });
+        }
+      });
+    }
   }
 
   onCancel(): void {

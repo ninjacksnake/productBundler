@@ -10,8 +10,10 @@
                 <!-- Image Upload Section -->
                 <div class="form-section">
                     <h2 class="section-title">Imagen del Producto</h2>
-                    <div class="upload-area" (click)="fileInput.click()">
-                        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+                    <div class="upload-area" (click)="imageInput.click()" (dragover)="onDragOver($event, 'image')"
+                        (dragleave)="onDragLeave($event, 'image')" (drop)="onDrop($event, 'image')"
+                        [class.drag-over]="isDragOverImage">
+                        <input #imageInput type="file" accept="image/*" (change)="onFileSelected($event)"
                             style="display: none;">
 
                         <div class="upload-content" *ngIf="!imagePreview">
@@ -21,7 +23,7 @@
                         </div>
 
                         <div class="image-preview-container" *ngIf="imagePreview">
-                            <img [src]="imagePreview" alt="Vista previa" class="image-preview">
+                            <img [src]="imagePreview" alt="Vista previa" class="image-preview" (error)="onImageError()">
                             <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
                                 (click)="removeImage($event)">
                                 <mat-icon>close</mat-icon>
@@ -32,20 +34,26 @@
 
                 <div class="form-section">
                     <h2 class="section-title">Documento del Producto</h2>
-                    <div class="upload-area" (click)="fileInput.click()">
-                        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+                    <div class="upload-area" (click)="documentInput.click()" (dragover)="onDragOver($event, 'document')"
+                        (dragleave)="onDragLeave($event, 'document')" (drop)="onDrop($event, 'document')"
+                        [class.drag-over]="isDragOverDocument">
+                        <input #documentInput type="file" accept=".pdf,.doc,.docx" (change)="onDocumentSelected($event)"
                             style="display: none;">
 
-                        <div class="upload-content" *ngIf="!imagePreview">
+                        <div class="upload-content" *ngIf="!documentPreview && !productForm.get('manualDoc')?.value">
                             <mat-icon class="upload-icon">attachment</mat-icon>
-                            <p class="upload-text">Haz clic para cambiar el documento</p>
+                            <p class="upload-text">Haz clic para subir el documento</p>
                             <p class="upload-hint">PDF, DOC, DOCX (máx. 5MB)</p>
                         </div>
 
-                        <div class="image-preview-container" *ngIf="imagePreview">
-                            <img [src]="imagePreview" alt="Vista previa" class="image-preview">
+                        <div class="image-preview-container"
+                            *ngIf="documentPreview || productForm.get('manualDoc')?.value">
+                            <div class="document-preview-info">
+                                <mat-icon>description</mat-icon>
+                                <span class="document-name">{{ productForm.get('manualDoc')?.value }}</span>
+                            </div>
                             <button type="button" mat-mini-fab color="warn" class="remove-image-btn"
-                                (click)="removeImage($event)">
+                                (click)="removeDocument($event)">
                                 <mat-icon>close</mat-icon>
                             </button>
                         </div>

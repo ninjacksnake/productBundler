@@ -64,13 +64,17 @@
 .upload-area {
     border: 3px dashed #cbd5e0;
     border-radius: 12px;
-    padding: 3rem;
+    padding: 2rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     position: relative;
     overflow: hidden;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .upload-area:hover {
@@ -132,14 +136,42 @@
 
 .remove-image-btn {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: 50%;
+    right: 1.5rem;
+    transform: translateY(-50%);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    z-index: 10;
 }
 
 .remove-image-btn:hover {
-    transform: scale(1.1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.document-preview-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    color: #4a5568;
+}
+
+.document-preview-info mat-icon {
+    font-size: 3.5rem !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    color: #667eea;
+}
+
+.document-name {
+    font-size: 1rem;
+    font-weight: 500;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #2d3748;
 }
 
 /* Form Fields */

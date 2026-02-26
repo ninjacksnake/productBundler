@@ -41,6 +41,14 @@ export class AddProductDto {
   @IsOptional()
   imageData?: Object;
 
+  @IsString()
+  @IsOptional()
+  manualDoc?: string;
+
+  @IsObject()
+  @IsOptional()
+  documentData?: Object;
+
   @IsNumber()
   quantity?: number = 1;
 }

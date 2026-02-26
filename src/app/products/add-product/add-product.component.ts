@@ -15,7 +15,9 @@ import { Router } from '@angular/router';
 export class AddProductComponent implements OnInit {
   productForm!: FormGroup;
   imagePreview: string | null = null;
-  isDragOver: boolean = false;
+  documentPreview: string | null = null;
+  isDragOverImage: boolean = false;
+  isDragOverDocument: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -31,8 +33,11 @@ export class AddProductComponent implements OnInit {
       description: ['', Validators.required],
       pricePM: ['', [Validators.required, Validators.min(0)]],
       priceCF: ['', [Validators.required, Validators.min(0)]],
+      priceDC: ['', [Validators.required, Validators.min(0)]],
       image: [''],
       imageData: [{ file: null }],
+      manualDoc: [''],
+      documentData: [{ file: null }],
     });
 
     // Subscribe to form value changes for debugging
@@ -63,33 +68,65 @@ export class AddProductComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragOver = true;
+  onDocumentSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.processDocument(file);
+    }
   }
 
-  onDragLeave(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragOver = false;
+  processDocument(file: File) {
+    this.productForm.patchValue({
+      manualDoc: file.name,
+      documentData: { file: file },
+    });
+
+    // For documents, we just show the name, but we can use FileReader if we want a preview for images/pdfs
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.documentPreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
-  onDrop(event: DragEvent) {
+  onImageError() {
+    this.imagePreview = null;
+    this.snackBar.open('No se pudo cargar la vista previa de la imagen', 'Cerrar', {
+      duration: 3000,
+      panelClass: ['mat-snackbar-warning']
+    });
+  }
+
+  onDragOver(event: DragEvent, type: 'image' | 'document') {
     event.preventDefault();
     event.stopPropagation();
-    this.isDragOver = false;
+    if (type === 'image') this.isDragOverImage = true;
+    else this.isDragOverDocument = true;
+  }
+
+  onDragLeave(event: DragEvent, type: 'image' | 'document') {
+    event.preventDefault();
+    event.stopPropagation();
+    if (type === 'image') this.isDragOverImage = false;
+    else this.isDragOverDocument = false;
+  }
+
+  onDrop(event: DragEvent, type: 'image' | 'document') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOverImage = false;
+    this.isDragOverDocument = false;
 
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       const file = files[0];
-      if (file.type.startsWith('image/')) {
+      if (type === 'image' && file.type.startsWith('image/')) {
         this.processFile(file);
+      } else if (type === 'document' && (file.type.includes('pdf') || file.type.includes('word') || file.name.match(/\.(pdf|doc|docx)$/i))) {
+        this.processDocument(file);
       } else {
-        this.snackBar.open('Por favor selecciona un archivo de imagen válido', 'Cerrar', {
+        this.snackBar.open('Tipo de archivo no válido', 'Cerrar', {
           duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
           panelClass: ['mat-snackbar-error']
         });
       }
@@ -105,6 +142,15 @@ export class AddProductComponent implements OnInit {
     });
   }
 
+  removeDocument(event: Event) {
+    event.stopPropagation();
+    this.documentPreview = null;
+    this.productForm.patchValue({
+      manualDoc: '',
+      documentData: { file: null },
+    });
+  }
+
   onCancel() {
     this.router.navigate(['/bundler/products']);
   }
@@ -117,28 +163,36 @@ export class AddProductComponent implements OnInit {
         description: this.productForm.value.description,
         pricePM: parseFloat(this.productForm.value.pricePM),
         priceCF: parseFloat(this.productForm.value.priceCF),
+        priceDC: parseFloat(this.productForm.value.priceDC),
         image: this.productForm.value.image,
         imageData: this.productForm.value.imageData,
+        manualDoc: this.productForm.value.manualDoc,
+        documentData: this.productForm.value.documentData,
       };
 
       this.productService.addProduct(product).pipe(
         switchMap((response: any) => {
-          // Product created successfully
-          const file = (this.productForm.value.imageData as { file: File })?.file;
+          const imageFile = (this.productForm.value.imageData as { file: File })?.file;
+          const docFile = (this.productForm.value.documentData as { file: File })?.file;
 
-          if (file) {
-            // Upload image if file exists
-            return this.productService.addImage(response.id, this.productForm.value.productId, file).pipe(
-              map(() => ({ type: 'success', message: 'Producto creado exitosamente' })),
-              catchError((err) => {
-                console.error('Image upload failed', err);
-                return of({ type: 'warning', message: 'Producto creado, pero la imagen no se pudo subir' });
-              })
-            );
-          } else {
-            // Product created without image
-            return of({ type: 'success', message: 'Producto creado exitosamente' });
+          let uploadObs: Observable<any> = of(null);
+
+          if (imageFile) {
+            uploadObs = this.productService.addImage(response.id, this.productForm.value.productId, imageFile);
           }
+
+          if (docFile) {
+            const docUpload = this.productService.addDocument(response.id, this.productForm.value.productId, docFile);
+            uploadObs = uploadObs.pipe(switchMap(() => docUpload));
+          }
+
+          return uploadObs.pipe(
+            map(() => ({ type: 'success', message: 'Producto creado exitosamente' })),
+            catchError((err) => {
+              console.error('Upload failed', err);
+              return of({ type: 'warning', message: 'Producto creado, pero hubo un error al subir los archivos' });
+            })
+          );
         })
       ).subscribe({
         next: (result) => {
