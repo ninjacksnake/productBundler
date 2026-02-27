@@ -41,7 +41,7 @@
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
     transition: all 0.3s ease;
-    background-color: #279d2b !important;
+    background-color: #012264 !important;
 }
 
 .add-button:hover {
@@ -103,7 +103,7 @@
 
 /* Header Cells */
 .users-table th.mat-mdc-header-cell {
-    background: linear-gradient(135deg, #6b6d78 0%, #50606d 100%);
+    background: #012264;
     color: white;
     font-weight: 600;
     font-size: 0.95rem;
@@ -114,13 +114,15 @@
 .header-cell {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+
 }
 
 .header-cell mat-icon {
     font-size: 1.2rem;
     width: 1.2rem;
     height: 1.2rem;
+    margin-right: 0.2rem;
 }
 
 /* Table Cells */

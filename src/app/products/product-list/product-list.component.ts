@@ -101,4 +101,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.filterProducts();
   }
 
+  printDocument(product: IProduct) {
+    if (product && product.manualDoc) {
+      this.productService.getDocument(product.manualDoc).subscribe((blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.click();
+        setTimeout(() => window.URL.revokeObjectURL(url), 100);
+      });
+    }
+  }
 }

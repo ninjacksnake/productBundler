@@ -41,7 +41,7 @@
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
   transition: all 0.3s ease;
-  background-color: #4299e1 !important;
+  background-color: #012264;
 
 }
 
@@ -109,8 +109,8 @@
 
 /* Header Cells */
 .products-table th.mat-mdc-header-cell {
-  background: #012264;
-  color: white;
+  background: #012264 !important;
+  color: white !important;
   font-weight: 600;
   font-size: 0.95rem;
   padding: 1rem;
@@ -120,7 +120,7 @@
 .header-cell {
   display: flex;
   align-items: center;
-
+  gap: 0.5rem;
 }
 
 .option-column {
@@ -132,6 +132,7 @@
   font-size: 1.2rem;
   width: 1.2rem;
   height: 1.2rem;
+  color: white !important;
 }
 
 /* Table Cells */

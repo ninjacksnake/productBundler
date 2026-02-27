@@ -132,6 +132,10 @@
                 matTooltip="Ver detalles">
                 <mat-icon>visibility</mat-icon>
               </button>
+              <button mat-icon-button *ngIf="product.manualDoc" class="action-btn print-btn"
+                (click)="printDocument(product)" matTooltip="Imprimir documento">
+                <mat-icon color="accent">print</mat-icon>
+              </button>
               <button mat-icon-button class="action-btn edit-btn" routerLink="/bundler/products/edit/{{ product.id }}"
                 matTooltip="Editar producto">
                 <mat-icon>edit</mat-icon>

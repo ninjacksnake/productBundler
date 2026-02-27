@@ -190,6 +190,11 @@ export class ProductService {
     return this.http.get(`/products/image/${safeName}`, { responseType: 'blob' }) as Observable<Blob>;
   }
 
+  getDocument(fileName: string): Observable<Blob> {
+    const safeName = encodeURIComponent(fileName);
+    return this.http.get(`/products/documents/${safeName}`, { responseType: 'blob' }) as Observable<Blob>;
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
